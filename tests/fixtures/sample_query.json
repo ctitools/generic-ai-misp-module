@@ -1,0 +1,6 @@
+{
+  "module": "generic_ai",
+  "text": "Analysts observed a phishing campaign targeting finance staff with messages themed around invoice reviews. The lure delivered a password-protected archive containing a malicious JavaScript downloader. Investigators contained the affected workstation quickly and blocked the domain at the proxy.",
+  "use_case_category": "summarization",
+  "model_id": "deterministic-fallback"
+}

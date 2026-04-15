@@ -1,0 +1,28 @@
+[project]
+name = "generic-ai-misp-module"
+version = "0.1.0"
+description = "Custom MISP expansion module scaffold for Generic AI summarization"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+
+[tool.pylint.main]
+py-version = "3.12"
+
+[tool.pylint.messages_control]
+disable = [
+  "missing-module-docstring",
+  "missing-function-docstring",
+  "missing-class-docstring",
+]

@@ -128,6 +128,7 @@ uv pip install .[all]
 misp-modules
 ```
 
+It's OK to pass on the .env variables to the remote host.
 
 ### Write test-cases first
 
@@ -156,11 +157,13 @@ Loop:
 2. Make sure the User configured the MISP_HOST so that it has the MISP_MODULES_HOST (== DEVELOPER_HOST) configured properly in MISP_HOST (this is a manual step only once. )
 3. Make sure you have the MISP_API_KEY and the MISP_HOST from .env
 4. Now use the MISP API of MISP_HOST to 
- - fetch a random OSINT CTI report from orkl.eu's archive (https://archive.orkl.eu/) (text)
- - make sure it's markdown
+ - read the fixed test report from `tests/fixtures/orkl-sample.txt`
+ - wrap it as markdown for the event text attribute
  - upload it to a test MISP event
  - send the report to the AI Module from MISP for summarization
  - add the summary to the MISP event
+ - verify the event is tagged with `ai-computer-assisted:assistance-level="ai-generated"` and `ai-computer-assisted:review-level="unreviewed"`
+ - do not fetch random ORKL reports for automated tests unless the user explicitly asks for that
  
 
 

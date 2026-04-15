@@ -1,0 +1,208 @@
+Emotet Is Not Dead (Yet) – Part 2
+By Jason Zhang
+Published: 2022-02-07 · Archived: 2026-04-05 16:51:19 UTC
+Contributor: Jason Zhang
+Emotet attacks leveraging malicious macros embedded in Excel files continue, with new variants and novel
+tactics, techniques, and procedures (TTPs). Following our recent report, we observed new waves of Emotet
+campaigns abusing legitimate Windows features, such as batch scripts and the mshta utility, combined with
+PowerShell, to deliver Emotet payloads.
+In this follow-up blog post, we first provide an overview of the delivery processes of Emotet payloads in typical
+attacks. Then, we examine the recent variants and reveal how techniques evolved in these attacks.
+Emotet payload delivery chain
+The Emotet infection chain typically starts with a spam email containing a malicious document in the attachment
+(see Figure 1). The attachment can be either a Word document or an Excel file with embedded VBA or Excel 4.0
+(XL4) macros. To entice the user to enable macro execution in Microsoft Word or Excel, the file displays social
+engineering content when opened. Once macro execution has been enabled, the embedded macro is executed,
+leading to the delivery process of an Emotet payload.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 1 of 13
+
+Figure 1: A typical Emotet payload delivery chain.
+As highlighted in Figure 1, there are typically two ways to deliver an Emotet payload:
+Executing macros to download the payload from a remote server directly: this can be achieved by invoking
+the WinAPI URLDownloadToFile via the CALL function, as we reported earlier.
+Invoking PowerShell scripts execution to download the payload: the PowerShell scripts can either be
+embedded in macros or downloaded from a remote server. Attackers can leverage various adversary
+techniques, such as multiple layers of obfuscation, to hide the PowerShell scripts. This can increase the
+infection rate by evading anti-virus (AV) scanners, particularly signature-based detection engines. As a
+result, using PowerShell scripts to download Emotet payloads has become a favorite choice in these
+attacks. The attacks discussed in this report are examples of this scenario.
+Detection timeline
+Figure 2 shows the detection timeline of a few recent Emotet waves attacking some of our customers. The first
+attack started on January 11, followed by two major waves afterwards.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 2 of 13
+
+Figure 2: Detection timeline of Emotet affecting some of VMware customers mainly in EMEA region
+Based on our investigation, we can classify these attacks into three clusters (marked as A, B, and C in Figure 2):
+Cluster A: Emotet payload via XL4 macro directly
+Cluster B: Emotet payload via XL4 macro with PowerShell
+Cluster C: Emotet payload via VBA macro with PowerShell
+The Cluster A attack leveraged the XL4 macro to download the Emotet payload directly from one of several
+possible remote servers, as has already been discussed in our earlier report. In the following sections, we will
+focus our analysis on clusters B and C. More specifically, we’ll investigate the techniques used in clusters B and C
+to understand how the Emotet payload is delivered differently, though the opening pages from the samples of both
+clusters appear very similar (see Figure 3).
+Figure 3: Similar opening pages from Clusters B and C samples.
+Cluster B: Emotet payload via XL4 macro with PowerShell
+To investigate Cluster B, we analyzed one of the samples from this campaign (see Table 1).
+Table 1: A typical XL4 macro weaponized Excel file from Cluster B attack.
+MD5 163206e4cff8d35befbfcdb66d63edd1
+SHA1 d8be95d2e1cd544d6b56b83ebad041453893cdb8
+SHA256 db2524a38755745b796339f2a7fb4e42dba8341984ce35ea715923742a725315
+File name 0029371874.xls
+Size 132214 bytes
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 3 of 13
+
+Type application/msoffice-xls
+XL4 macro
+Figure 4 shows the extracted XL4 macro from the sample. The macro is stored in a macro worksheet called KEY.
+The macro is relatively simple, with less obfuscation compared to samples in the Cluster A wave (see report).
+Figure 4: Simple XL4 macros extracted from the sample.
+When macro execution is enabled, the macro script runs cmd.exe via the EXEC function to spawn a process to
+execute mshta (the de-obfuscated version of m^sh^t^a from the SET.NAME command line shown in the figure).
+Once mshta is launched, it executes a remote file. The remote file URL is obfuscated with a hexadecimal-encoded
+server name:
+h^tt^p^:/^/0xb907d607/c^c.h^tm^l
+De-obfuscating it reveals the actual URL:
+hxxp://185.7.214[.]7.cc.html
+Next, we discuss mshta and investigate the content stored in the file above.
+mshta
+mshta.exe is a 20-year-old Windows-native utility that executes Microsoft HTML Application (HTA) files.
+Windows-legitimate tools like mshta and PowerShell, dubbed “LOLBINs” (living-off-the-land binaries), have
+become increasingly popular among threat actors. This is because these utilities and scripts are signed by
+Microsoft and trusted by the Windows OS, allowing attackers to bypass detection by proxying execution of the
+malware. MITRE reports T1218 and T1216 provide more information on signed binary proxy execution and
+signed script proxy execution, respectively.
+Attackers typically abuse mshta to execute malicious VBScript and Jscript programs either through inline
+commands (e.g., Kovter Trojan), or through an HTA file. The attack we investigate herein is the latter case. The
+next stage payload is stored in the remote HTA file and delivered via mshta execution. A copy of the HTA file is
+also downloaded to the C:\Users\ directory during the execution process, as confirmed by analyzing the Excel
+sample with VMware NSX Advanced Threat Analyzer (NSX ATA, see Figure 5).
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 4 of 13
+
+Figure 5: An HTA file copy downloaded to C:\Users\ directory.
+At a first glance, the HTA file (sha1: 2615f7aa2141cc1cb5d0c687bc3396981c2c68dc) doesn’t appear to contain
+anything, and it is empty when opening it in a common editor. Using whitespace obfuscation is a typical example
+of a steganography technique (see MITRE report T1027.003) to hide code or make analysis harder. One can use
+tools such as js-beautify to remove the empty lines and prettify the script inside. Figure 6 shows the first and last
+parts of the prettified JScript contained in the HTA file.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 5 of 13
+
+Figure 6: Beautified JScript contained in the HTA file.
+The JScript is highly obfuscated. At the end of the script, the unescape() and eval() functions (as highlighted in the
+figure above) are called to decode and execute the obfuscated script. Executing the Jscript sample within VMware
+NSX ATA shows that a new process is spawned to invoke PowerShell execution.
+Our analysis reveals that the remaining process to deliver the final Emotet payload involves two stages:
+1. The PowerShell script contained in the HTA file downloads another PowerShell payload from a remote
+URL.
+2. The downloaded PowerShell script from the previous step downloads the Emotet DLL payload.
+PowerShell: first stage
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 6 of 13
+
+Figure 7 shows the PowerShell payload contained in the HTA file.
+Figure 7: PowerShell script extracted from the HTA file.
+After removing the obfuscating strings, the purpose of the script becomes more noticeable – when the PowerShell
+script is executed, it attempts to download another payload using the .NET WebClient.DownloadString method, as
+highlighted in Figure 8. The IEX command (shown at the end of the figure) is an alias for the Invoke-Expression
+cmdlet that evaluates and runs the string specified by the $JI variable. One can ignore the backticks, as they are
+used just to obfuscate the command.
+Figure 8: De-obfuscated first stage PowerShell script.
+PowerShell: second stage
+While the payload (sha1: dcc120c943f78a76ada9fc47ebfdcecd683cf3e4) downloaded from the previous stage has
+an image file extension .PNG, in fact it is another PowerShell script but without obfuscation (see Figure 9). This
+time it calls the .NET WebClient.DownloadFile method to download the Emotet DLL payload from one of 10
+hosts (as compared to 3 hosts seen in samples from Cluster A) and save it to C:\Users\Public\Documents\ssd.dll
+(sha1: e597f6439a01aad82e153e0de647f54ad82b58d3).
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 7 of 13
+
+Figure 9: Second stage PowerShell script.
+At the end, the process pauses for 4 seconds by running Sleep -s 4 (see Figure 9). This is to make sure the payload
+is properly saved before calling cmd.exe to launch rundll.32.exe and execute the Emotet DLL payload.
+Cluster C: Emotet payload via VBA macro with PowerShell
+Similarly, we analyzed one of the samples from the Cluster C campaign (see Table 2).
+Table 2: A typical VBA macro weaponized Excel file from Cluster C attack.
+MD5 2c1d8269dfe24bccc7936b304b8dbffe
+SHA1 94868da2c75efa650e001e8c5ef53ceb99323cad
+SHA256 63d5a4febc0df7e1167b28fd510fad226b060b67b027000010b11413a234084a
+File name 0020645587.xls
+Size 147456 bytes
+Type application/msoffice-xls
+VBA macro
+Like most Emotet attacks seen in the past, the file contains highly obfuscated VBA macros. If macro execution is
+enabled, the embedded VBA scripts are executed. Figure 10 shows a snippet of the macros.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 8 of 13
+
+Figure 10: A snippet of obfuscated VBA macros.
+To reveal the actual malicious behavior, one can use open-source emulation tools such as ViperMonkey to analyse
+and de-obfuscate the VBA macros. The emulation results show that the macros will drop and execute a Windows
+batch script during execution. The batch file is saved to the hidden folder ProgramData on the system drive. This
+is also confirmed by analyzing the Excel sample with VMware NSX ATA (see Figure 11).
+Figure 11: A batch file is saved to C:\programdata folder during macro execution.
+Batch script
+Figure 12 shows the highly obfuscated content of the dropped batch file (sha1:
+bf1171da149442a511a946ded726b94c1ad7cf85).
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 9 of 13
+
+Figure 12: The batch file dropped during the execution of VBA macros.
+It seems that AV engines are not effective at catching fresh malicious batch scripts. In this example, only 2 of 58
+AV engines detected the batch file on VirusTotal (see Figure 13, the results were checked five days after they were
+first submitted to VirusTotal).
+Figure 13: Detection of the batch file on VirusTotal.
+After de-obfuscating the batch script with batch deobfuscator, it reveals the PowerShell payload (see Figure 14).
+Figure 14: PowerShell script contained in the batch file.
+PowerShell
+As highlighted in Figure 14, the batch script runs PowerShell in the background with the command start/B. The
+PowerShell command accepts a base64-encoded string version of a command by using the -enc (or
+EncodedCommand) parameter. After decoding the base64-encoded string, the de-obfuscated PowerShell payload
+is shown in Figure 15.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 10 of 13
+
+Figure 15: The PowerShell script to download Emotet DLL payload.
+The PowerShell script attempts to download the Emotet DLL payload from one of 12 hosts and save it to the
+C:\ProgramData\ folder with a randomly generated number as file name, e.g., c:\ProgramData\759027055.dll
+(sha1: 606e6e0f3b476b2dae26c7f3c95e392a911d04c5). Once the Emotet payload is downloaded successfully, the
+script calls cmd.exe to launch rundll.32.exe and execute the payload, as highlighted in Figure 15.
+VMware NSX detection with MITRE ATT&CK mapping
+VMware NSX customers are well-protected against Emotet attacks from both clusters. Figure 16 and Figure 17
+show the analysis overview from VMware NSX ATA when executing the initial Excel samples listed in Table 1
+and Table 2, respectively. As shown in both figures, NSX ATA successfully detected both samples as Emotet.
+While NSX ATA identified a few common high-risk characteristics from both clusters, such as the spawning of
+shell command and PowerShell, the observation of command & control traffic, and the execution of a dropped a
+file, there are also some techniques that distinguish both clusters. For example, the sample from Cluster B exhibits
+the behaviors of running XL4 macro with suspicious external commands and spawning an mshta process (see
+Figure 16), while the Cluster C sample is capable of dropping and executing a script file (see Figure 17).
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 11 of 13
+
+Figure 16: Cluster B attack: VMware NSX advanced threat analysis overview with MITRE ATT&CK mapping.
+Figure 17: Cluster C attack: VMware NSX advanced threat analysis overview with MITRE ATT&CK mapping.
+The analysis overview also contains MITRE ATT&CK tactic and technique mapping for some of the key
+malicious behaviors observed during the attack execution (as highlighted in both Figure 16 and Figure 17). The
+typical ATT&CK tactics used in this attack include TA0002: Execution, TA0005: Defense Evasion, and TA0011:
+Command and Control. A detailed MITRE ATT&CK tactic and technique mapping for Emotet can be found in the
+MITRE report.
+Conclusions
+The increasing challenges the security community faces today not only come from new threats, but also from old
+malware armed with new TTPs. The recent Emotet attacks discussed in this blog post and our previous report are
+notable examples of these long-term threats that leverage legitimate Windows features (such as XL4 macros and
+batch scripts) and LOLBINs (like mshta and PowerShell utilities). These attacks impose great challenges on
+traditional AV solutions, in particular signature-based detection systems. In contrast, behavior-based detection
+systems such as VMware’s AI-driven NSX ATA are very effective in successfully identifying the techniques
+leveraged by attackers.
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 12 of 13
+
+Appendix: IoCs
+Indicators of compromise identified from this report can be found on VMware TAU’s GitHub IoCs repository.
+Source: https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+https://blogs.vmware.com/networkvirtualization/2022/02/emotet-is-not-dead-yet-part-2.html/
+Page 13 of 13

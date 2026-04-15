@@ -7,3 +7,5 @@ logs/*
 !logs/.gitkeep
 artifacts/*
 !artifacts/.gitkeep
+.env
+

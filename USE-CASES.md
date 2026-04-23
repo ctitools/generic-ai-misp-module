@@ -1,8 +1,8 @@
-# AIPITCH Kaplan 
+# AIPITCH Use-cases 
 
 
 
-## Usecases
+## Use-cases
 
 There are different types of use-cases: those which use the AI MISP module (similar to enrichment modules), those that use MISP externally + AI features (such as RAG, MCP).
 

@@ -96,6 +96,18 @@ Why? Because MARTI currently manually selects the TA name for every new report.
 This might be helped by the existing TA canonical name mapping that CIRCL has: [link](https://misp-galaxy.org/threat-actor/) -> synonyms.
 
 
+### Knowledge Graphs of CTI relationships
+
+MISP has a rich interlinking of objects, attributes and events. It can be the basis for a knowledge graph for an LLM.
+Research BCPs on how to use KGs in CTI and with AI models. 
+Focus on verbs which can describe the story of the graph.
+
+Needed: a schema for sending the graph to an LLM
+Expected output: a story in markdown with UUIDs injection + highlight notable indicators + summaries of the report.
+
+Note: this is an experiment.
+
+
 ### Periodic/Quartelry reports improvements
 
 We have MISP input data (+knowledge base + PDFs/text) for quarterly reports.

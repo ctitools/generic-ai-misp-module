@@ -47,6 +47,23 @@ The output results (B*) are:
 
 
 
+## LLM-suitable knowledge graph representation
+An LLM does not need to have the full internal data (linking , object refs, etc) that the MISP format has.
+The problem is that the MISP format is too verbose for reasonsing on it. But, it might be a existing in the training data and hence be "understood" (but not in a clean way) by the LLM.
+(Question: is it better to create a custom format for the graph structure or better use the existing MISP format?)
+
+Possible structure:
+- RDF?
+- how to make this in markdown?
+
+How would we evaluate the quality? Probably initially by hand only.
+Criteria for evaluations:
+- coverage
+- correctness
+- filter out non-relevant info which is present in the KG but not relevant (for example: domain of mandiant.com, RFC1918 IPs)
+
+XXX __Aaron to do some research in this area__. Are there any models out there already for this? Can we use them for eval? XXX
+
 # Appendix
 
 

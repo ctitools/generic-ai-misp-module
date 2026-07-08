@@ -1,3 +1,6 @@
+.env
+.venv/
+
 __pycache__/
 .pytest_cache/
 .ruff_cache/
@@ -7,6 +10,6 @@ logs/*
 !logs/.gitkeep
 artifacts/*
 !artifacts/.gitkeep
-.env
+
 
 .env

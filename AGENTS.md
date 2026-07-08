@@ -4,6 +4,14 @@ This repository should be worked in short, closed loops.
 
 The target workflow is not "write a plan and disappear". The target workflow is "build something runnable, verify it, inspect it, then tighten the loop again".
 
+## Highest priority values and instructions
+
+- make everything unit testable
+- make e2e tests
+- as input, take orkl.eu, or the existing event reports of the misp instance misp-dev.lo-res.org (see .env)
+- Simplicyt , simplicity, simplicity! Human maintainability and clarity count more than completeness or number of lines of codes. Less = more.
+- Create benchmarks in a directory benchmarks/ which shall take existing MISP events with summaries, extracted CTI infos etc. + where there is an event report and make sure you can reproduce the summary (roughly) or the extracted data from the report roughly.
+
 ## Operating Style
 
 These are general instructions. 
@@ -20,7 +28,7 @@ These are general instructions.
 
 1. Read the relevant files first.
 2. Identify the thinnest end-to-end path that proves the change.
-3. Implement that path.
+3. Implement that path. Less code is more. Human maintainability is the highest value.
 4. Run the path or explain the blocker concretely.
 5. Capture the commands and data flow in docs.
 6. Iterate from the observed result, not from an imagined perfect design.
@@ -53,10 +61,11 @@ Prefer the standard library for:
 3. `pandas`
 4. logging: `logging`
 5. `click` for CLI parsing
+6. `rich` for progress bars or CLI code
 
 ### Approved Third-Party Dependencies
 
-none
+none. Ask if you really need one.
 
 ### Software Supply Chain checks
 1. every dependency might pull in other dependencies. This is a DAG.
@@ -78,7 +87,7 @@ none
 
 ### Approved External Tools
 
-none
+none. Ask if you really need one.
 
 ### Dependency Policy
 

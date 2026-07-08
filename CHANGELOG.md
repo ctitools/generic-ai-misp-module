@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-06-15
+
+- updated use-cases.
+
 ## 2026-04-15
 
 - Bootstrapped a custom `misp-modules` expansion scaffold for a Generic AI module.

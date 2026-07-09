@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-08
+
+Re-write the requirements (kiro-assisted), they are in docs/requirements.md
+
 ## 2026-06-15
 
 - updated use-cases.

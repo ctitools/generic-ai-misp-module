@@ -4,6 +4,41 @@ The first benchmark measures the **CTI info extraction** use-case: the module's 
 against a classical regex extractor and against hand-labelled gold lists. The measured result is
 in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit by hand).
 
+## Results (2026-09-05, qwen3.8:latest digest 22130167c4c2, Ollama 0.33.2, seed 42)
+
+Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (module as
+deployed, prompt cluster v1, 2000-token answers) and
+[BENCHMARKS_extraction-v2.md](BENCHMARKS_extraction-v2.md) (same prompt, 8000-token answers,
+15-minute request timeout). Both are generated; do not edit them by hand.
+
+What the numbers say:
+
+1. **As deployed, 35 of 100 reports failed**: the JSON answer hit the 2000-token budget of
+   `cti-info-extraction/qwen3.8-v1` (the prompt asks for a `quote` per indicator, which is
+   expensive on indicator-rich reports). The module returns an error, never partial results,
+   so those reports contribute nothing. The v2 cluster removes the budget problem; the
+   generation then takes several minutes per report, above the default 120 s timeout.
+2. **Against the three hand-labelled gold lists the LLM is precise**: precision 1.00,
+   recall 0.80, F1 0.89, kappa 0.84 (micro). Its misses are defanged values
+   (`131.226.2[.]6`) and a name (`emotet`), both rejected by the module's own filters. The
+   classic extractor on the same reports: precision 0.21, recall 0.49, kappa negative, because
+   it also returns the reporting vendor's links.
+3. **Against the classic superset (65 reports) agreement is low by construction**: F1 0.29,
+   kappa -0.67. The classic-only values are URLs and domains (289 of 351), a large part of
+   them reference links and vendor sites (78 flagged `reporter-domain`, the flag only catches
+   hosts named in the entry metadata). On hashes the two agree: recall of classic md5/sha1/
+   sha256 is 0.83-0.91; on ip-dst 0.27, url 0.14, domain 0.02 (classic derives a domain from
+   every URL; the LLM reports the URL).
+4. **What only the LLM finds**: 241 values in types the regexes cannot see: threat-actor
+   (73), filename (58), malware-type (46), regkey, mutex, btc, vulnerability, onion-address.
+   These are the module's added value and need a human-labelled set to be scored.
+5. **Superset artefacts found on the way**: iocextract's IPv6 regex matched times such as
+   `23:00:15` (116 false IPs before `genai/classic.py` validated candidates with `ipaddress`),
+   and its e-mail regex swallows the preceding word. The comparison refangs values before
+   matching so a defanged LLM value equals its refanged classic twin.
+6. **Speed**: median 12 s per report, max 54 s (v1); the whole v1 pass took 66 minutes
+   including a GPU-server reboot.
+
 ## Method
 
 - Sample: 100 random orkl.eu reports (seeded draw, `benchmarks/data/orkl/sample.json`).
@@ -22,7 +57,8 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 python -m benchmarks.orkl --n 100 --seed 42          # draw the sample -> benchmarks/data/orkl/
 python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # classic extractor (skips sample.json's empty text)
 python -m benchmarks.run_llm                         # LLM extraction -> benchmarks/results/<id>.llm.json
-python -m benchmarks.run_llm --prompt cti-info-extraction/qwen3.8-v2 --results-dir benchmarks/results-v2  # 8000-token variant
+GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --prompt cti-info-extraction/qwen3.8-v2 --results-dir benchmarks/results-v2  # 8000-token variant
+python -m benchmarks.compare --results-dir benchmarks/results-v2 --out docs/BENCHMARKS_extraction-v2.md --csv benchmarks/results/extraction-v2.csv
 python -m benchmarks.compare                         # -> docs/BENCHMARKS_extraction.md + results/extraction.csv
 .venv/bin/pytest -q tests/test_compare_unit.py       # offline check of the comparison on synthetic data
 

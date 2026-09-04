@@ -96,3 +96,13 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     Python 3.14 the first import emits `SyntaxWarning`s for invalid escapes in iocextract's own
     source (cosmetic, compile-time only), and its email regex swallows the word before the
     address, which `classic.py` works around.
+25. **Extraction answer budget (benchmark finding, 2026-09-05).** With `max_tokens 2000` the
+    extraction answer was truncated on 35 of 100 orkl reports (one `quote` per indicator is
+    expensive). Options: raise the budget in the cluster (v2 does, at the cost of multi-minute
+    generations that need `request_timeout` > 120 s), shorten `quote` to a few words, or ask
+    for values only and locate them in the text ourselves. Decide before the module is deployed
+    on indicator-rich reports.
+26. **Defanged values pass the LLM path unevenly.** `url` and `ip-dst|port` have no strict
+    format check, so `http://169.197.142[.]162/vt.zip` is stored defanged while `ip-dst`
+    `131.226.2[.]6` is rejected. Either refang as an explicit step or reject consistently.
+

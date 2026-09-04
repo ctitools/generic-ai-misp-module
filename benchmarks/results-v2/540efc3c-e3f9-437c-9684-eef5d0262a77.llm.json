@@ -1,0 +1,341 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v2",
+    "uuid": "e1f0a6a2-6b7c-4d3e-9f10-2a3b4c5d6e7f",
+    "version": 2,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "filename",
+      "B0SDFUWEkNCj.logN"
+    ],
+    [
+      "filename",
+      "Core.dll"
+    ],
+    [
+      "filename",
+      "CoreLnc.dll"
+    ],
+    [
+      "filename",
+      "CrLnc.dat"
+    ],
+    [
+      "filename",
+      "D8JNCKS0DJE"
+    ],
+    [
+      "filename",
+      "DEment.dll"
+    ],
+    [
+      "filename",
+      "Duser.dll"
+    ],
+    [
+      "filename",
+      "EntAppsvc.dll"
+    ],
+    [
+      "filename",
+      "Interactive.dll"
+    ],
+    [
+      "filename",
+      "JSONDIU7c9djE"
+    ],
+    [
+      "filename",
+      "License.hwp"
+    ],
+    [
+      "filename",
+      "Net.dll"
+    ],
+    [
+      "filename",
+      "PrintDialog.dll"
+    ],
+    [
+      "filename",
+      "PrintDialog.exe"
+    ],
+    [
+      "filename",
+      "Win32CmdDll.dll"
+    ],
+    [
+      "filename",
+      "banner.bmp"
+    ],
+    [
+      "filename",
+      "certificate.cert"
+    ],
+    [
+      "filename",
+      "osksupport.dll"
+    ],
+    [
+      "filename",
+      "setup.dll"
+    ],
+    [
+      "filename",
+      "setup.exe"
+    ],
+    [
+      "filename",
+      "setup0.exe"
+    ],
+    [
+      "malware-type",
+      "AceHash"
+    ],
+    [
+      "malware-type",
+      "PipeMon"
+    ],
+    [
+      "malware-type",
+      "ShadowPad"
+    ],
+    [
+      "malware-type",
+      "Winnti"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\CMDPipeRead"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\CMDPipeWrite"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\ComHeatPipeRead%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\FilePipeRead%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\FilePipeWrite%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\InCmdPipeRead%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\InCmdPipeWrite%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\MainHeatPipeRead%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\MainPipeRead%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\MainPipeWrite%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\RoutePipeWriite%B64_TIMESTAMP%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\ScreenPipeRead%CNC_DEFINED%"
+    ],
+    [
+      "named pipe",
+      "\\\\.\\pipe\\ScreenPipeWrite%CNC_DEFINED%"
+    ],
+    [
+      "regkey",
+      "HKLM\\SOFTWARE\\Microsoft\\Print\\Components\\A66F35-4164-45FF-9CB4-69ACAA10E52D"
+    ],
+    [
+      "regkey",
+      "HKLM\\SOFTWARE\\Microsoft\\Print\\Components\\DC20FD7E-4B1B-4B88-8172-61F0BED7D9E8"
+    ],
+    [
+      "regkey",
+      "HKLM\\SYSTEM\\ControlSet001\\Control\\Print\\Environments\\Windows x64\\Print Processors\\PrintFiiterPipelineSvc\\Driver"
+    ],
+    [
+      "regkey",
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Print\\Environments\\Windows x64\\Print Processors\\lltdsvc1\\Driver"
+    ],
+    [
+      "sha1",
+      "168101B9B3B512583B3CE6531CFCE6E5FB581409"
+    ],
+    [
+      "sha1",
+      "23789B2C9F831E385B22942DBC22F085D62B48C7"
+    ],
+    [
+      "sha1",
+      "2B0481C61F367A99987B7EC0ADE4B6995425151C"
+    ],
+    [
+      "sha1",
+      "3508EB2857E279E0165DE5AD7BBF811422959158"
+    ],
+    [
+      "sha1",
+      "44D0A2A43ECC8619DE8DB99C1465DB4E3C8FF995"
+    ],
+    [
+      "sha1",
+      "48230228B69D764F71A7BF8C08C85436B503109E"
+    ],
+    [
+      "sha1",
+      "4A240EDEF042AE3CE47E8E42C2395DB43190909D"
+    ],
+    [
+      "sha1",
+      "4B90E2E2D1DEA7889DC15059E11E11353FA621A6"
+    ],
+    [
+      "sha1",
+      "534CD47EB38FEE7093D24BAC66C2CF8DF24C7D03"
+    ],
+    [
+      "sha1",
+      "53C5AE2655808365F1030E1E06982A7A6141E47F"
+    ],
+    [
+      "sha1",
+      "5663AF9295F171FDD41A6D819094A5196920AA4B"
+    ],
+    [
+      "sha1",
+      "5BB96743FEB1C3375A6E2660B8397C68BEF4AAC2"
+    ],
+    [
+      "sha1",
+      "729D526E75462AA8D33A1493B5A77CB28DD654BC"
+    ],
+    [
+      "sha1",
+      "751A9CBFFEC28B22105CDCAF073A371DE255F176"
+    ],
+    [
+      "sha1",
+      "78F4ACD69DC8F9477CAB9C732C91A92374ADCACD"
+    ],
+    [
+      "sha1",
+      "AF9C220D177B0B54A790C6CC135824E7C829B681"
+    ],
+    [
+      "sha1",
+      "B56D8F826FA8E073E6AD1B99B433EAF7501F129E"
+    ],
+    [
+      "sha1",
+      "C03BE8BB8D03BE24A6C5CF2ED14EDFCEFA8E8429"
+    ],
+    [
+      "sha1",
+      "C7A9DCD4F9B2F26F50E8DD7F96352AEC7C4123FE"
+    ],
+    [
+      "sha1",
+      "C887B35EA883F8622F7C48EC9D0427AFE833BF46"
+    ],
+    [
+      "sha1",
+      "D24BBB898A4A301870CAB85F836090B0FC968163"
+    ],
+    [
+      "sha1",
+      "E17972F1A3C667EEBB155A228278AA3B5F89F560"
+    ],
+    [
+      "sha1",
+      "E422CC1D7B2958A59F44EE6D1B4E10B524893E9D"
+    ],
+    [
+      "threat-actor",
+      "Winnti Group"
+    ],
+    [
+      "x509-fingerprint-sha1",
+      "2830DE648BF0A521320036B96CE0D82BEF05994C"
+    ],
+    [
+      "x509-fingerprint-sha1",
+      "745EAC99E03232763F98FB6099F575DFC7BDFAA3"
+    ]
+  ],
+  "rejected": [
+    {
+      "type": "domain",
+      "value": "n8.ahnlabinc[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "owa.ahnlabinc[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "ssl2.ahnlabinc[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "www2.dyn.tracker[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "ssl2.dyn-tracker[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "client.gnisoft[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "nmn.nhndesk[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "domain",
+      "value": "ssl.lcrest[.]com",
+      "reason": "format"
+    },
+    {
+      "type": "ip-dst",
+      "value": "154.223.215[.]116",
+      "reason": "format"
+    },
+    {
+      "type": "ip-dst",
+      "value": "203.86.239[.]113",
+      "reason": "format"
+    }
+  ],
+  "seconds": 163.889
+}

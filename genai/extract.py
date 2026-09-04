@@ -71,7 +71,7 @@ def parse_candidates(answer: str) -> list[dict[str, Any]]:
     return candidates
 
 
-def reject_reason(
+def reject_reason(  # one return per filter; pylint: disable=too-many-return-statements
     candidate: dict[str, Any], source: str, existing: set[tuple[str, str]], min_confidence: float
 ) -> str | None:
     """The first filter the candidate fails, or None if it may be added."""

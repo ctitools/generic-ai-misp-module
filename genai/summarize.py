@@ -17,8 +17,9 @@ _INDICATOR_RES = (
     re.compile(r"https?://[^\s)\]>\"']+"),  # urls
     re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.I),
     re.compile(r"\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", re.I),  # uuids
-    re.compile(
-        r"\b(?:[a-z0-9-]+\.)+(?:com|net|org|io|lu|eu|ru|cn|info|biz|xyz|top|click|live|help|site|online)\b",
+    re.compile(  # domains with a common TLD
+        r"\b(?:[a-z0-9-]+\.)+"
+        r"(?:com|net|org|io|lu|eu|ru|cn|info|biz|xyz|top|click|live|help|site|online)\b",
         re.I,
     ),
 )

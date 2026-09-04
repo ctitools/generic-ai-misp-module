@@ -23,7 +23,7 @@ AI_TAGS = (
 
 
 @dataclass(frozen=True)
-class Prompt:
+class Prompt:  # mirrors the cluster meta; pylint: disable=too-many-instance-attributes
     value: str
     uuid: str
     use_case: str

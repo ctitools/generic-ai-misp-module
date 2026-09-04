@@ -21,4 +21,4 @@ tests/golden/*.tmp
 .claude/
 benchmarks/data/
 benchmarks/results/*.json
-benchmarks/results/
+benchmarks/results/gold/

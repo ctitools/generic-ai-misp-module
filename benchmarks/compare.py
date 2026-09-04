@@ -19,76 +19,16 @@ from functools import cached_property
 from pathlib import Path
 from urllib.parse import urlparse
 
-# --- _metrics: private minimal copy.  TODO coordinator: replace by benchmarks.metrics ---------
-
-
-@dataclass(frozen=True)
-class Confusion:
-    tp: int
-    fp: int
-    fn: int
-    tn: int = 0
-
-
-def normalise_value(v: str) -> str:
-    return re.sub(r"\s+", " ", v.strip().lower()).rstrip("/.")
-
-
-def values(pairs) -> set[str]:
-    return {normalise_value(v) for _, v in pairs}
-
-
-def confusion(got: set, ref: set, universe: set | None = None) -> Confusion:
-    universe = universe if universe is not None else got | ref
-    return Confusion(len(got & ref), len(got - ref), len(ref - got), len(universe - got - ref))
-
-
-def _ratio(num: int, den: int, empty: float) -> float:
-    return num / den if den else empty
-
-
-def scores(c: Confusion) -> dict[str, float]:
-    empty = 1.0 if (c.tp + c.fp + c.fn) == 0 else 0.0
-    recall = _ratio(c.tp, c.tp + c.fn, empty)
-    return {
-        "precision": _ratio(c.tp, c.tp + c.fp, empty),
-        "recall": recall,
-        "sensitivity": recall,
-        "specificity": _ratio(c.tn, c.tn + c.fp, 0.0),
-        "accuracy": _ratio(c.tp + c.tn, sum(astuple(c)), 0.0),
-        "f1": _ratio(2 * c.tp, 2 * c.tp + c.fp + c.fn, empty),
-        "jaccard": _ratio(c.tp, c.tp + c.fp + c.fn, empty),
-    }
-
-
-def cohen_kappa(a: set, b: set, universe: set | None = None) -> float:
-    c = confusion(a, b, universe)
-    n = sum(astuple(c))
-    if n == 0:
-        return 1.0
-    po = (c.tp + c.tn) / n
-    pe = ((c.tp + c.fp) * (c.tp + c.fn) + (c.fn + c.tn) * (c.fp + c.tn)) / (n * n)
-    return 1.0 if pe == 1 else (po - pe) / (1 - pe)
-
-
-def _sum(cs: list[Confusion]) -> Confusion:
-    return Confusion(*(sum(x) for x in zip(*map(astuple, cs), strict=True)))
-
-
-def aggregate(cs: list[Confusion]) -> dict[str, dict[str, float]]:
-    micro, per = scores(_sum(cs)), [scores(c) for c in cs]
-    return {"micro": micro, "macro": {k: statistics.fmean(s[k] for s in per) for k in micro}}
-
-
-def by_type(got_pairs, ref_pairs) -> dict[str, Confusion]:
-    """Per reference type: tp/fn against all got values, fp = got values of that type not in ref."""
-    got, ref, out = values(got_pairs), values(ref_pairs), {}
-    for t in sorted({t for t, _ in ref_pairs}):
-        ref_t = values(p for p in ref_pairs if p[0] == t)
-        got_t = values(p for p in got_pairs if p[0] == t)
-        out[t] = Confusion(len(ref_t & got), len(got_t - ref), len(ref_t - got))
-    return out
-
+from benchmarks.metrics import (
+    Confusion,
+    aggregate,
+    by_type,
+    cohen_kappa,
+    confusion,
+    normalise_value,
+    scores,
+    values,
+)
 
 # --- loading -----------------------------------------------------------------------------------
 
@@ -258,7 +198,7 @@ accuracy need a wider universe than `llm ∪ classic` and are only meaningful in
 
 def section_llm_vs_classic(ok: list[Report]) -> str:
     confs = [r.conf for r in ok]
-    agg, micro_c = aggregate(confs), _sum(confs)
+    agg, micro_c = aggregate(confs), sum(confs, Confusion(0, 0, 0, 0))
     pooled_l = {f"{r.id}:{v}" for r in ok for v in values(r.pairs)}
     pooled_c = {f"{r.id}:{v}" for r in ok for v in values(r.classic)}
     metric_rows = [[m, agg["micro"][m], agg["macro"][m]] for m in METRICS]
@@ -268,7 +208,7 @@ def section_llm_vs_classic(ok: list[Report]) -> str:
     types = {}  # by_type per report, then summed: the same value in two reports stays distinct
     for r in ok:
         for t, c in by_type(r.pairs, r.classic).items():
-            types[t] = _sum([types.get(t, Confusion(0, 0, 0)), c])
+            types[t] = types.get(t, Confusion(0, 0, 0, 0)) + c
     types = dict(sorted(types.items()))
     labels = [t for t in TYPES if t in types] + sorted(set(types) - set(TYPES))
     agreement = {"LLM only": micro_c.fp, "both": micro_c.tp, "classic only": micro_c.fn}
@@ -387,8 +327,7 @@ def main(argv=None) -> int:
     gold = section_gold(args.gold_dir, gold_results) if gold_results.is_dir() else ""
     reproduce = (
         "## Reproduce\n\n```bash\npython -m benchmarks.orkl --n 100 --seed 42\n"
-        'for f in benchmarks/data/orkl/*.txt; do python -m genai.classic "$f" '
-        '-o "benchmarks/results/$(basename "$f" .txt).classic.json"; done\n'
+        "python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results\n"
         f"python -m benchmarks.run_llm\npython -m benchmarks.compare --data-dir {args.data_dir} "
         f"--results-dir {args.results_dir} --out {args.out} --csv {args.csv}\n```\n"
     )

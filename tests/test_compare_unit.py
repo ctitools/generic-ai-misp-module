@@ -109,14 +109,7 @@ def test_gold_view(data: Path) -> None:
     assert "| x | classic vs gold | 1 | 1 | 1 | 0 |" in md
 
 
-def test_metrics_edge_cases() -> None:
-    assert compare.scores(compare.Confusion(0, 0, 0))["f1"] == 1.0
-    assert compare.scores(compare.Confusion(0, 1, 0))["precision"] == 0.0
-    assert compare.cohen_kappa(set(), set()) == 1.0
-    assert compare.cohen_kappa({"a"}, {"b"}, {"a", "b", "c"}) < 0
-    assert compare.normalise_value("  Http://X.com/ ") == "http://x.com"
+def test_helpers() -> None:
     assert compare.host_of("https://www.vendor.example/blog") == "vendor.example"
     assert compare.host_of("vendor.example") == "vendor.example"
     assert compare.host_of("hxxp://evil[.]com/x") == ""  # defanged: no crash, no host
-    by_type = compare.by_type([["ip-src", "1.1.1.1"]], [["ip-dst", "1.1.1.1"], ["md5", MD5]])
-    assert by_type["ip-dst"].tp == 1 and by_type["md5"].fn == 1  # value-only matching

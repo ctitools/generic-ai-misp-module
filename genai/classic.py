@@ -47,18 +47,24 @@ def extract_classic(text: str) -> list[tuple[str, str]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("textfile", type=Path)
-    parser.add_argument("-o", "--output", type=Path, help="write JSON here instead of stdout")
+    parser.add_argument("files", type=Path, nargs="+", help=".txt, or orkl .json (plain_text)")
+    parser.add_argument("-o", "--out-dir", type=Path, help="write <stem>.classic.json per file")
     args = parser.parse_args()
-    result = {
-        "tool": f"iocextract {version('iocextract')}",
-        "indicators": extract_classic(args.textfile.read_text(encoding="utf-8")),
-    }
-    dumped = json.dumps(result, indent=2)
-    if args.output:
-        args.output.write_text(dumped + "\n", encoding="utf-8")
-    else:
-        print(dumped)
+    for path in args.files:
+        text = path.read_text(encoding="utf-8")
+        if path.suffix == ".json":
+            text = json.loads(text).get("plain_text", "")
+        result = {
+            "tool": f"iocextract {version('iocextract')}",
+            "indicators": extract_classic(text),
+        }
+        if args.out_dir:
+            args.out_dir.mkdir(parents=True, exist_ok=True)
+            out = args.out_dir / f"{path.stem}.classic.json"
+            out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+            print(f"{out}: {len(result['indicators'])} indicators")
+        else:
+            print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

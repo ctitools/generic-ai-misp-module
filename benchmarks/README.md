@@ -26,14 +26,11 @@ benchmarks/results/<id>.classic.json   benchmarks/results/<id>.llm.json
 ```bash
 V=.venv/bin
 $V/python -m benchmarks.orkl --n 100 --seed 42        # 1. sample 100 English reports
-$V/python -m genai.classic                            # 2. classical extractor on the sample
+$V/python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # 2. classical extractor
 $V/python -m benchmarks.run_llm                       # 3. LLM extraction (needs OPENAI_* in .env)
 $V/python -m benchmarks.compare                       # 4. metrics -> docs + csv
 $V/pytest -q tests/test_orkl_unit.py                  # verification of step 1 (offline, fake API)
 ```
-
-Steps 2-4 are separate units of the benchmark work and land in their own commits; until they
-do, only step 1 runs.
 
 `benchmarks.orkl` options: `--n --seed --min-chars 2000 --max-chars 40000 --language en --data-dir`.
 It draws offsets in `[0, library_entries)` with `random.Random(seed)` (no replacement), fetches one

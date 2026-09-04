@@ -1,23 +1,5 @@
 # Benchmarks
 
-## Running: LLM extraction over the orkl sample
-
-Data flow: `benchmarks/data/orkl/sample.json` (`{"seed", "n", "ids": [...]}`) and one
-`benchmarks/data/orkl/<id>.json` per report (`id`, `title`, `plain_text`, ...) are produced by
-the sampler; `benchmarks/run_llm.py` wraps each report as a MISP event with one EventReport,
-sends it through `expansion.generic_ai.dict_handler` with `use_case=extraction` (the module as
-deployed, LLM from `.env`) and writes one result per report.
-
-```bash
-.venv/bin/python -m benchmarks.run_llm                 # all ids in sample.json, resumable
-.venv/bin/python -m benchmarks.run_llm --ids a,b --force
-```
-
-- artifact: `benchmarks/results/<id>.llm.json` = `{"model", "prompt", "indicators": [[type, value], ...], "rejected", "seconds"}`, or `{"error", "seconds"}` (a report is never dropped)
-- progress: `logs/benchmark-llm.log` (ok/fail counts, reports/s, ETA); exit code 2 when the LLM is unreachable
-- verification: `.venv/bin/pytest -q tests/test_run_llm_unit.py` (offline, mocked LLM)
-
-Benchmarks exist per use-case and per community profile.
 The first benchmark measures the **CTI info extraction** use-case: the module's LLM extraction
 against a classical regex extractor and against hand-labelled gold lists. The measured result is
 in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit by hand).
@@ -38,9 +20,7 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 ## Commands
 
 python -m benchmarks.orkl --n 100 --seed 42          # draw the sample -> benchmarks/data/orkl/
-for f in benchmarks/data/orkl/*.txt; do              # classic extractor, one file per report
-  python -m genai.classic "$f" -o "benchmarks/results/$(basename "$f" .txt).classic.json"
-done
+python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # classic extractor (skips sample.json's empty text)
 python -m benchmarks.run_llm                         # LLM extraction -> benchmarks/results/<id>.llm.json
 python -m benchmarks.compare                         # -> docs/BENCHMARKS_extraction.md + results/extraction.csv
 .venv/bin/pytest -q tests/test_compare_unit.py       # offline check of the comparison on synthetic data
@@ -56,9 +36,8 @@ python -m benchmarks.compare                         # -> docs/BENCHMARKS_extrac
 | `benchmarks/results/extraction.csv` | one row per report (counts, precision, recall, F1, kappa, seconds) |
 | `docs/BENCHMARKS_extraction.md` | the report: tables, Mermaid charts, confusion matrices, deviations |
 
-Data and result json files are gitignored (`benchmarks/data/`, `benchmarks/results/`). Only
-`benchmarks/compare.py` is in this tree yet; `benchmarks/orkl.py`, `genai/classic.py`
-(`iocextract`, a benchmark-only dependency) and `benchmarks/run_llm.py` are separate units.
+Data and result json files are gitignored (`benchmarks/data/`, `benchmarks/results/*.json`);
+the csv and the report are committed. Details of each step: `benchmarks/README.md`.
 
 ## Metric definitions
 

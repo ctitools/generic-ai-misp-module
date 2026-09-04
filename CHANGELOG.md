@@ -8,6 +8,8 @@
   and test tooling only — never on the request path (`tests/test_classic_unit.py` enforces it, plus
   the gold-subset gate on `orkl-sample`). Supply-chain notes in IMPROVEMENTS.md item 24.
 - `benchmarks/orkl.py`: stdlib-only read-only orkl.eu client (`info`, `entry`, `entries`) and reproducible sampler `sample(n, seed, ...)` / `python -m benchmarks.orkl` that draws random English reports (2000-40000 chars) into `benchmarks/data/orkl/<id>.json` + `sample.json` (resumable, progress in `logs/benchmark-orkl.log`). Offline tests in `tests/test_orkl_unit.py`; data flow and file contracts in `benchmarks/README.md`; `benchmarks/data/`, `benchmarks/results/*.json`, `logs/` gitignored.
+- `benchmarks/run_llm.py`: runs the module's LLM extraction through `expansion.generic_ai.dict_handler` over the orkl sample (`benchmarks/data/orkl/sample.json`) and writes `benchmarks/results/<id>.llm.json` (`model`, `prompt`, sorted `indicators`, `rejected`, `seconds`; `{"error", "seconds"}` on failure, no report is dropped). Resumable (`--force` re-runs), exits 2 when the LLM in `.env` is unreachable, logs ok/fail, reports/s and ETA to `logs/benchmark-llm.log`. Offline tests in `tests/test_run_llm_unit.py`; `benchmarks/data/` and `benchmarks/results/*.json` are gitignored. Docs: BENCHMARKS.md "Running", IMPROVEMENTS item 19.
+- `expansion/generic_ai.py`: `dict_handler` also turns `PyMISPError` from the use-case into an `{"error": ...}` response (a candidate that passes all filters but PyMISP still refuses, e.g. an unparsable `datetime`, no longer crashes the handler).
 
 ## 2026-09-04 (use-cases)
 

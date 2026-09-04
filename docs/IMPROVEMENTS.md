@@ -71,9 +71,10 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     live e2e tests already skip without credentials.
 18. **No lockfile — done.** A `[build-system]` was added and `uv.lock` (39 packages) is committed,
     as AGENTS.md asks. Hash pinning of the transitive tree is still worth a review.
-19. **`benchmarks/` mandated by AGENTS.md and described in BENCHMARKS.md but absent — open.**
-    The fixture set (5 events with reports) is a natural seed: reproduce each report's summary
-    or extracted attributes from the report text and score coverage/correctness.
+19. **`benchmarks/` mandated by AGENTS.md and described in BENCHMARKS.md — in progress.**
+    `benchmarks/run_llm.py` runs the module's extraction over an orkl sample (see
+    BENCHMARKS.md "Running"). Still open: the summary benchmark on the fixture set (5 events
+    with reports): reproduce each report's summary from the report text and score it.
 20. **README claimed artifacts that don't exist — done.** `artifacts/` and `logs/` were empty; the
     README listed six saved result files. Removed.
 21. **AGENTS.md contradictions — partly done.** Python 3.13 vs 3.12 vs README 3.14 (now 3.14

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-04 (benchmark)
+
+- `benchmarks/orkl.py`: stdlib-only read-only orkl.eu client (`info`, `entry`, `entries`) and reproducible sampler `sample(n, seed, ...)` / `python -m benchmarks.orkl` that draws random English reports (2000-40000 chars) into `benchmarks/data/orkl/<id>.json` + `sample.json` (resumable, progress in `logs/benchmark-orkl.log`). Offline tests in `tests/test_orkl_unit.py`; data flow and file contracts in `benchmarks/README.md`; `benchmarks/data/`, `benchmarks/results/*.json`, `logs/` gitignored.
+
 ## 2026-09-04 (use-cases)
 
 - Implemented the two use-cases in a new `genai/` package: `extract.py` (CTI info extraction: LLM proposes JSON candidates, five deterministic filters — in-source, known type, format, duplicate, confidence — decide; file/vulnerability objects; every added attribute AI-tagged) and `summarize.py` (`kind=report|event`, deterministic event rendering, structural gate: headings, ≤ 200 words, no indicator that is not in the input; summary attached as a new EventReport, event AI-tagged).

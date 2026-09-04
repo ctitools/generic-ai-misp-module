@@ -124,3 +124,12 @@ def test_unreachable_llm_exits_2(data_dir, tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(llm, "is_reachable", lambda settings: False)
     assert run_llm.main(_args(data_dir, tmp_path)) == 2
     assert not (tmp_path / "a.llm.json").exists()
+
+
+def test_prompt_option_selects_the_cluster(data_dir, tmp_path, fake_llm) -> None:
+    fake_llm(ANSWER)
+    results = tmp_path / "results"
+    args = [*_args(data_dir, results), "--prompt", "cti-info-extraction/qwen3.8-v2"]
+    assert run_llm.main(args) == 0
+    result = json.loads((results / "a.llm.json").read_text())
+    assert result["prompt"]["cluster"] == "cti-info-extraction/qwen3.8-v2"

@@ -33,12 +33,14 @@ def indicators(event: dict) -> list[list[str]]:
     return sorted([a["type"], str(a["value"])] for a in attributes)
 
 
-def run_one(entry: dict) -> dict:
+def run_one(entry: dict, prompt: str = "") -> dict:
     """One report through the real module entry point; never raises on LLM/validation errors."""
     title = entry.get("title") or entry["id"]
     report = {"name": title, "content": entry.get("plain_text", "")}
     event = {"info": title, "EventReport": [report]}
     request = {"module": "generic_ai", "event": {"Event": event}, "use_case": "extraction"}
+    if prompt:  # prompt cluster uuid or value, e.g. cti-info-extraction/qwen3.8-v2
+        request["prompt_extraction"] = prompt
     start = time.perf_counter()
     response = generic_ai.dict_handler(request)
     seconds = round(time.perf_counter() - start, 3)
@@ -61,6 +63,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
     parser.add_argument("--force", action="store_true", help="re-run ids with a result file")
     parser.add_argument("--log-file", type=Path, default=LOG_FILE)
+    parser.add_argument("--prompt", default="", help="prompt cluster uuid or value (default v1)")
     args = parser.parse_args(argv)
 
     args.log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -85,7 +88,7 @@ def main(argv: list[str] | None = None) -> int:
     started, fail = time.perf_counter(), 0
     for done, uid in enumerate(todo, 1):
         entry = json.loads((args.data_dir / f"{uid}.json").read_text(encoding="utf-8"))
-        result = run_one(entry)
+        result = run_one(entry, args.prompt)
         fail += "error" in result
         (args.results_dir / f"{uid}.llm.json").write_text(json.dumps(result, indent=2))
         _progress(uid, result, (done, fail, len(todo)), time.perf_counter() - started)

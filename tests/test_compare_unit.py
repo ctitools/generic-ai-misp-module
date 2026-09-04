@@ -12,7 +12,7 @@ MD5 = "a" * 32
 IDS = ["aaaaaaaa-0001", "bbbbbbbb-0002", "cccccccc-0003"]
 LLM_META = {
     "model": {"name": "m", "digest": "d", "server": "s"},
-    "prompt": {"value": "p", "uuid": "u", "version": "1", "sha256": "h"},
+    "prompt": {"cluster": "p", "uuid": "u", "version": "1", "sha256": "h"},
 }
 
 

@@ -185,7 +185,7 @@ Date: {date.today()}. Sample: seed {sample.get("seed")}, n {sample.get("n")}, re
 results {len(reports)}, reports with LLM errors {len(reports) - len(ok)}.
 
 - Model: `{model.get("name")}` digest `{model.get("digest")}` server `{model.get("server")}`
-- Prompt: `{prompt.get("value")}` version `{prompt.get("version")}` sha256 `{prompt.get("sha256")}`
+- Prompt: `{prompt.get("cluster")}` v{prompt.get("version")} sha256 `{prompt.get("sha256")}`
 - Classic tool: `{tool}`
 
 **Method.** Indicators are compared by normalised value only (lower-case, trailing `/` and `.`

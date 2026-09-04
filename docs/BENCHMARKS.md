@@ -22,6 +22,7 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 python -m benchmarks.orkl --n 100 --seed 42          # draw the sample -> benchmarks/data/orkl/
 python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # classic extractor (skips sample.json's empty text)
 python -m benchmarks.run_llm                         # LLM extraction -> benchmarks/results/<id>.llm.json
+python -m benchmarks.run_llm --prompt cti-info-extraction/qwen3.8-v2 --results-dir benchmarks/results-v2  # 8000-token variant
 python -m benchmarks.compare                         # -> docs/BENCHMARKS_extraction.md + results/extraction.csv
 .venv/bin/pytest -q tests/test_compare_unit.py       # offline check of the comparison on synthetic data
 

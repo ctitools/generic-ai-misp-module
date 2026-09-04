@@ -40,8 +40,23 @@ POST /query {"module": "generic_ai", "event": {"Event": {...}}}
          "event_report": "<markdown>"}
 ```
 
-All of this lives in [expansion/generic_ai.py](expansion/generic_ai.py) (about 130 lines).
-To add real behaviour, replace the bodies of `process_event()` and `process_eventReport()`.
+`process_event()` runs the configured use-case ([docs/USE-CASES.md](docs/USE-CASES.md)):
+
+| `use_case` | what happens | where |
+|---|---|---|
+| `none` (default) | pass-through, no LLM call | |
+| `extraction` | high-confidence MISP attributes from the EventReport, AI-tagged per attribute | `genai/extract.py` |
+| `summarization` | `summary_kind: report` or `event` → new AI-tagged EventReport, event tagged | `genai/summarize.py` |
+
+The LLM comes from `.env` (`OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_KEY`; any
+OpenAI-compatible chat endpoint). Prompts and sampling parameters come from the
+`generic-ai-prompts` galaxy in `galaxies/` + `clusters/` ([docs/PROMPTS.md](docs/PROMPTS.md)).
+
+```bash
+jq -c '{module: "generic_ai", use_case: "summarization", summary_kind: "report", event: .}' fixtures/summary/dummy-event.json \
+  | curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- \
+  | jq '{summary: .results.Event.Event.EventReport[-1].content, tags: [.results.Event.Event.Tag[].name], meta: .metadata}'
+```
 
 ### Input shapes
 
@@ -70,12 +85,19 @@ carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 
 ```text
 .
-├── expansion/generic_ai.py        the module
+├── expansion/generic_ai.py        the module (misp-modules contract, validation, dispatch)
+├── genai/                         llm.py (client), prompts.py (galaxy + tags), extract.py, summarize.py
+├── galaxies/ · clusters/          the generic-ai-prompts MISP galaxy
+├── fixtures/summary/dummy-event.json  hand-written event for deterministic summary tests
+├── fixtures/gold/*.iocs.json      hand-checked indicator lists for the extraction precision gate
+├── tests/golden/summary-*.md      recorded summaries (model digest + prompt hash in the header)
 ├── fixtures/output/*.json         8 real MISP events (5 with EventReports), used by all tests
 ├── fixtures/output/hashes.csv     md5 → event uuid map of the fixture set
 ├── tests/conftest.py              fixture loading + read-only MISP client (MispApi)
 ├── tests/test_generic_ai_unit.py  in-process tests of the handler
-├── tests/test_generic_ai_e2e.py   real misp-modules server + live MISP instance
+├── tests/test_generic_ai_e2e.py   real misp-modules server + live MISP instance + use-cases
+├── tests/test_usecases_unit.py    use-cases with a mocked LLM
+├── tests/test_llm_live.py         determinism, extraction precision, summary gate + goldens
 ├── tests/test_e2e_roundtrip.py    round-trip quality gate on 10 random live events
 ├── tests/misp_compare.py          semantic MISP-event comparison used by the gate
 ├── tests/e2etests/                events written by process_event(..., e2etest=True)
@@ -121,6 +143,7 @@ Expected: the input uuid echoed back and the first 120 characters of the report 
 
 - unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; the two hooks
 - e2e, local: starts `misp-modules` on a free port and POSTs every fixture event to `/query`
+- use-cases offline: `tests/test_usecases_unit.py` mocks the LLM; live: `tests/test_llm_live.py` (skips when the endpoint in `.env` is down)
 - e2e, live: fetches the fixture uuids from `MISP_BASE_URL` with `MISP_API_KEY` (both from `.env`), runs them through the module and compares the report with the fixture. Skipped when `.env` is missing, the key is rejected, or an event is not on the instance. The dev instance has a self-signed certificate; run with `MISP_VERIFY_SSL=false` to accept it (tests only, never the module):
 
 ```bash

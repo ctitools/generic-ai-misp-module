@@ -26,12 +26,12 @@ caller / MISP ──POST /query──▶ misp-modules ──handler(json)──�
               {"results": {"Event": {...}, "ReportEvent": {...}}, "event_report": "..."}
 ```
 
-`process_event()` and `process_eventReport()` are the extension points. Both are dummies today
-(`process_event` returns its input; `process_eventReport` wraps the markdown into a fresh event
-with one EventReport). Real AI logic — summarisation, extraction, tagging — goes there and keeps
-the contract "MISP Event in, MISP Event out".
+`process_event()` dispatches on `use_case` (`none` = pass-through, `extraction`, `summarization`)
+to `genai/extract.py` / `genai/summarize.py`; `process_eventReport()` is still a dummy. Code lives
+in the `genai/` package because misp-modules loads every `.py` in `expansion/` as a module, so
+helpers cannot sit next to `generic_ai.py`; the module adds the repo root to `sys.path` on import.
 
-### Planned hooks (next code round; contract in USE-CASES.md, tests in TESTING.md)
+### Use-case hooks (contract in USE-CASES.md, tests in TESTING.md)
 
 ```text
 process_event(event, use_case, …)
@@ -44,8 +44,9 @@ both:  prompt cluster (galaxy) ──┐
        sampling params ──────────┘        (one function, OpenAI-compatible chat, JSON mode for UC1)
 ```
 
-- **LLM boundary**: exactly one function talks to the network (`llm_chat`); tests mock it.
-  Endpoint and key come from `.env` only; timeout → error, no fallback.
+- **LLM boundary**: exactly one function talks to the network (`genai.llm.llm_chat`); tests
+  mock it. Endpoint and key come from `.env` only; timeout → error, no fallback. Thinking is
+  disabled via `reasoning_effort: none` (Ollama ignores `think: false` on the OpenAI route).
 - **Prompt resolution**: `prompt_*` config → galaxy cluster (uuid or value) → inline text →
   bundled default; the cluster also fixes temperature/seed/top_p/max_tokens/think (PROMPTS.md).
 - **Tagging**: pinned `ai-computer-assisted` strings on every LLM-suggested attribute (UC1) or

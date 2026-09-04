@@ -51,7 +51,15 @@ the answer alone; a test asserts the answer is not truncated (`finish_reason == 
 ## 3. Test plan per use-case
 
 Gate = must be green before merge. Offline tests mock the LLM with a canned reply
-(`monkeypatch` on the single LLM-call function), so they run everywhere.
+(`monkeypatch` on `genai.llm.llm_chat`, the single LLM-call function), so they run everywhere.
+Files: `tests/test_usecases_unit.py` (offline), `tests/test_llm_live.py` (live LLM),
+`tests/test_generic_ai_e2e.py` (through misp-modules, live LLM for the use-case cases).
+
+```bash
+.venv/bin/pytest -q tests/test_usecases_unit.py                 # offline, ~2 s
+MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_llm_live.py   # live, ~1-2 min, prints precision/recall
+MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_llm_live.py --update-goldens  # re-record summaries
+```
 
 ### UC1 — CTI info extraction
 
@@ -73,7 +81,11 @@ Gate = must be green before merge. Offline tests mock the LLM with a canned repl
 | determinism | live LLM | same report twice | identical attribute set | yes |
 | recall report | live LLM | `tests/fixtures/orkl-sample.txt` wrapped as an EventReport | recall vs a labelled list, printed as a table | no (informational) |
 
-The gold IoC lists are written by hand once (≈ 20–40 indicators per report) and committed.
+The gold IoC lists (`fixtures/gold/*.iocs.json`) were seeded by regex over the report text and
+completed by hand after the first live run; every entry is literally in the report. Results on
+2026-09-04 with `qwen3.8`: `10a94632` (no real indicators) → 0 extracted, precision 1.0;
+`59ed4725` (ToolShell) → filenames, hashes, CVEs and threat-actor names found, defanged IPs
+correctly rejected; Emotet sample → all 11 hashes found (recall 1.0).
 
 ### UC2 — Summarization
 
@@ -175,7 +187,13 @@ Gates that must be green before merging: unit, local e2e, round-trip gate, UC1 p
 UC2 L3 gate, repeat-run determinism. Live layers skip (not fail) when their backend is down;
 a merge with skipped gates is allowed only if the CI log shows the skip reason.
 
-## 6. Where tests run
+## 6. Golden files recorded
+
+`tests/golden/summary-report.md` and `summary-event.md` were recorded on 2026-09-04
+(`qwen3.8:latest`, digest `22130167c4c2`, Ollama 0.33.2) and reviewed: every indicator they
+mention is in the dummy event, all four headings are present, both under 200 words.
+
+## 7. Where tests run
 
 Locally, against `nanu` and the dev MISP instance from `.env`. The developer-host loop in
 README.md is an alternative when the laptop cannot reach them, not a requirement.

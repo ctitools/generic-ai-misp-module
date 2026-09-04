@@ -1,0 +1,112 @@
+{
+  "Event": {
+    "uuid": "6f1e2b3c-4d5e-4f60-8a71-92b3c4d5e6f7",
+    "info": "Dummy phishing campaign against ACME Bank customers",
+    "date": "2026-09-02",
+    "timestamp": "1788000000",
+    "published": false,
+    "analysis": "1",
+    "threat_level_id": "2",
+    "distribution": "1",
+    "Orgc": {
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f",
+      "name": "CIRCL"
+    },
+    "Tag": [
+      {
+        "name": "tlp:amber"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Phishing - T1566\""
+      }
+    ],
+    "Attribute": [
+      {
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "203.0.113.42",
+        "to_ids": true,
+        "comment": "phishing host"
+      },
+      {
+        "type": "domain",
+        "category": "Network activity",
+        "value": "login-acme-bank.example",
+        "to_ids": true
+      },
+      {
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://login-acme-bank.example/verify",
+        "to_ids": true
+      },
+      {
+        "type": "email-src",
+        "category": "Payload delivery",
+        "value": "alerts@acme-bank-secure.example",
+        "to_ids": true
+      },
+      {
+        "type": "text",
+        "category": "Other",
+        "value": "About 40,000 EUR lost by twelve customers",
+        "to_ids": false
+      },
+      {
+        "type": "campaign-name",
+        "category": "Attribution",
+        "value": "ACME hotel-invoice phishing 2026",
+        "to_ids": false
+      }
+    ],
+    "Object": [
+      {
+        "name": "file",
+        "meta-category": "file",
+        "uuid": "0a1b2c3d-4e5f-4607-8192-a3b4c5d6e7f8",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "24",
+        "Attribute": [
+          {
+            "type": "filename",
+            "object_relation": "filename",
+            "category": "Payload delivery",
+            "value": "Invoice_2026.xlsm"
+          },
+          {
+            "type": "md5",
+            "object_relation": "md5",
+            "category": "Payload delivery",
+            "value": "d41d8cd98f00b204e9800998ecf8427e"
+          },
+          {
+            "type": "sha256",
+            "object_relation": "sha256",
+            "category": "Payload delivery",
+            "value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ]
+      }
+    ],
+    "EventReport": [
+      {
+        "uuid": "9c8b7a6f-5e4d-4c3b-8a29-18f7e6d5c4b3",
+        "name": "Phishing campaign against ACME Bank customers",
+        "content": "## Summary\n\nOn 2 September 2026 ACME Bank customers received phishing e-mails from alerts@acme-bank-secure.example asking them to \"verify\" their account at https://login-acme-bank.example/verify. The page, hosted on 203.0.113.42 (domain login-acme-bank.example), imitates the ACME Bank login portal and steals credentials and one-time codes.\n\n## Delivery\n\nThe e-mails carry an Excel attachment Invoice_2026.xlsm (MD5 d41d8cd98f00b204e9800998ecf8427e, SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855). Opening it and enabling macros contacts the same host and downloads a second-stage loader.\n\n## Impact\n\nTwelve customers reported fraudulent transfers totalling about 40,000 EUR. No employee accounts were compromised. The campaign is attributed with low confidence to the same group as the March 2026 campaign against Beta Credit Union (related event).\n\n## Recommendations\n\nBlock the domain and IP, reset credentials of affected customers, warn customers about the sender address, and report new URLs to the CSIRT.\n",
+        "distribution": "1",
+        "deleted": false,
+        "timestamp": "1788000000"
+      }
+    ],
+    "RelatedEvent": [
+      {
+        "Event": {
+          "uuid": "1b2c3d4e-5f60-4718-8293-a4b5c6d7e8f9",
+          "info": "March 2026 phishing campaign against Beta Credit Union",
+          "date": "2026-03-11",
+          "id": "77"
+        }
+      }
+    ]
+  }
+}

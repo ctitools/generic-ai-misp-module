@@ -136,3 +136,34 @@ def test_live_misp_events_validate(misp_api, uuid) -> None:
         r["content"] for r in fixture["Event"].get("EventReport", []) if not r.get("deleted")
     )
     assert result["event_report"] == expected_report
+
+
+# --- use-cases through the real misp-modules server (live LLM; skips when it is down) ---
+
+
+@pytest.mark.parametrize(
+    ("body", "expected"),
+    [
+        ({"use_case": "summarization", "summary_kind": "report"}, "kind"),
+        ({"use_case": "extraction"}, "added"),
+    ],
+)
+def test_service_runs_use_cases(
+    misp_modules_url, llm_settings, dummy_event, body, expected
+) -> None:
+    payload = _post_json(
+        f"{misp_modules_url}/query",
+        {"module": "generic_ai", "event": dummy_event, **body},
+        timeout=300,
+    )
+    assert "error" not in payload, payload
+    assert expected in payload["metadata"]
+    assert payload["metadata"]["model"]["name"] == llm_settings.model
+    event = payload["results"]["Event"]["Event"]
+    tagged = {t["name"] for t in event.get("Tag", [])} | {
+        t["name"] for a in event.get("Attribute", []) for t in a.get("Tag", [])
+    }
+    assert (
+        'ai-computer-assisted:assistance-level="ai-generated"' in tagged
+        or body["use_case"] == "extraction"
+    )

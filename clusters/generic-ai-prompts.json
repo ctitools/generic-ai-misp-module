@@ -1,0 +1,141 @@
+{
+  "authors": [
+    "Aaron Kaplan",
+    "CIRCL"
+  ],
+  "category": "generic-ai",
+  "description": "Prompts, models and sampling parameters used by the Generic AI MISP module",
+  "name": "Generic AI prompts",
+  "source": "https://github.com/ctitools/generic-ai-misp-module",
+  "type": "generic-ai-prompts",
+  "uuid": "d555596c-4db5-4af6-a66d-748f74f65ab8",
+  "version": 1,
+  "values": [
+    {
+      "value": "cti-info-extraction/qwen3.8-v1",
+      "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+      "description": "Extract high-confidence MISP attributes from an EventReport",
+      "meta": {
+        "use_case": "cti-info-extraction",
+        "model": {
+          "name": "qwen3.8:latest",
+          "digest": "22130167c4c2",
+          "quantization": "Q4_K_M",
+          "server": "ollama 0.33.2"
+        },
+        "model_parameters": {
+          "temperature": 0,
+          "seed": 42,
+          "top_p": 1,
+          "max_tokens": 2000,
+          "think": false
+        },
+        "prompt": "You extract indicators of compromise from a cyber threat intelligence report for MISP.\nOnly return indicators that appear LITERALLY in the report text. Never infer, complete or\nnormalise a value. If unsure, leave it out: precision matters more than recall. Benign\nreferences (the reporting organisation's own website, documentation links) are not indicators.\n\nAllowed \"type\" values are MISP attribute types, e.g. ip-src, ip-dst, domain, hostname, url,\nmd5, sha1, sha256, filename, email-src, email-dst, vulnerability, regkey, mutex, user-agent,\nja3-fingerprint-md5, AS, btc, threat-actor, malware-type. The complete list follows:\n{{misp_types}}\n\nReturn ONLY a JSON object, no prose, following this schema:\n{\"indicators\": [{\"type\": \"<misp type>\", \"category\": \"<misp category>\", \"value\": \"<exact text>\",\n  \"confidence\": <0..1>, \"quote\": \"<the sentence fragment containing the value>\"}]}\nSet confidence below 0.9 for anything you are not certain about.\n\nReport:\n{{input}}",
+        "version": 1,
+        "prompt_sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757",
+        "language": "en",
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "indicators": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "value",
+                  "confidence",
+                  "quote"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "type": "number"
+                  },
+                  "quote": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "indicators"
+          ]
+        }
+      }
+    },
+    {
+      "value": "summary-report/qwen3.8-v1",
+      "uuid": "0b8b4d38-4d38-48eb-be21-f42ad010281e",
+      "description": "Analyst assessment of an EventReport",
+      "meta": {
+        "use_case": "summary-report",
+        "model": {
+          "name": "qwen3.8:latest",
+          "digest": "22130167c4c2",
+          "quantization": "Q4_K_M",
+          "server": "ollama 0.33.2"
+        },
+        "model_parameters": {
+          "temperature": 0,
+          "seed": 42,
+          "top_p": 1,
+          "max_tokens": 600,
+          "think": false
+        },
+        "prompt": "You are a CTI analyst writing an analyst assessment of the following report for a MISP event.\nWrite in English, at most 200 words, using exactly these markdown headings:\n## Threat\n## Targets\n## Indicators\n## Recommended actions\nUse only facts stated in the report. Do not add indicators, names or dates that are not in the\nreport. If a section has no information, write \"Not stated in the report.\"\n\nReport:\n{{input}}",
+        "version": 1,
+        "prompt_sha256": "22dc0a98abda8ed8cd1977ea2c1a4f1e910e0fa26a645414768a31002bd2fff1",
+        "language": "en",
+        "headings": [
+          "## Threat",
+          "## Targets",
+          "## Indicators",
+          "## Recommended actions"
+        ],
+        "max_words": 200
+      }
+    },
+    {
+      "value": "summary-event/qwen3.8-v1",
+      "uuid": "3d6c2c76-de71-4335-b19a-ba2550790a9a",
+      "description": "Management summary of a MISP event from its attributes, objects, tags and links",
+      "meta": {
+        "use_case": "summary-event",
+        "model": {
+          "name": "qwen3.8:latest",
+          "digest": "22130167c4c2",
+          "quantization": "Q4_K_M",
+          "server": "ollama 0.33.2"
+        },
+        "model_parameters": {
+          "temperature": 0,
+          "seed": 42,
+          "top_p": 1,
+          "max_tokens": 600,
+          "think": false
+        },
+        "prompt": "You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering\nof the event: its attributes, objects, tags, galaxies and related events.\nWrite in English, at most 200 words, using exactly these markdown headings:\n## What happened\n## Key indicators\n## Context and attribution\n## Related events\nMention uuids exactly as given when you refer to objects or related events. Use only the\ninformation below; never invent indicators. If a section has no information, write\n\"Not present in the event.\"\n\nEvent:\n{{input}}",
+        "version": 1,
+        "prompt_sha256": "b5ed5d27d94e2336aa4a5633f2b6f9e1168d101d9a636b03c843cd0e714098df",
+        "language": "en",
+        "headings": [
+          "## What happened",
+          "## Key indicators",
+          "## Context and attribution",
+          "## Related events"
+        ],
+        "max_words": 200
+      }
+    }
+  ]
+}

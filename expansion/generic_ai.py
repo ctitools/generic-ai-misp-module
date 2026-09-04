@@ -1,26 +1,37 @@
-"""Generic AI MISP module: takes a full MISP Event, validates it, runs two (dummy) hooks.
+"""Generic AI MISP module: takes a full MISP Event, validates it, runs a use-case on it.
 
 Data flow (see README.md / docs/ARCHITECTURE.md):
 
     request -> _extract_event -> validate_event -> event (MISPEvent)
         -> get_event_report(event) -> event_report (markdown string)
-        -> process_event(event)            -> MISPEvent
-        or...
+        -> process_event(event, settings)    -> MISPEvent  (use_case none|extraction|summarization)
         -> process_eventReport(event_report) -> MISPEvent
-        -> response {"results": {"Event": ..., "ReportEvent": ...}, "event_report": ...}
+        -> response {"results": {"Event": ..., "ReportEvent": ...}, "event_report", "metadata"}
 """
 
 import copy
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
 from pymisp import MISPEvent, PyMISPError
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:  # misp-modules imports this file by path, not as a package
+    sys.path.insert(0, str(REPO_ROOT))
+
+from genai import (  # noqa: E402  # pylint: disable=wrong-import-position
+    extract,
+    llm,
+    prompts,
+    summarize,
+)
+
 misperrors = {"error": "Error"}
 mispattributes = {"input": [], "output": ["Event"], "format": "misp_standard"}
 moduleinfo = {
-    "version": "0.3",
+    "version": "0.4",
     "author": "Aaron Kaplan / ctitools",
     "description": "Generic AI MISP module operating on a full MISP Event.",
     "module-type": ["expansion"],
@@ -28,18 +39,33 @@ moduleinfo = {
     "logo": "",
     "requirements": ["pymisp"],
     "features": (
-        "Accepts a full MISP Event (MISP core format), validates it with PyMISP, extracts the "
-        "EventReport markdown and passes both through process_event() and "
-        "process_eventReport(). Both hooks are dummies for now and return a MISP Event."
+        "Accepts a full MISP Event (MISP core format), validates it with PyMISP and runs a "
+        "use-case on it: CTI info extraction (high-confidence attributes from the EventReport) "
+        "or summarization (of the EventReport or of the event). Prompts and sampling parameters "
+        "come from the generic-ai-prompts galaxy; all LLM output is ai-computer-assisted tagged."
     ),
     "references": ["https://www.misp-standard.org/rfc/misp-standard-core.html"],
     "input": 'A full MISP Event under "event" ({"Event": {...}} or bare) or under "data": [...].',
-    "output": "Two MISP Events: the processed event and the event built from the EventReport.",
+    "output": "The processed MISP Event plus a MISP Event built from the EventReport.",
 }
-moduleconfig: list[str] = []
+# key -> default. Settable in MISP's module settings; the request body may override all but
+# request_timeout. Endpoint and API key come from .env only (never from the request).
+DEFAULTS: dict[str, Any] = {
+    "use_case": "none",
+    "summary_kind": "report",
+    "prompt_extraction": "",
+    "prompt_summary_report": "",
+    "prompt_summary_event": "",
+    "model_id": "",
+    "min_confidence": 0.9,
+    "request_timeout": llm.DEFAULT_TIMEOUT,
+}
+moduleconfig = list(DEFAULTS)
+REQUEST_KEYS = frozenset(moduleconfig) - {"request_timeout"}
+USE_CASES = ("none", "extraction", "summarization")
 
 # process_event(..., e2etest=True) writes the processed event here as <uuid>.json
-E2E_DIR = Path(__file__).resolve().parents[1] / "tests" / "e2etests"
+E2E_DIR = REPO_ROOT / "tests" / "e2etests"
 
 
 def _extract_event(request: dict[str, Any]) -> dict[str, Any]:
@@ -50,6 +76,22 @@ def _extract_event(request: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(data, dict) or not data:
         raise ValueError('This module requires a MISP Event under "event" or "data".')
     return data["Event"] if isinstance(data.get("Event"), dict) else data
+
+
+def resolve_settings(request: dict[str, Any]) -> dict[str, Any]:
+    """Precedence: request body (allowed keys) > module config > .env GENERIC_AI_<KEY> > default."""
+    config = request.get("config") if isinstance(request.get("config"), dict) else {}
+    env = llm.env()
+    settings = {}
+    for key, default in DEFAULTS.items():
+        sources = [
+            request.get(key) if key in REQUEST_KEYS else None,
+            config.get(key),
+            env.get(f"GENERIC_AI_{key.upper()}"),
+        ]
+        value = next((v for v in sources if v not in (None, "")), default)
+        settings[key] = type(default)(value) if isinstance(default, (int, float)) else value
+    return settings
 
 
 def _normalise_for_pymisp(data: dict[str, Any]) -> dict[str, Any]:
@@ -96,16 +138,49 @@ def get_event_report(event: MISPEvent) -> str:
     return "\n\n".join(contents)
 
 
-def process_event(event: MISPEvent, e2etest: bool = False) -> MISPEvent:
-    """Dummy hook acting on the whole event. Replace with real AI logic.
+def _run_use_case(event: MISPEvent, settings: dict[str, Any]) -> dict[str, Any]:
+    llm_settings = llm.LLMSettings.from_env(
+        settings["model_id"] or None, settings["request_timeout"]
+    )
+    report = get_event_report(event)
+    if settings["use_case"] == "extraction":
+        prompt = prompts.resolve_prompt("cti-info-extraction", settings["prompt_extraction"])
+        result = extract.extract_iocs(
+            event, report, llm_settings, prompt, float(settings["min_confidence"])
+        )
+    else:
+        kind = settings["summary_kind"]
+        if kind not in summarize.KINDS:
+            raise ValueError(f"unknown summary_kind {kind!r}, expected one of {summarize.KINDS}")
+        prompt = prompts.resolve_prompt(f"summary-{kind}", settings[f"prompt_summary_{kind}"])
+        result = summarize.summarize(event, report, kind, llm_settings, prompt)
+    result["model"] = llm.model_info(llm_settings)
+    return result
 
-    With e2etest=True the (processed) event is also written to E2E_DIR/<uuid>.json so the
-    round-trip quality gate (tests/test_e2e_roundtrip.py) can compare it with the original.
+
+def process_event(
+    event: MISPEvent,
+    e2etest: bool = False,
+    settings: dict[str, Any] | None = None,
+    metadata: dict[str, Any] | None = None,
+) -> MISPEvent:
+    """Run the configured use-case on the event (default "none": pass-through).
+
+    `metadata`, if given, is filled with what the use-case did. With e2etest=True the
+    processed event is also written to E2E_DIR/<uuid>.json for the round-trip quality gate.
     """
+    settings = {**DEFAULTS, **(settings or {})}
+    if settings["use_case"] not in USE_CASES:
+        raise ValueError(f"unknown use_case {settings['use_case']!r}, expected one of {USE_CASES}")
+    if settings["use_case"] != "none":
+        result = _run_use_case(event, settings)
+        if metadata is not None:
+            metadata.update(result)
     if e2etest:
         E2E_DIR.mkdir(parents=True, exist_ok=True)
-        path = E2E_DIR / f"{event.uuid}.json"
-        path.write_text(json.dumps(_to_dict(event), indent=2), encoding="utf-8")
+        (E2E_DIR / f"{event.uuid}.json").write_text(
+            json.dumps(_to_dict(event), indent=2), encoding="utf-8"
+        )
     return event
 
 
@@ -129,12 +204,18 @@ def dict_handler(request: dict[str, Any]) -> dict[str, Any]:
         return {"error": f"Invalid MISP Event: {error}"}
 
     event_report = get_event_report(event)
+    metadata: dict[str, Any] = {}
+    try:
+        processed = process_event(event, settings=resolve_settings(request), metadata=metadata)
+    except (ValueError, llm.LLMError) as error:
+        return {"error": str(error)}
     return {
         "results": {
-            "Event": _to_dict(process_event(event)),
+            "Event": _to_dict(processed),
             "ReportEvent": _to_dict(process_eventReport(event_report)),
         },
         "event_report": event_report,
+        "metadata": metadata,
     }
 
 

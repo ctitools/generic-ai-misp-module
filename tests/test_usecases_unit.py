@@ -1,0 +1,328 @@
+"""Offline tests for the two use-cases: the LLM is replaced by a canned answer."""
+
+# pylint: disable=redefined-outer-name,unused-argument
+
+import json
+
+import pytest
+from conftest import load_fixture
+from pymisp import MISPEvent
+
+from expansion import generic_ai
+from genai import extract, llm, prompts, summarize
+
+AI_TAGS = set(prompts.AI_TAGS)
+REPORT_UUID = "9c8b7a6f-5e4d-4c3b-8a29-18f7e6d5c4b3"
+
+
+def _tags(element) -> set[str]:
+    return {t.name for t in element.tags}
+
+
+@pytest.fixture
+def event(dummy_event) -> MISPEvent:
+    return generic_ai.validate_event(dummy_event["Event"])
+
+
+@pytest.fixture
+def fake_llm(monkeypatch):
+    """Make llm.llm_chat return a fixed answer and record the request."""
+    calls: list[dict] = []
+
+    def install(answer: str):
+        def fake(messages, params, settings, json_mode=False):
+            calls.append({"messages": messages, "params": params, "json_mode": json_mode})
+            return answer
+
+        monkeypatch.setattr(llm, "llm_chat", fake)
+        return calls
+
+    return install
+
+
+def _candidate(kind, value, quote=None, confidence=0.99, category=None):
+    return {
+        "type": kind,
+        "value": value,
+        "quote": quote or value,
+        "confidence": confidence,
+        "category": category,
+    }
+
+
+# --- UC1 extraction ------------------------------------------------------------------------------
+
+
+def test_extraction_adds_tagged_attributes(event, fake_llm) -> None:
+    # the dummy report mentions an IP that is already on the event and two new-looking strings
+    answer = json.dumps(
+        {
+            "indicators": [
+                _candidate(
+                    "domain",
+                    "acme-bank-secure.example",
+                    "e-mails from alerts@acme-bank-secure.example",
+                ),
+                _candidate(
+                    "filename", "Invoice_2026.xlsm", "Excel attachment Invoice_2026.xlsm (MD5"
+                ),
+            ]
+        }
+    )
+    calls = fake_llm(answer)
+    before = len(event.attributes)
+    settings = {"use_case": "extraction"}
+    metadata: dict = {}
+    generic_ai.process_event(event, settings=settings, metadata=metadata)
+    assert calls[0]["json_mode"] is True
+    assert "{{" not in calls[0]["messages"][0]["content"]  # placeholders rendered
+    added = [a for a in event.attributes if a.value == "acme-bank-secure.example"]
+    assert len(added) == 1 and _tags(added[0]) == AI_TAGS
+    assert added[0].comment == f"extracted by generic_ai from EventReport {REPORT_UUID}"
+    assert len(event.attributes) == before + 1  # the filename already exists inside the file object
+    assert metadata["added"] == 1 and [r["reason"] for r in metadata["rejected"]] == ["duplicate"]
+    assert not _tags(event) & AI_TAGS  # attributes were suggested, not event-level content
+    assert event.event_reports[0].content.startswith("## Summary")  # source untouched
+
+
+@pytest.mark.parametrize(
+    ("candidate", "reason"),
+    [
+        (_candidate("ip-dst", "198.51.100.9"), "not-in-source"),
+        (_candidate("ip-dst", "203.0.113.42", quote="something else"), "quote-mismatch"),
+        (_candidate("ipv4", "203.0.113.42"), "unknown-type"),
+        (_candidate("sha256", "d41d8cd98f00b204e9800998ecf8427e"), "format"),
+        (_candidate("ip-dst", "203.0.113.42"), "duplicate"),
+        (_candidate("domain", "acme-bank-secure.example", confidence=0.5), "confidence"),
+    ],
+)
+def test_extraction_filters(event, fake_llm, candidate, reason) -> None:
+    fake_llm(json.dumps({"indicators": [candidate]}))
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    assert metadata["added"] == 0
+    assert metadata["rejected"][0]["reason"] == reason
+
+
+def test_extraction_rejects_non_json(event, fake_llm) -> None:
+    fake_llm("Here are the indicators: 203.0.113.42")
+    before = event.to_json()
+    with pytest.raises(llm.LLMError, match="not JSON"):
+        generic_ai.process_event(event, settings={"use_case": "extraction"})
+    assert event.to_json() == before
+
+
+def test_extraction_builds_objects(fake_llm) -> None:
+    raw = {
+        "Event": {
+            "info": "x",
+            "EventReport": [
+                {
+                    "name": "r",
+                    "content": "Dropper evil.exe (sha256 " + "a" * 64 + ") exploits CVE-2025-1234.",
+                }
+            ],
+        }
+    }
+    event = generic_ai.validate_event(raw["Event"])
+    quote = "evil.exe (sha256 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)"
+    fake_llm(
+        json.dumps(
+            {
+                "indicators": [
+                    _candidate("filename", "evil.exe", quote),
+                    _candidate("sha256", "a" * 64, quote),
+                    _candidate("vulnerability", "CVE-2025-1234", "exploits CVE-2025-1234"),
+                ]
+            }
+        )
+    )
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    assert metadata == {**metadata, "added": 3, "objects": 2}
+    assert sorted(o.name for o in event.objects) == ["file", "vulnerability"]
+    for misp_object in event.objects:
+        assert all(_tags(a) == AI_TAGS for a in misp_object.attributes)
+    assert not event.attributes
+
+
+def test_extraction_needs_a_report(fake_llm) -> None:
+    event = generic_ai.validate_event({"info": "no report"})
+    fake_llm("{}")
+    with pytest.raises(ValueError, match="no EventReport"):
+        generic_ai.process_event(event, settings={"use_case": "extraction"})
+
+
+def test_extraction_only_adds(event, fake_llm, dummy_event) -> None:
+    from misp_compare import misp_event_diff  # pylint: disable=import-outside-toplevel
+
+    fake_llm(
+        json.dumps(
+            {
+                "indicators": [
+                    _candidate(
+                        "domain", "acme-bank-secure.example", "alerts@acme-bank-secure.example"
+                    )
+                ]
+            }
+        )
+    )
+    generic_ai.process_event(event, settings={"use_case": "extraction"})
+    differences = misp_event_diff(dummy_event["Event"], json.loads(event.to_json()))
+    assert all("added by processing" in d or "items ->" in d for d in differences), differences
+
+
+# --- UC2 summarization ---------------------------------------------------------------------------
+
+SUMMARY = (
+    "## Threat\nPhishing against ACME Bank via login-acme-bank.example.\n"
+    "## Targets\nCustomers.\n## Indicators\n203.0.113.42\n## Recommended actions\nBlock it."
+)
+EVENT_SUMMARY = (
+    "## What happened\nPhishing.\n## Key indicators\n203.0.113.42\n"
+    "## Context and attribution\nLow confidence.\n"
+    "## Related events\n1b2c3d4e-5f60-4718-8293-a4b5c6d7e8f9"
+)
+
+
+def test_summary_of_report_is_attached_and_event_tagged(event, fake_llm) -> None:
+    calls = fake_llm(SUMMARY)
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "summarization"}, metadata=metadata)
+    assert "## Summary" in calls[0]["messages"][0]["content"]  # the report was the input
+    assert calls[0]["params"]["temperature"] == 0 and calls[0]["params"]["seed"] == 42
+    assert [r.name for r in event.event_reports][
+        1
+    ] == "AI summary of Phishing campaign against ACME Bank customers"
+    assert event.event_reports[1].content == SUMMARY
+    assert event.event_reports[0].content.startswith("## Summary")
+    assert AI_TAGS <= _tags(event)
+    assert all(not _tags(a) & AI_TAGS for a in event.attributes)
+    assert (
+        metadata["kind"] == "report"
+        and metadata["prompt"]["cluster"] == "summary-report/qwen3.8-v1"
+    )
+
+
+def test_summary_of_event_uses_rendering(event, fake_llm) -> None:
+    calls = fake_llm(EVENT_SUMMARY)
+    generic_ai.process_event(event, settings={"use_case": "summarization", "summary_kind": "event"})
+    sent = calls[0]["messages"][0]["content"]
+    assert "## Attributes" in sent and "1b2c3d4e-5f60-4718-8293-a4b5c6d7e8f9" in sent
+    assert "## Summary" not in sent  # report content is not the input for kind=event
+    assert event.event_reports[1].name == f"AI summary of event {event.uuid}"
+
+
+def test_event_rendering_is_deterministic_and_sorted(dummy_event) -> None:
+    first = summarize.render_event(generic_ai.validate_event(dummy_event["Event"]))
+    dummy_event["Event"]["Attribute"].reverse()
+    dummy_event["Event"]["Tag"].reverse()
+    second = summarize.render_event(generic_ai.validate_event(dummy_event["Event"]))
+    assert first == second
+    assert "timestamp" not in first
+    for attribute in dummy_event["Event"]["Attribute"]:
+        assert attribute["value"] in first
+
+
+@pytest.mark.parametrize(
+    ("answer", "fragment"),
+    [
+        (
+            "## Threat\nx\n## Targets\nx\n## Indicators\nx",
+            "missing heading '## Recommended actions'",
+        ),
+        (
+            SUMMARY + "\nAlso 198.51.100.77 and evil-other.example.com.",
+            "indicator not in input: 198.51.100.77",
+        ),
+        (
+            "## Threat\n" + "word " * 250 + "\n## Targets\n## Indicators\n## Recommended actions",
+            "words > 200",
+        ),
+    ],
+)
+def test_summary_structural_gate(event, fake_llm, answer, fragment) -> None:
+    fake_llm(answer)
+    with pytest.raises(llm.LLMError, match="structural check") as excinfo:
+        generic_ai.process_event(event, settings={"use_case": "summarization"})
+    assert fragment in str(excinfo.value)
+    assert len(event.event_reports) == 1 and not _tags(event) & AI_TAGS
+
+
+def test_unknown_kind_and_use_case(event, fake_llm) -> None:
+    fake_llm(SUMMARY)
+    with pytest.raises(ValueError, match="summary_kind"):
+        generic_ai.process_event(
+            event, settings={"use_case": "summarization", "summary_kind": "nope"}
+        )
+    with pytest.raises(ValueError, match="use_case"):
+        generic_ai.process_event(event, settings={"use_case": "translate"})
+
+
+# --- cross-cutting -------------------------------------------------------------------------------
+
+
+def test_settings_precedence(monkeypatch) -> None:
+    monkeypatch.setenv("GENERIC_AI_SUMMARY_KIND", "event")
+    monkeypatch.setenv("GENERIC_AI_REQUEST_TIMEOUT", "7")
+    settings = generic_ai.resolve_settings(
+        {
+            "use_case": "extraction",
+            "config": {"use_case": "summarization", "min_confidence": "0.5"},
+            "request_timeout": 1,
+        }
+    )
+    assert settings["use_case"] == "extraction"  # request beats config
+    assert settings["min_confidence"] == 0.5  # config beats default, coerced to float
+    assert settings["summary_kind"] == "event"  # env beats default
+    assert settings["request_timeout"] == 7  # request may not set it
+    assert generic_ai.resolve_settings({})["use_case"] == "none"
+
+
+def test_request_cannot_set_endpoint(monkeypatch) -> None:
+    monkeypatch.setenv("OPENAI_BASE_URL", "http://from-env.example/v1")
+    monkeypatch.setenv("OPENAI_API_KEY", "env-key")
+    settings = llm.LLMSettings.from_env()
+    assert settings.base_url == "http://from-env.example/v1" and settings.api_key == "env-key"
+    assert "api_base" not in generic_ai.moduleconfig and "api_key" not in generic_ai.moduleconfig
+
+
+def test_dict_handler_reports_llm_errors(dummy_event, monkeypatch) -> None:
+    def boom(*_args, **_kwargs):
+        raise llm.LLMError("LLM endpoint unreachable or timed out (120s)")
+
+    monkeypatch.setattr(llm, "llm_chat", boom)
+    result = generic_ai.dict_handler({"event": dummy_event, "use_case": "summarization"})
+    assert result == {"error": "LLM endpoint unreachable or timed out (120s)"}
+
+
+def test_passthrough_default_makes_no_llm_call(dummy_event, monkeypatch) -> None:
+    monkeypatch.setattr(llm, "llm_chat", lambda *a, **k: pytest.fail("LLM called"))
+    result = generic_ai.dict_handler({"event": dummy_event})
+    assert result["metadata"] == {}
+
+
+def test_prompt_resolution() -> None:
+    default = prompts.resolve_prompt("summary-report")
+    assert default.value == "summary-report/qwen3.8-v1" and default.params["seed"] == 42
+    assert prompts.resolve_prompt("summary-report", default.uuid) == default
+    inline = prompts.resolve_prompt("summary-report", "Summarise: {{input}}")
+    assert inline.value == "inline" and inline.headings == default.headings
+    with pytest.raises(ValueError):
+        prompts.resolve_prompt("nope")
+
+
+def test_pinned_tags_cover_the_ai_tags() -> None:
+    assert set(prompts.AI_TAGS) <= set(prompts.pinned_tags())
+
+
+def test_describe_types_matches_rfc_scale() -> None:
+    assert len(extract.MISP_TYPES) > 150 and "ip-dst" in extract.MISP_TYPES
+
+
+def test_fixture_event_extraction_keeps_round_trip(fake_llm) -> None:
+    raw = load_fixture("10a94632-a0a1-4062-a3a5-95fe321ae045")
+    fake_llm(json.dumps({"indicators": []}))
+    event = generic_ai.validate_event(raw["Event"])
+    generic_ai.process_event(event, settings={"use_case": "extraction"})
+    assert json.loads(event.to_json())["uuid"] == raw["Event"]["uuid"]

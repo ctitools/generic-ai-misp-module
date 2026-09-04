@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-04 (use-cases)
+
+- Implemented the two use-cases in a new `genai/` package: `extract.py` (CTI info extraction: LLM proposes JSON candidates, five deterministic filters — in-source, known type, format, duplicate, confidence — decide; file/vulnerability objects; every added attribute AI-tagged) and `summarize.py` (`kind=report|event`, deterministic event rendering, structural gate: headings, ≤ 200 words, no indicator that is not in the input; summary attached as a new EventReport, event AI-tagged).
+- `genai/llm.py`: the single OpenAI-compatible chat client (endpoint/key/model from `.env` only, timeout → error, no fallback, thinking disabled via `reasoning_effort: none`, JSON mode, model digest/server lookup for Ollama, API key masked in reprs).
+- `genai/prompts.py` + `galaxies/generic-ai-prompts.json` + `clusters/generic-ai-prompts.json`: prompts shipped as a MISP galaxy; a cluster carries use-case, model (name/digest/quantisation/server), sampling parameters and the prompt text; resolution by uuid, value, inline text or default. `genai/ai_taxonomy_pinned.json` pins the `ai-computer-assisted` tag strings.
+- `expansion/generic_ai.py`: `process_event(event, e2etest, settings, metadata)` dispatches on `use_case` (`none` default, `extraction`, `summarization`); `resolve_settings()` implements request > config > `.env` > default for the `moduleconfig` keys; `api_base`/`api_key` are never request-settable; response gained `metadata`. Module version 0.4.
+- Tests: `tests/test_usecases_unit.py` (26 offline tests with a mocked LLM: every filter, objects, tagging, rendering determinism, structural gate, precedence), `tests/test_llm_live.py` (determinism, model pinning, extraction precision gate on two reports + Emotet recall report, summary gate and goldens with `--update-goldens`), use-case cases through the real misp-modules server. Fixtures: `fixtures/summary/dummy-event.json`, `fixtures/gold/*.iocs.json`, `tests/golden/summary-*.md`.
+- Docs: USE-CASES, TESTING, requirements, ARCHITECTURE, README, CLAUDE updated to the implementation and the first measured results.
+
 ## 2026-09-04
 
 - Rewrote `expansion/generic_ai.py` (609 → ~130 lines): the module now takes a **full MISP Event** instead of a text attribute. Removed the OpenAI/Ollama backends, prompts, deterministic summariser and the 13 runtime settings.

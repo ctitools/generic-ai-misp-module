@@ -16,8 +16,7 @@ Highest-priority value, unchanged: **human maintainability** — less code, copy
 Stack per `AGENTS.md`: Python ≥ 3.14, `uv`, `pytest`, stdlib first; the only approved third-party
 runtime dependency is **PyMISP**.
 
-Requirement style: EARS (`WHEN/WHERE/IF … THE module SHALL …`). Status tags: *implemented*,
-*planned* (next code round), *future*.
+Requirement style: EARS (`WHEN/WHERE/IF … THE module SHALL …`). Status tags: *implemented*, *future*.
 
 ## Glossary
 
@@ -51,50 +50,50 @@ Requirement style: EARS (`WHEN/WHERE/IF … THE module SHALL …`). Status tags:
 2. WHEN `process_event` is called with `e2etest=True`, THE module SHALL write the processed Event to `tests/e2etests/<uuid>.json`.
 3. THE processed Event SHALL be semantically identical to the input (as defined by `tests/misp_compare.py`) except for additions made by a use-case. Verified by the round-trip gate.
 
-## R4 Use-case selection — *planned*
+## R4 Use-case selection — *implemented*
 
-1. THE module SHALL read `use_case` from the request body, then module config, default `summarization`.
+1. THE module SHALL read `use_case` from the request body, then module config, then `GENERIC_AI_USE_CASE` in `.env`, default `none` (pass-through).
 2. WHEN `use_case` is `extraction`, THE module SHALL call `extract_iocs(event)`.
 3. WHEN `use_case` is `summarization`, THE module SHALL call `summarize(event, kind)` with `kind` from `summary_kind` (request), then `default_summary_kind` (config), default `report`.
 4. IF `use_case` or `kind` is unknown, THEN THE module SHALL return an error listing the allowed values.
 
-## R5 CTI info extraction — *planned*
+## R5 CTI info extraction — *implemented*
 
 1. THE module SHALL send the prompt cluster for `cti-info-extraction` plus `event_report` to the LLM and require a JSON array of `{type, category, value, confidence, quote}`.
 2. IF the LLM output is not valid JSON, THEN THE module SHALL return an error and SHALL NOT add anything.
-3. THE module SHALL add an indicator only if all hold: value is a case-insensitive, whitespace-normalised substring of `event_report`; `type` and `category` exist in PyMISP `describeTypes.json`; `MISPAttribute` accepts it; the per-type format check passes (IPv4/IPv6, domain/hostname, md5/sha1/sha256, url, email, CVE); it is not already on the Event; `confidence >= min_confidence` (default 0.9).
+3. THE module SHALL add an indicator only if all hold: value is a case-insensitive, whitespace-normalised substring of `event_report`; `type` exists in PyMISP `describeTypes.json` (an invalid `category` is replaced by the type's default); `MISPAttribute` accepts it; the per-type format check passes (IPv4/IPv6, domain/hostname, md5/sha1/sha256, url, email, CVE); it is not already on the Event; `confidence >= min_confidence` (default 0.9).
 4. THE module SHALL record every rejected candidate with its reason in the response metadata.
 5. WHEN hashes and a filename describe one file, THE module SHALL group them in a `file` object; WHEN a CVE is extracted, in a `vulnerability` object.
 6. THE count of added indicators SHALL be ≤ the count of candidates (filters only remove).
 
-## R6 Summarization — *planned*
+## R6 Summarization — *implemented*
 
 1. WHEN `kind` is `report`, THE module SHALL summarise `event_report`.
 2. WHEN `kind` is `event`, THE module SHALL render attributes, objects, tags, galaxies and related events into a sorted, timestamp-free markdown table and summarise that. Rendering the same Event twice SHALL produce identical bytes.
 3. THE module SHALL attach the summary as a **new** EventReport ("AI summary of <report name>" / "AI summary of event <uuid>") and SHALL NOT modify existing reports.
 4. THE summary SHALL use the headings and the ≤ 200-word limit fixed in the prompt cluster; the module SHALL verify that no indicator or uuid in the summary is absent from the input and SHALL return an error otherwise.
 
-## R7 AI taxonomy tagging — *planned*, MUST
+## R7 AI taxonomy tagging — *implemented*, MUST
 
 1. Every element the LLM suggested SHALL carry both AI tags, verbatim from the pinned list: on each added attribute/object for extraction; on the Event for summaries and any future event-level suggestion (e.g. tags).
 2. THE module SHALL NOT return LLM-produced content without these tags.
 3. THE pinned list SHALL be checked against upstream `machinetag.json` by a test; IF a required string is missing upstream, THEN the test SHALL fail.
 4. Existing tags on the Event SHALL NOT be changed. Review-level transitions (`human-reviewed`, …) are done in MISP, not by the module.
 
-## R8 Prompts and parameters — *planned*
+## R8 Prompts and parameters — *implemented*
 
 1. Prompts SHALL be shipped as the `generic-ai-prompts` galaxy; each cluster SHALL carry `use_case`, `model` (name, digest, quantisation, server), `model_parameters` (temperature, seed, top_p, max_tokens, think), `prompt`, `version`, `prompt_sha256`.
 2. THE module SHALL resolve `prompt_*` config values as cluster uuid → cluster `value` → inline text → bundled default, and SHALL take sampling parameters from the chosen cluster.
 3. THE response metadata SHALL name the cluster (uuid, version, prompt hash) and the model (name, digest) used.
 
-## R9 Configuration and safety — *planned*
+## R9 Configuration and safety — *implemented*
 
 1. Precedence SHALL be request body (allowed keys only) > module config > `.env` > default.
 2. `api_base` and `api_key` SHALL NOT be settable from the request body.
 3. THE module SHALL bound every LLM call with `request_timeout` (default 120 s); IF it elapses, THEN THE module SHALL return an error. There is no fallback output.
 4. *future* — TLP governance: content at or above a configured TLP level SHALL NOT be sent to an endpoint not marked local; `:cloud`-routed Ollama models count as external.
 
-## R10 Testability — *planned*, see docs/TESTING.md
+## R10 Testability — *implemented*, see docs/TESTING.md
 
 1. Every use-case SHALL have offline unit tests with a mocked LLM covering each rejection rule and the tagging rule, a local misp-modules e2e test, and live LLM tests that skip when the endpoint is unreachable.
 2. Summaries SHALL be reproducible on a pinned model: three identical requests SHALL give identical text; goldens SHALL carry model digest, server version and prompt hash and SHALL only be compared when those match; the structural check (headings, length, no foreign indicators, tags) SHALL be the gate.

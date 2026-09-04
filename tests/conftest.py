@@ -1,7 +1,6 @@
 """Shared fixtures: local fixture events and read-only access to the live MISP instance."""
 
 import json
-import os
 import ssl
 import sys
 from pathlib import Path
@@ -11,8 +10,9 @@ import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_DIR = PROJECT_ROOT / "fixtures" / "output"
-ENV_PATH = PROJECT_ROOT / ".env"
 sys.path.insert(0, str(PROJECT_ROOT))
+
+from genai import llm  # noqa: E402  # pylint: disable=wrong-import-position
 
 # Real MISP events exported from the MISP instance in .env (see fixtures/output/hashes.csv).
 FIXTURE_FILES = sorted(p for p in FIXTURE_DIR.glob("*.json") if p.name != "manifest.json")
@@ -31,15 +31,31 @@ def event_with_report() -> dict:
 
 
 def load_env() -> dict[str, str]:
-    """Shell semantics: a later line in .env overrides an earlier one; os.environ wins over both."""
-    values: dict[str, str] = {}
-    if ENV_PATH.exists():
-        for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.lstrip().startswith("#"):
-                key, _, value = line.partition("=")
-                values[key.strip()] = value.strip().strip('"').strip("'")
-    values.update(os.environ)
-    return values
+    """.env (last line wins) overlaid by os.environ — the same loader the module uses."""
+    return llm.env()
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-goldens",
+        action="store_true",
+        default=False,
+        help="re-record tests/golden/*.md from the live LLM (review the diff before committing)",
+    )
+
+
+@pytest.fixture(scope="session")
+def llm_settings() -> llm.LLMSettings:
+    """LLM endpoint from .env; skips every LLM test when it is unreachable."""
+    settings = llm.LLMSettings.from_env()
+    if not settings.model or not llm.is_reachable(settings):
+        pytest.skip(f"LLM endpoint {settings.base_url} not reachable or OPENAI_MODEL unset")
+    return settings
+
+
+@pytest.fixture
+def dummy_event() -> dict:
+    return json.loads((PROJECT_ROOT / "fixtures" / "summary" / "dummy-event.json").read_text())
 
 
 class MispApi:

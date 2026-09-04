@@ -16,3 +16,4 @@ artifacts/*
 presentations/generic-ai-misp-module.pptx
 tests/e2etests/*
 !tests/e2etests/.gitkeep
+tests/golden/*.tmp

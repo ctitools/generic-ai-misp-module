@@ -7,8 +7,9 @@ OpenAI-compatible chat endpoint, today Ollama on `nanu`). Prompts and sampling p
 configurable and shipped as a MISP galaxy ([PROMPTS.md](PROMPTS.md)). Tests for both are
 specified in [TESTING.md](TESTING.md); formal requirements in [requirements.md](requirements.md).
 
-Status: **design, not implemented.** `process_event()` is still a dummy. Everything below is the
-contract the next code round implements.
+Status: **implemented** in `genai/extract.py` and `genai/summarize.py`, dispatched by
+`process_event()` in `expansion/generic_ai.py`. The default `use_case` is `none` (pass-through,
+no LLM call), so the round-trip gate and plain validation never touch the LLM.
 
 ## Rule that applies to every output
 
@@ -46,7 +47,7 @@ passes all of them; every rejection is recorded in the response metadata:
 
 1. `value` is a substring of the source report (case-insensitive, whitespace-normalised) — the
    hallucination guard; `quote` must contain `value` too.
-2. `type` exists in `describeTypes.json` and `category` is valid for that type.
+2. `type` exists in `describeTypes.json`; an invalid or missing `category` is replaced by the type's default category.
 3. PyMISP `MISPAttribute(type, value)` accepts it (PyMISP's own per-type validation).
 4. A per-type format check for the common types (IPv4/IPv6, domain/hostname, md5/sha1/sha256,
    url, email, CVE id). Types without a check rely on 1–3.
@@ -81,7 +82,7 @@ How the caller selects it:
  "use_case": "summarization", "summary_kind": "event"}
 ```
 
-`summary_kind` falls back to the module config `default_summary_kind`, then to `report`.
+`summary_kind` falls back to the module config `summary_kind`, then to `report`.
 
 Deterministic rendering for `kind=event` matters for testing: attributes sorted by
 `(type, value)`, objects by `(name, uuid)`, tags by name, no timestamps, so identical events
@@ -95,11 +96,11 @@ the request body ([IMPROVEMENTS.md](IMPROVEMENTS.md) item 3).
 
 | key | default | request | meaning |
 |---|---|---|---|
-| `use_case` | `summarization` | yes | `extraction` or `summarization` |
+| `use_case` | `none` | yes | `none` (pass-through), `extraction` or `summarization` |
 | `summary_kind` | `report` | yes | `report` or `event` |
 | `prompt_extraction`, `prompt_summary_report`, `prompt_summary_event` | bundled galaxy cluster | yes | galaxy cluster uuid or `value`, or inline prompt text |
 | `model_id` | `OPENAI_MODEL` from `.env` | yes | must exist on the endpoint |
-| `temperature` / `seed` / `top_p` / `max_tokens` / `think` | from the prompt cluster (`0` / `42` / `1` / per use-case / `false`) | yes | sampling parameters |
+| sampling (`temperature`, `seed`, `top_p`, `max_tokens`, `think`) | from the prompt cluster (`0` / `42` / `1` / per use-case / `false`) | via the cluster | select another cluster to change them |
 | `min_confidence` | `0.9` | yes | UC1 gate |
 | `request_timeout` | `120` s | no | LLM call bound; timeout → error, no fallback |
 | `api_base`, `api_key` | `.env` | **no** | endpoint |
@@ -119,3 +120,11 @@ Collected during hackathon 2026; kept as one-liners so they are not lost.
 - **MISP MCP server** ([MISP-mcp](https://github.com/MISP/MISP-mcp)) and **AI-assisted search** on [misp-workbench](https://github.com/MISP/misp-workbench).
 - **Prompt template library**: superseded by the prompt galaxy in PROMPTS.md.
 - **Long jobs** (e.g. video analysis) and async request topologies: out of scope while the module is a synchronous `/query` responder.
+
+## Known limits (from the first live runs, 2026-09-04)
+
+- Defanged values (`131.226.2[.]6`, `hxxp://…`) are rejected by the format check because the
+  policy forbids normalising values. Refanging as an explicit, documented step is a candidate
+  for the next round; until then recall on defanged reports is low by design.
+- Precision on the fixture reports was 1.0 once the gold lists were complete; every extra
+  indicator the model found (filenames, threat-actor names) was literally in the text.

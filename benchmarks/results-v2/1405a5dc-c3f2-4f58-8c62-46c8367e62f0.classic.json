@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "techcrunch.com"
+    ],
+    [
+      "url",
+      "https://techcrunch.com/2023/10/20/ragnarlocker-ransomware-dark-web-portal-seized-in-international-sting/?guccounter=1"
+    ]
+  ]
+}

@@ -14,6 +14,7 @@ from pathlib import Path
 BASE = "https://orkl.eu/api/v1"
 DATA_DIR = Path(__file__).resolve().parent / "data" / "orkl"
 LOG_FILE = Path(__file__).resolve().parents[1] / "logs" / "benchmark-orkl.log"
+# FIXME: URL will change when merging upstream
 UA = "generic-ai-misp-module benchmarks (https://github.com/CIRCL/generic-ai-misp-module)"
 log = logging.getLogger("benchmark.orkl")
 

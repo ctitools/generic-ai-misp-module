@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "redlock.io"
+    ],
+    [
+      "url",
+      "https://redlock.io/blog/instance-metadata-api-a-modern-day-trojan-horse"
+    ]
+  ]
+}

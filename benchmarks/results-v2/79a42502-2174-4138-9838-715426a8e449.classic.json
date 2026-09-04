@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blog.erratasec.com"
+    ],
+    [
+      "url",
+      "https://blog.erratasec.com/2016/12/some-notes-on-iocs.html"
+    ]
+  ]
+}

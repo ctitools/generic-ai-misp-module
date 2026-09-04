@@ -1,0 +1,72 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "ip-dst|port",
+      "136[.]243[.]202[.]133:8080"
+    ],
+    [
+      "ip-dst|port",
+      "162[.]243[.]154[.]25:443"
+    ],
+    [
+      "ip-dst|port",
+      "164[.]208[.]152[.]175:8080"
+    ],
+    [
+      "ip-dst|port",
+      "178[.]254[.]33[.]12:8080"
+    ],
+    [
+      "ip-dst|port",
+      "37[.]187[.]57[.].57:443"
+    ],
+    [
+      "ip-dst|port",
+      "62[.]210[.]86[.]114:8080"
+    ],
+    [
+      "ip-dst|port",
+      "66[.]234[.]234[.]36:8080"
+    ],
+    [
+      "ip-dst|port",
+      "94[.]199[.]242[.]92:8080"
+    ],
+    [
+      "pgp-public-key",
+      "-----BEGIN RSA PUBLIC KEY-----\nMGcCYDeWo1m4l56rx8uAsn+gsDBAYoJARIdddsLOaiOf4oxe0GGy3IruKSmi\nRSMfzj93sIHm88vzhJOeUkLES+RuDXUwSfob8u8bx5TjoSmY2kdmx5rgkp8U\nNqD3z+P0m6bAxwIDAQAB -----END RSA PUBLIC KEY-----"
+    ],
+    [
+      "sha256",
+      "3f75ee07639bbcebf9b904debae1b40ae1e2f2cbfcef44caeda21a9dae71c982"
+    ],
+    [
+      "sha256",
+      "455be9278594633944bfdada541725a55e5ef3b7189ae13be8b311848d473b53"
+    ],
+    [
+      "sha256",
+      "fbff242aeeff98285e000ef03cfa96e87d6d63c41080d531edcb455646b64eec"
+    ]
+  ],
+  "rejected": [
+    {
+      "type": "url",
+      "value": "hxxp://bonn-medien[.]de/RfThRpWC/",
+      "reason": "format"
+    }
+  ],
+  "seconds": 39.044
+}

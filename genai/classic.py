@@ -19,20 +19,25 @@ import iocextract
 HASH_TYPES = {32: "md5", 40: "sha1", 64: "sha256", 128: "sha512"}
 
 
+def _is_ip(value: str) -> bool:
+    try:
+        ipaddress.ip_address(value)
+        return True
+    except ValueError:
+        return False
+
+
 def _domain(url: str) -> str | None:
     host = urlsplit(url).hostname or ""
-    try:
-        ipaddress.ip_address(host)
-        return None
-    except ValueError:
-        return host or None
+    return None if _is_ip(host) else host or None
 
 
 def extract_classic(text: str) -> list[tuple[str, str]]:
     """Sorted, de-duplicated (misp_type, value) pairs found by iocextract with refang=True."""
     found: set[tuple[str, str]] = set()
     for ip in (*iocextract.extract_ipv4s(text, refang=True), *iocextract.extract_ipv6s(text)):
-        found.add(("ip-dst", ip))
+        if _is_ip(ip):  # iocextract's IPv6 regex also matches times such as 23:00:15
+            found.add(("ip-dst", ip))
     for url in iocextract.extract_urls(text, refang=True):
         found.add(("url", url))
         if domain := _domain(url):

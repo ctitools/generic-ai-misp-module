@@ -1,0 +1,37 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blogs.vmware.com"
+    ],
+    [
+      "ip-dst",
+      "172.87.222.3"
+    ],
+    [
+      "ip-dst",
+      "23.94.139.92"
+    ],
+    [
+      "ip-dst",
+      "35.246.189.81"
+    ],
+    [
+      "url",
+      "http:172.87.222.3"
+    ],
+    [
+      "url",
+      "http:23.94.139.92"
+    ],
+    [
+      "url",
+      "http:35.246.189.81"
+    ],
+    [
+      "url",
+      "https://blogs.vmware.com/security/2022/11/threat-analysis-active-c2-discovery-using-protocol-emulation-part4-dacls-aka-mata.html"
+    ]
+  ]
+}

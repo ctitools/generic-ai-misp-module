@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "home.treasury.gov"
+    ],
+    [
+      "url",
+      "https://home.treasury.gov/news/press-releases/sb0042"
+    ]
+  ]
+}

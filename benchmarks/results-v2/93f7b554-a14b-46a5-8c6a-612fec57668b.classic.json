@@ -1,0 +1,29 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "hash-37257.portmap.io"
+    ],
+    [
+      "ip-dst",
+      "112.213.98.44"
+    ],
+    [
+      "ip-dst",
+      "192.168.233.129"
+    ],
+    [
+      "url",
+      "http://192.168.233.129:4444"
+    ],
+    [
+      "url",
+      "http://hash-37257.portmap.io:37257"
+    ],
+    [
+      "url",
+      "https://112.213.98.44:8443/yolZSbt0qhZjjGKOPOXInwsGAF4fh-ug_DJWthkcIw248sAYaksYdEMF9AfLWAxNLZeL0cqpKH90RWpcWyunne-jAQctfyIjN9iOcA97GrOQA/"
+    ]
+  ]
+}

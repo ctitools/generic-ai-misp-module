@@ -1,0 +1,102 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "domain",
+      "CLAIRES-ASSETS.COM"
+    ],
+    [
+      "domain",
+      "FOCUSCAMERE.COM"
+    ],
+    [
+      "domain",
+      "PAPERS0URCE.COM"
+    ],
+    [
+      "domain",
+      "areac-agr.com"
+    ],
+    [
+      "domain",
+      "darvishkhan.net"
+    ],
+    [
+      "domain",
+      "luxmodelagency.com"
+    ],
+    [
+      "domain",
+      "signedbooksandcollectibles.com"
+    ],
+    [
+      "domain",
+      "stefanoturco.com"
+    ],
+    [
+      "domain",
+      "technokain.com"
+    ],
+    [
+      "ip-dst",
+      "23.81.246.179"
+    ],
+    [
+      "threat-actor",
+      "HIDDEN COBRA"
+    ],
+    [
+      "url",
+      "http://www.areac-agr.com/cms/wp-content/uploads/2015/12/check.vm"
+    ],
+    [
+      "url",
+      "https://darvishkhan.net/wp-content/uploads/2017/06/update6.dat"
+    ],
+    [
+      "url",
+      "https://darvishkhan.net/wp-includes/js/dist/gtm.min.js"
+    ],
+    [
+      "url",
+      "https://darvishkhan.net/wp-includes/js/hotjar.min.js"
+    ],
+    [
+      "url",
+      "https://technokain.com/ads/adshow1.dat"
+    ],
+    [
+      "url",
+      "https://technokain.com/vendor/jquery.validate.min.js"
+    ],
+    [
+      "url",
+      "https://www.areac-agr.com/cms/wp-includes/Requests/Security1.3.min.js"
+    ],
+    [
+      "url",
+      "https://www.areac-agr.com/cms/wp-includes/Requests/Utility/json.min.js"
+    ],
+    [
+      "url",
+      "https://www.luxmodelagency.com/wp-includes/js/customize-gtag.min.js"
+    ],
+    [
+      "url",
+      "https://www.signedbooksandcollectibles.com/js/gmaps.min.js"
+    ]
+  ],
+  "rejected": [],
+  "seconds": 42.505
+}

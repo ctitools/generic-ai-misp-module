@@ -1,0 +1,33 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "sha256",
+      "117fc30c25b1f28cd923b530ab9f91a0a818925b0b89b8bc9a7f820a9e630464"
+    ],
+    [
+      "sha256",
+      "28aeb2d6576b2437ecab535c0a1bf41713ee9864611965bf1d498a87cbdd2fab"
+    ],
+    [
+      "sha256",
+      "93d0cc8492511c663f17544b3bf14eab8ccb492909536e79ef652921d809bb1a"
+    ],
+    [
+      "sha256",
+      "e4a319f7afafbbd710ff2dbe8d0883ef332afcb0363efd4e919ed3c3faba0342"
+    ],
+    [
+      "url",
+      "http:ozsxj4hwxub7gio347ac7tyqqozvfioty37skqilzo2oqfs4cw2mgtyd.onion"
+    ],
+    [
+      "url",
+      "http:pmbvfcoawmpkpqtcrv3fmtqyvxufbpiidrseseypvxrmlbh727aoqmyd.onion"
+    ],
+    [
+      "url",
+      "http:ygo44wtbprhx2kvibtgjj3rrjo3f4fccuhuavy6vnvtrvihpruqdjuad.onion"
+    ]
+  ]
+}

@@ -8,6 +8,8 @@ from benchmarks import metrics as m
 def test_normalise_value():
     assert m.normalise_value("  Evil.COM/ ") == "evil.com"
     assert m.normalise_value("a   b.") == "a b"
+    assert m.normalise_value("hxxp://evil[.]com/x") == "http://evil.com/x"
+    assert m.normalise_value("1.2.3[.]4") == "1.2.3.4"
     assert m.values([("domain", "Evil.COM/"), ("hostname", "evil.com")]) == {"evil.com"}
 
 

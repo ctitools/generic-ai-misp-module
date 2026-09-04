@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www.zdnet.com"
+    ],
+    [
+      "url",
+      "https://www.zdnet.com/article/web-skimmers-found-on-the-websites-of-intersport-claires-and-icing/"
+    ]
+  ]
+}

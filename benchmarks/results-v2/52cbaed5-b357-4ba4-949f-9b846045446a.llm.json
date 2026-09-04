@@ -1,0 +1,114 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "filename",
+      "COVID-19 and North Korea.docx"
+    ],
+    [
+      "malware-type",
+      "AZORult"
+    ],
+    [
+      "malware-type",
+      "Clop"
+    ],
+    [
+      "malware-type",
+      "CrimsonRAT"
+    ],
+    [
+      "malware-type",
+      "Gozi ISFB"
+    ],
+    [
+      "malware-type",
+      "LokiBot"
+    ],
+    [
+      "malware-type",
+      "Maze"
+    ],
+    [
+      "malware-type",
+      "Oski"
+    ],
+    [
+      "malware-type",
+      "PoisonIvy"
+    ],
+    [
+      "malware-type",
+      "REvil"
+    ],
+    [
+      "malware-type",
+      "SpyMax"
+    ],
+    [
+      "malware-type",
+      "TrickBot"
+    ],
+    [
+      "malware-type",
+      "Ursnif"
+    ],
+    [
+      "threat-actor",
+      "APT36"
+    ],
+    [
+      "threat-actor",
+      "BRONZE PRESIDENT"
+    ],
+    [
+      "threat-actor",
+      "COPPER FIELDSTONE"
+    ],
+    [
+      "threat-actor",
+      "GOLD BLACKBURN"
+    ],
+    [
+      "threat-actor",
+      "GOLD TAHOE"
+    ],
+    [
+      "threat-actor",
+      "GOLD VILLAGE"
+    ],
+    [
+      "threat-actor",
+      "Gamaredon"
+    ],
+    [
+      "threat-actor",
+      "Kimsuky"
+    ],
+    [
+      "threat-actor",
+      "Mustang Panda"
+    ],
+    [
+      "threat-actor",
+      "NICKEL KIMBALL"
+    ],
+    [
+      "threat-actor",
+      "TILDEN"
+    ]
+  ],
+  "rejected": [],
+  "seconds": 37.651
+}

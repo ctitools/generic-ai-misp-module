@@ -1,0 +1,53 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "api.ipgeolocation.io"
+    ],
+    [
+      "domain",
+      "gist.github.com"
+    ],
+    [
+      "domain",
+      "github.com"
+    ],
+    [
+      "md5",
+      "ae511e1627824a968aaaa758a5309154"
+    ],
+    [
+      "md5",
+      "f7ae3457420af78a54b38a31cc0c809c"
+    ],
+    [
+      "sha1",
+      "6e344066a0464814a27fbd7ca8422f473956a803"
+    ],
+    [
+      "sha1",
+      "847047cf7f81ab08352038b2204f0e7633449580"
+    ],
+    [
+      "url",
+      "https://api.ipgeolocation.io/ipgeo?apiKey=ae511e162782"
+    ],
+    [
+      "url",
+      "https://api.ipgeolocation.io/ipgeo?apiKey=ae511e1627824a968aaaa758"
+    ],
+    [
+      "url",
+      "https://api.ipgeolocation.io/ipgeo?apiKey=ae511e1627824a968aaaa758a5309154"
+    ],
+    [
+      "url",
+      "https://gist.github.com/MidSpike/f7ae3457420af78a54b38a31cc0c809c"
+    ],
+    [
+      "url",
+      "https://github.com/RIAEvangelist/node-ipc/blob/847047cf7f81ab08352038b2204f0e7633449580/dao/ssl-geospec.js"
+    ]
+  ]
+}

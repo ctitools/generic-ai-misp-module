@@ -1,0 +1,30 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "filename",
+      "8848.twilight.zip"
+    ],
+    [
+      "ip-dst",
+      "156.224.26.7"
+    ],
+    [
+      "sha256",
+      "F70b34e2b1716528a3c3fffdbfc008003b9685f1a4da2e5a6052612de92b0c68"
+    ]
+  ],
+  "rejected": [],
+  "seconds": 11.074
+}

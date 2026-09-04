@@ -1,0 +1,41 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "sha256",
+      "0a689281e5c807412fd9fca5f4a2d02f90e149da1ecc16179a09d88fa88eed74"
+    ],
+    [
+      "sha256",
+      "11a834cda4a55c8adb663fbcdd4b1f1018715dd737d3089a731b9840b77e5e76"
+    ],
+    [
+      "sha256",
+      "2add0397fccd1c5cfe522530d20e672c47e6259ea625a3338845b1383272c23e"
+    ],
+    [
+      "sha256",
+      "484aa9b06abff6b8b07695522b81fc70a8163f466b2aee2076481fab3e57840e"
+    ],
+    [
+      "sha256",
+      "6b61c223d618ead7ca78f4731a0128e30bf602bdfe8d940e442041486cb2fe76"
+    ],
+    [
+      "sha256",
+      "73c07d1b17e8224996866c53ac95c9c327a1b88f78bef72852ca250016d06c33"
+    ],
+    [
+      "sha256",
+      "cdd2e26792bd7ee81a6297d13dd514836778620c9bd96e79ae6ee26239c546b1"
+    ],
+    [
+      "sha256",
+      "fba31181ed1957e81c452fa1e860414d3a2bd2da470074a32f196f873a37d9ad"
+    ],
+    [
+      "url",
+      "http:map.com(website"
+    ]
+  ]
+}

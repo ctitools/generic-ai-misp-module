@@ -1,0 +1,21 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "prnt.sc"
+    ],
+    [
+      "domain",
+      "www.bleepingcomputer.com"
+    ],
+    [
+      "url",
+      "https://prnt.sc/[redacted"
+    ],
+    [
+      "url",
+      "https://www.bleepingcomputer.com/news/security/equinix-data-center-giant-hit-by-netwalker-ransomware-45m-ransom/"
+    ]
+  ]
+}

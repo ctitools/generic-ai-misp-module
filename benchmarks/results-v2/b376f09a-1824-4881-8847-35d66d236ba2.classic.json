@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www.databreaches.net"
+    ],
+    [
+      "url",
+      "https://www.databreaches.net/advisories-are-published-but-are-enough-entities-reading-them-and-taking-precautions/"
+    ]
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blog.talosintelligence.com"
+    ],
+    [
+      "url",
+      "https://blog.talosintelligence.com/voidlink/"
+    ]
+  ]
+}

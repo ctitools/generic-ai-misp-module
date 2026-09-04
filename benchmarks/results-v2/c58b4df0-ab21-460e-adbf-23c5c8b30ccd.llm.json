@@ -1,0 +1,80 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "domain",
+      "breached.vc"
+    ],
+    [
+      "domain",
+      "breachforums.st"
+    ],
+    [
+      "domain",
+      "raidforums.com"
+    ],
+    [
+      "threat-actor",
+      "Baphomet"
+    ],
+    [
+      "threat-actor",
+      "Conor Fitzpatrick"
+    ],
+    [
+      "threat-actor",
+      "IntelBroker"
+    ],
+    [
+      "threat-actor",
+      "Omnipotent"
+    ],
+    [
+      "threat-actor",
+      "ShinyHunters"
+    ],
+    [
+      "threat-actor",
+      "pompompurin"
+    ]
+  ],
+  "rejected": [
+    {
+      "type": "domain",
+      "value": "breachforums.cx",
+      "reason": "not-in-source"
+    },
+    {
+      "type": "domain",
+      "value": "breachforums.is",
+      "reason": "not-in-source"
+    },
+    {
+      "type": "domain",
+      "value": "breachforums.vc",
+      "reason": "not-in-source"
+    },
+    {
+      "type": "domain",
+      "value": "breached.to",
+      "reason": "not-in-source"
+    },
+    {
+      "type": "domain",
+      "value": "breached.co",
+      "reason": "not-in-source"
+    }
+  ],
+  "seconds": 22.857
+}

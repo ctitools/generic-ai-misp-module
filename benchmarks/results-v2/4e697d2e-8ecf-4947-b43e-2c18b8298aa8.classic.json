@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "krebsonsecurity.com"
+    ],
+    [
+      "url",
+      "https://krebsonsecurity.com/2013/10/adobe-to-announce-source-code-customer-data-breach/"
+    ]
+  ]
+}

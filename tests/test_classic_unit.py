@@ -54,3 +54,8 @@ def test_request_path_never_imports_classic():
         src = (ROOT / name).read_text("utf-8")
         for needle in ("iocextract", "genai.classic", "from genai import classic"):
             assert needle not in src, f"{name} must not reference {needle}"
+
+
+def test_times_are_not_ipv6():
+    pairs = extract_classic("seen at 23:00:15 and 21:37:23 from 2001:db8::1")
+    assert pairs == [("ip-dst", "2001:db8::1")]

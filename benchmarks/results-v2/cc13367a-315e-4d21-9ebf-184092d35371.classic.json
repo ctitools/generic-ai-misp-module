@@ -1,0 +1,41 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blog.fox-it.com"
+    ],
+    [
+      "domain",
+      "en.wikipedia.org"
+    ],
+    [
+      "domain",
+      "mergene.medium.com"
+    ],
+    [
+      "domain",
+      "www.activecountermeasures.com"
+    ],
+    [
+      "url",
+      "https://blog.fox-it.com/2020/01/15/hunting-for-beacons/"
+    ],
+    [
+      "url",
+      "https://en.wikipedia.org/wiki/Standard_deviation"
+    ],
+    [
+      "url",
+      "https://mergene.medium.com/enterprise-scale-threat-hunting-network-beacon-detection-with-unsupervised-machine-learning-and-277c"
+    ],
+    [
+      "url",
+      "https://mergene.medium.com/enterprise-scale-threat-hunting-network-beacon-detection-with-unsupervised-machine-learning-and-277c4c30304f"
+    ],
+    [
+      "url",
+      "https://www.activecountermeasures.com/threat-hunting-simplifying-the-beacon-analysis-process/"
+    ]
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "md5",
+      "4a7a1626b6baf8c917945b8fc414c8b9"
+    ],
+    [
+      "url",
+      "http:hxxps(:)//concrecapital(.)com"
+    ]
+  ]
+}

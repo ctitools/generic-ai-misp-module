@@ -1,0 +1,37 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "securelist.com"
+    ],
+    [
+      "md5",
+      "00aa9900205771b8c9e7927153b77cf2"
+    ],
+    [
+      "md5",
+      "0318b7b906e9a34427bf6bbcf64b6fc8"
+    ],
+    [
+      "md5",
+      "b456430b4ed0879271e6164a7c0e4f6e"
+    ],
+    [
+      "md5",
+      "fa8b1592c9cda268d8affb6bceb7a120"
+    ],
+    [
+      "url",
+      "http:https[://]dbdb.addea.workers.dev"
+    ],
+    [
+      "url",
+      "http:https[://]google.kt9.site"
+    ],
+    [
+      "url",
+      "https://securelist.com/soumnibot-android-banker-obfuscates-app-manifest/112334/"
+    ]
+  ]
+}

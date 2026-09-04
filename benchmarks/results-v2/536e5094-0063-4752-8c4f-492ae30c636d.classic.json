@@ -1,0 +1,53 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www"
+    ],
+    [
+      "domain",
+      "www.welivesecurity.com"
+    ],
+    [
+      "sha1",
+      "336C1244674BB378F041E9064EA127E9E077D59D"
+    ],
+    [
+      "sha1",
+      "3DD83D7123AEFBE5579C9DC9CF3E68BCAFC9E65E"
+    ],
+    [
+      "sha1",
+      "5FC1B6A55A9F5A52422872A8E34A284CDBDD0526"
+    ],
+    [
+      "sha1",
+      "6F75F2490186225C922FE605953038BDEB537FEE"
+    ],
+    [
+      "sha1",
+      "941F341770B67F9E8EE811B4B8383101F35B27CD"
+    ],
+    [
+      "sha1",
+      "9AFC9D6D72F78B2EB72C5F2B87BDC7D59C1A14ED"
+    ],
+    [
+      "sha1",
+      "DC8BD2F65FD2199CE402C76A632A9743672EFE2D"
+    ],
+    [
+      "sha1",
+      "DFC941F365E065187B5C4A4BF42E770035920856"
+    ],
+    [
+      "url",
+      "https://www"
+    ],
+    [
+      "url",
+      "https://www.welivesecurity.com/2020/06/11/gamaredon-group-grows-its-game"
+    ]
+  ]
+}

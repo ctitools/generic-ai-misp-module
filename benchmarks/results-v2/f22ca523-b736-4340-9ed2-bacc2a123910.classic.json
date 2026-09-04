@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blogs.blackberry.com"
+    ],
+    [
+      "url",
+      "https://blogs.blackberry.com/en/2022/08/luca-stealer-targets-password-managers-and-cryptocurrency-wallets"
+    ]
+  ]
+}

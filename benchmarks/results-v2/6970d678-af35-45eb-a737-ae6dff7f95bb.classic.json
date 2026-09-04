@@ -1,0 +1,17 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www.controlglobal.com"
+    ],
+    [
+      "email",
+      "support@us.yokogawa.com"
+    ],
+    [
+      "url",
+      "https://www.controlglobal.com/industrynews/2019/yokogawa-announcement-warns-of-counterfeit-transmitters/"
+    ]
+  ]
+}

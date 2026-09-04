@@ -1,0 +1,25 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "email",
+      "info@usa.gov.us"
+    ],
+    [
+      "email",
+      "intelligence@crowdstrike.com"
+    ],
+    [
+      "email",
+      "keyvan.ajaxtm@gmail.com"
+    ],
+    [
+      "url",
+      "http:aeroconf2014.org"
+    ],
+    [
+      "url",
+      "http:parmanpower.com"
+    ]
+  ]
+}

@@ -23,8 +23,15 @@ class Confusion:
         return Confusion(*(a + b for a, b in zip(astuple(self), astuple(other), strict=True)))
 
 
+_REFANG = (("hxxp", "http"), ("[.]", "."), ("(.)", "."), ("[:]", ":"), ("[at]", "@"), ("[@]", "@"))
+
+
 def normalise_value(value: str) -> str:
-    return " ".join(value.lower().split()).rstrip("/.")
+    """Lower-case, whitespace-collapsed, refanged, trailing `/` and `.` stripped."""
+    value = " ".join(value.lower().split())
+    for defanged, plain in _REFANG:
+        value = value.replace(defanged, plain)
+    return value.rstrip("/.")
 
 
 def values(indicators: Iterable[tuple[str, str]]) -> set[str]:

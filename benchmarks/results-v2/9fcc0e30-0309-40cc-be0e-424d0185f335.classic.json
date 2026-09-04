@@ -1,0 +1,49 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blog.group-ib.com"
+    ],
+    [
+      "domain",
+      "blog.malwarebytes.com"
+    ],
+    [
+      "domain",
+      "decoded.avast.io"
+    ],
+    [
+      "domain",
+      "github.com"
+    ],
+    [
+      "domain",
+      "www.netsupportsoftware.com"
+    ],
+    [
+      "email",
+      "ti@avast.com"
+    ],
+    [
+      "url",
+      "https://blog.group-ib.com/prometheus-tds"
+    ],
+    [
+      "url",
+      "https://blog.malwarebytes.com/threat-analysis/2018/04/fakeupdates-campaign-leverages-multiple-website-platforms/"
+    ],
+    [
+      "url",
+      "https://decoded.avast.io/janrubin/parrot-tds-takes-over-web-servers-and-threatens-millions/"
+    ],
+    [
+      "url",
+      "https://github.com/avast/ioc/tree/master/ParrotTDS"
+    ],
+    [
+      "url",
+      "https://www.netsupportsoftware.com/"
+    ]
+  ]
+}

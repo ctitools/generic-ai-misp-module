@@ -1,0 +1,29 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www.threatexpert.com"
+    ],
+    [
+      "domain",
+      "www.virustotal.com"
+    ],
+    [
+      "md5",
+      "032e8fced2fbed146c30a47d4989804b"
+    ],
+    [
+      "md5",
+      "2ded7ee112cea2db509ba95dc09fded6"
+    ],
+    [
+      "url",
+      "http://www.threatexpert.com/report.aspx?md5=2ded7ee112cea2db509ba95dc09fded6"
+    ],
+    [
+      "url",
+      "http://www.virustotal.com/analisis/8f7684eed8707df29772df1285232df84d2e9be814aced65f"
+    ]
+  ]
+}

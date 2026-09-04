@@ -1,0 +1,9 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "url",
+      "http:azma.edu.af"
+    ]
+  ]
+}

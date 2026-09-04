@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "blog.trendmicro.com"
+    ],
+    [
+      "url",
+      "https://blog.trendmicro.com/trendlabs-security-intelligence/zeus-gets-another-update/"
+    ]
+  ]
+}

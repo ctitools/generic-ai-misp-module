@@ -1,0 +1,13 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "www.bleepingcomputer.com"
+    ],
+    [
+      "url",
+      "https://www.bleepingcomputer.com/news/security/us-aerospace-services-provider-breached-by-maze-ransomware/"
+    ]
+  ]
+}

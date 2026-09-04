@@ -1,0 +1,25 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "sha256",
+      "3CB0D2CFF9DB85C8E816515DDC380EA73850846317B0BB73EA6145C026276948"
+    ],
+    [
+      "sha256",
+      "6EE1E629494D7B5138386D98BD718B010EE774FE4A4C9D0E069525408BB7B1F7"
+    ],
+    [
+      "sha256",
+      "A896C2D16CADCDEDD10390C3AF3399361914DB57BDE1673E46180244E806A1D0"
+    ],
+    [
+      "url",
+      "http:Sinitude.com"
+    ],
+    [
+      "url",
+      "http:sinitude.com"
+    ]
+  ]
+}

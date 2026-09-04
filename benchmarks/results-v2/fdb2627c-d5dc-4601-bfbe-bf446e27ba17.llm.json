@@ -1,0 +1,50 @@
+{
+  "model": {
+    "name": "qwen3.8:latest",
+    "server": "ollama 0.33.2",
+    "digest": "22130167c4c2",
+    "quantization": "Q4_K_M"
+  },
+  "prompt": {
+    "cluster": "cti-info-extraction/qwen3.8-v1",
+    "uuid": "7b4e32ca-db05-46ae-ba95-4c0b4ee7d4c3",
+    "version": 1,
+    "sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757"
+  },
+  "indicators": [
+    [
+      "threat-actor",
+      "Flax Typhoon"
+    ],
+    [
+      "threat-actor",
+      "Integrity Technology Group, Inc."
+    ],
+    [
+      "threat-actor",
+      "Salt Typhoon"
+    ],
+    [
+      "threat-actor",
+      "Shanghai Heiying Information Technology Company, Limited"
+    ],
+    [
+      "threat-actor",
+      "Sichuan Juxinhe Network Technology Company, Ltd."
+    ],
+    [
+      "threat-actor",
+      "Sichuan Silence Information Technology Company, Ltd."
+    ],
+    [
+      "threat-actor",
+      "Yin Kecheng"
+    ],
+    [
+      "threat-actor",
+      "Zhou Shuai"
+    ]
+  ],
+  "rejected": [],
+  "seconds": 13.054
+}

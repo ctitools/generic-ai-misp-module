@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 (benchmark)
+
+- Added `benchmarks/metrics.py`, a stdlib-only metrics library for the LLM-vs-regex IoC
+  extraction benchmark: value-only normalisation, `Confusion` counts against an optional
+  universe, precision/recall(sensitivity)/specificity/accuracy/F1/Jaccard overlap, Cohen's
+  kappa, micro/macro aggregation and per-reference-type buckets. Hand-computed tests in
+  `tests/test_metrics_unit.py`.
+
 ## 2026-06-15
 
 - updated use-cases.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-04 (benchmark)
+
+- `benchmarks/compare.py` (+ `tests/test_compare_unit.py`): compares the LLM extraction with the classic `iocextract` results and the gold lists by normalised value, writes `docs/BENCHMARKS_extraction.md` (confusion matrices, micro/macro precision, recall, specificity, accuracy, F1, Jaccard, Cohen's kappa, per-type recall, Mermaid charts, deviations with a `reporter-domain` flag, gold view) and `benchmarks/results/extraction.csv`. Carries a private `_metrics` copy until `benchmarks.metrics` lands. `docs/BENCHMARKS.md` rewritten as the benchmark index (method, commands, artifacts, metric definitions, superset caveat).
+
 ## 2026-09-04 (use-cases)
 
 - Implemented the two use-cases in a new `genai/` package: `extract.py` (CTI info extraction: LLM proposes JSON candidates, five deterministic filters — in-source, known type, format, duplicate, confidence — decide; file/vulnerability objects; every added attribute AI-tagged) and `summarize.py` (`kind=report|event`, deterministic event rendering, structural gate: headings, ≤ 200 words, no indicator that is not in the input; summary attached as a new EventReport, event AI-tagged).

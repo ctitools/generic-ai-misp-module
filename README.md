@@ -63,9 +63,12 @@ carries a report. See ARCHITECTURE.md, "Schema provenance".
 ├── expansion/generic_ai.py        the module
 ├── fixtures/output/*.json         8 real MISP events (5 with EventReports), used by all tests
 ├── fixtures/output/hashes.csv     md5 → event uuid map of the fixture set
-├── tests/conftest.py              fixture loading
+├── tests/conftest.py              fixture loading + read-only MISP client (MispApi)
 ├── tests/test_generic_ai_unit.py  in-process tests of the handler
 ├── tests/test_generic_ai_e2e.py   real misp-modules server + live MISP instance
+├── tests/test_e2e_roundtrip.py    round-trip quality gate on 10 random live events
+├── tests/misp_compare.py          semantic MISP-event comparison used by the gate
+├── tests/e2etests/                events written by process_event(..., e2etest=True)
 ├── logs/                          e2e server log
 ├── CHANGELOG.md · IMPROVEMENTS.md · ARCHITECTURE.md · USE-CASES.md · AGENTS.md
 └── pyproject.toml
@@ -112,6 +115,29 @@ Expected: the input uuid echoed back and the first 120 characters of the report 
 ```bash
 MISP_VERIFY_SSL=false .venv/bin/pytest -q
 ```
+
+### Round-trip quality gate
+
+Before real AI logic lands in `process_event()`, this proves the processing path does not
+corrupt events. `process_event(event, e2etest=True)` writes the processed event to
+`tests/e2etests/<uuid>.json`; the gate fetches **10 random events** from the MISP instance in
+`.env`, runs each through `validate_event()` and `process_event(..., e2etest=True)`, and asserts
+that the file is semantically identical to the original.
+
+```bash
+MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtrip.py
+```
+
+The seed and the chosen uuids are printed and saved to `tests/e2etests/last_run.json`; reproduce
+a run with `E2E_SEED=<seed>`. The test skips when the instance is not configured or unreachable.
+
+"Semantically identical" is defined in [tests/misp_compare.py](tests/misp_compare.py), because a
+PyMISP load → to_json round trip is not byte-identical. Tolerated: null/empty values, `"1"` vs
+`1`, whitespace, ISO date-time spelling (`+0000` vs `+00:00`), and four allowlisted paths that
+PyMISP normalises (default galaxy-cluster `distribution`/`sharing_group_id`, filled-in
+`ObjectReference.object_uuid`, the `_canEdit` UI flag, opinions on related events). Everything
+else — a changed value, a dropped attribute, a lost timestamp — fails the gate and is printed
+with its path.
 
 Lint before pushing:
 

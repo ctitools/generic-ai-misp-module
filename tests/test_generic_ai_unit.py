@@ -145,3 +145,14 @@ def test_process_event_report_returns_misp_event() -> None:
     result = generic_ai.process_eventReport("# Title\n\nbody")
     assert isinstance(result, MISPEvent)
     assert result.event_reports[0].content == "# Title\n\nbody"
+
+
+def test_process_event_e2etest_writes_event_file(event_with_report, tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(generic_ai, "E2E_DIR", tmp_path / "e2etests")
+    event = generic_ai.validate_event(event_with_report["Event"])
+    assert generic_ai.process_event(event) is event
+    assert not (tmp_path / "e2etests").exists()  # default: nothing written
+    generic_ai.process_event(event, e2etest=True)
+    saved = json.loads((tmp_path / "e2etests" / f"{event.uuid}.json").read_text(encoding="utf-8"))
+    assert saved["Event"]["uuid"] == event_with_report["Event"]["uuid"]
+    assert saved["Event"]["timestamp"] == event_with_report["Event"]["timestamp"]

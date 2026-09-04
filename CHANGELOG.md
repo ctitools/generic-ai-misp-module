@@ -12,7 +12,10 @@
 - Rewrote the tests: 21 unit tests (all fixtures validate and round-trip, input shapes, report extraction, 8 rejection cases, hooks), local e2e against a real `misp-modules` server for every fixture, and live e2e fetching the fixture uuids from the MISP instance in `.env` (skips on missing key / 404 / unreachable; `MISP_VERIFY_SSL=false` for the self-signed dev cert).
 - `pyproject.toml`: Python `>=3.14`, dependency `pymisp>=2.5.34.2`, extras `dev` (pytest, ruff, pylint) and `e2e` (misp-modules), build system, version `0.3.0` (module and package versions now agree).
 - Docs: README rewritten for the new data flow; ARCHITECTURE.md gained the current flow, the schema-provenance check (no official JSON schema defines `EventReport`) and the test-data note; AGENTS.md updated (Python 3.14, PyMISP approved); new IMPROVEMENTS.md with the repository analysis.
-- Verified locally: `pytest` 42 passed / 4 skipped (events absent on the instance), `ruff`, `pylint` clean.
+- Added a round-trip quality gate: `process_event(event, e2etest=False)` gained the `e2etest` flag that writes the processed event to `tests/e2etests/<uuid>.json`; `tests/test_e2e_roundtrip.py` fetches 10 random events from the live instance (seedable with `E2E_SEED`, last run recorded in `tests/e2etests/last_run.json`) and proves the files are semantically identical to the originals via the new `tests/misp_compare.py` (own tests in `tests/test_misp_compare.py`).
+- `validate_event()` now builds the `MISPEvent` with `force_timestamps=True`; PyMISP otherwise dropped the event `timestamp` on published events.
+- Moved the `.env` loader and a small read-only MISP client (`MispApi`: `fetch`, `index`) into `tests/conftest.py`, shared by the live e2e test and the gate.
+- Verified locally: `pytest` 49 passed / 4 skipped (events absent on the instance), `ruff`, `pylint` clean; the gate passed 10/10 on three seeds.
 
 ## 2026-06-15
 

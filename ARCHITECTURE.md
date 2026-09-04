@@ -55,6 +55,16 @@ default galaxy clusters (MISP emits them, PyMISP rejects them) are dropped befor
 (`hashes.csv` lists md5 → uuid). Five carry EventReports. The unit tests, the local misp-modules
 e2e test and the live-instance e2e test all use this set, so results are comparable across runs.
 
+### Round-trip quality gate
+
+`process_event(event, e2etest=True)` writes the processed event to `tests/e2etests/<uuid>.json`.
+`tests/test_e2e_roundtrip.py` fetches 10 random events from the live instance, runs them through
+`validate_event()` → `process_event(..., e2etest=True)` and compares the file with the original via
+`tests/misp_compare.py`. The comparator tolerates only PyMISP's own normalisations (null/empty
+fields, numeric strings, whitespace, date-time spelling, and four allowlisted paths); any other
+difference fails. `validate_event()` builds the event with `force_timestamps=True` because
+PyMISP otherwise drops the event `timestamp` from published events it marks as edited.
+
 ## PoC version 1
 
 Two years ago, we did a ["CTI Info Extractor" PoC](https://github.com/aaronkaplan/stochasticCTIExtractor)

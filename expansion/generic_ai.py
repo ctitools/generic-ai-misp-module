@@ -11,6 +11,7 @@ Data flow (see README.md / ARCHITECTURE.md):
 
 import copy
 import json
+from pathlib import Path
 from typing import Any
 
 from pymisp import MISPEvent, PyMISPError
@@ -35,6 +36,9 @@ moduleinfo = {
     "output": "Two MISP Events: the processed event and the event built from the EventReport.",
 }
 moduleconfig: list[str] = []
+
+# process_event(..., e2etest=True) writes the processed event here as <uuid>.json
+E2E_DIR = Path(__file__).resolve().parents[1] / "tests" / "e2etests"
 
 
 def _extract_event(request: dict[str, Any]) -> dict[str, Any]:
@@ -75,7 +79,8 @@ def validate_event(data: dict[str, Any]) -> MISPEvent:
     """Validate the raw event dict with PyMISP; raises PyMISPError on invalid input."""
     if not data.get("info"):
         raise PyMISPError('"info" is required.')
-    event = MISPEvent()
+    # force_timestamps: PyMISP otherwise drops "timestamp" from events it considers edited
+    event = MISPEvent(force_timestamps=True)
     event.load(_normalise_for_pymisp(data))
     return event
 
@@ -90,8 +95,16 @@ def get_event_report(event: MISPEvent) -> str:
     return "\n\n".join(contents)
 
 
-def process_event(event: MISPEvent) -> MISPEvent:
-    """Dummy hook acting on the whole event. Replace with real AI logic."""
+def process_event(event: MISPEvent, e2etest: bool = False) -> MISPEvent:
+    """Dummy hook acting on the whole event. Replace with real AI logic.
+
+    With e2etest=True the (processed) event is also written to E2E_DIR/<uuid>.json so the
+    round-trip quality gate (tests/test_e2e_roundtrip.py) can compare it with the original.
+    """
+    if e2etest:
+        E2E_DIR.mkdir(parents=True, exist_ok=True)
+        path = E2E_DIR / f"{event.uuid}.json"
+        path.write_text(json.dumps(_to_dict(event), indent=2), encoding="utf-8")
     return event
 
 
@@ -112,7 +125,6 @@ def dict_handler(request: dict[str, Any]) -> dict[str, Any]:
         event = validate_event(_extract_event(request))
     except (ValueError, TypeError, KeyError, PyMISPError) as error:
         # PyMISP raises TypeError/KeyError (not PyMISPError) for some missing fields
-
         return {"error": f"Invalid MISP Event: {error}"}
 
     event_report = get_event_report(event)

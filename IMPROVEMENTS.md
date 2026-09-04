@@ -44,6 +44,10 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     - `MISPGalaxyCluster.from_dict` rejects `distribution` on default clusters, which MISP's
       own `/events/view` output sets. The module strips it before loading.
     - `add_event_report()` raises `TypeError`, not a `PyMISPError`, when `name` is missing.
+    - `to_json()` drops the event-level `timestamp` when the event is flagged edited, which
+      `from_dict` does for published events via `publish()`. The module passes
+      `force_timestamps=True`. Measured round-trip losses tolerated by the gate are listed in
+      `tests/misp_compare.py`.
 
 ## 3. Design and maintainability
 

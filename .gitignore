@@ -19,3 +19,5 @@ tests/e2etests/*
 tests/golden/*.tmp
 
 .claude/
+benchmarks/data/
+benchmarks/results/*.json

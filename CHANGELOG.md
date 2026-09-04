@@ -7,6 +7,7 @@
   and returning sorted `(misp_type, value)` pairs plus a `python -m genai.classic` CLI. Benchmark
   and test tooling only — never on the request path (`tests/test_classic_unit.py` enforces it, plus
   the gold-subset gate on `orkl-sample`). Supply-chain notes in IMPROVEMENTS.md item 24.
+- `benchmarks/orkl.py`: stdlib-only read-only orkl.eu client (`info`, `entry`, `entries`) and reproducible sampler `sample(n, seed, ...)` / `python -m benchmarks.orkl` that draws random English reports (2000-40000 chars) into `benchmarks/data/orkl/<id>.json` + `sample.json` (resumable, progress in `logs/benchmark-orkl.log`). Offline tests in `tests/test_orkl_unit.py`; data flow and file contracts in `benchmarks/README.md`; `benchmarks/data/`, `benchmarks/results/*.json`, `logs/` gitignored.
 
 ## 2026-09-04 (use-cases)
 

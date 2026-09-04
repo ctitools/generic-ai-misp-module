@@ -326,3 +326,12 @@ def test_fixture_event_extraction_keeps_round_trip(fake_llm) -> None:
     event = generic_ai.validate_event(raw["Event"])
     generic_ai.process_event(event, settings={"use_case": "extraction"})
     assert json.loads(event.to_json())["uuid"] == raw["Event"]["uuid"]
+
+
+def test_check_summary_ignores_markdown_around_urls() -> None:
+    prompt = prompts.resolve_prompt("summary-report")
+    source = "Phishing at https://login-acme-bank.example/verify seen."
+    summary = "\n".join(f"## {h}" for h in prompt.headings)
+    url = "https://login-acme-bank.example/verify"
+    summary += f"\nVictims visit `{url}`. Then ({url})."
+    assert not [p for p in summarize.check_summary(summary, source, prompt) if "indicator" in p]

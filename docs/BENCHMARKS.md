@@ -16,28 +16,32 @@ What the numbers say:
 1. **As deployed, 35 of 100 reports failed**: the JSON answer hit the 2000-token budget of
    `cti-info-extraction/qwen3.8-v1` (the prompt asks for a `quote` per indicator, which is
    expensive on indicator-rich reports). The module returns an error, never partial results,
-   so those reports contribute nothing. The v2 cluster removes the budget problem; the
-   generation then takes several minutes per report, above the default 120 s timeout.
+   so those reports contribute nothing. Re-running the 35 with the v2 cluster (8000 tokens,
+   `GENERIC_AI_REQUEST_TIMEOUT=900`) recovered 30; 5 reports overflow even 8000 tokens. v2
+   generations take a median of 95 s and up to 194 s per report, far above the module's 120 s
+   default timeout, so v2 is not a deployable setting as is.
 2. **Against the three hand-labelled gold lists the LLM is precise**: precision 1.00,
    recall 0.80, F1 0.89, kappa 0.84 (micro). Its misses are defanged values
    (`131.226.2[.]6`) and a name (`emotet`), both rejected by the module's own filters. The
    classic extractor on the same reports: precision 0.21, recall 0.49, kappa negative, because
    it also returns the reporting vendor's links.
-3. **Against the classic superset (65 reports) agreement is low by construction**: F1 0.29,
-   kappa -0.67. The classic-only values are URLs and domains (289 of 351), a large part of
-   them reference links and vendor sites (78 flagged `reporter-domain`, the flag only catches
-   hosts named in the entry metadata). On hashes the two agree: recall of classic md5/sha1/
-   sha256 is 0.83-0.91; on ip-dst 0.27, url 0.14, domain 0.02 (classic derives a domain from
-   every URL; the LLM reports the URL).
-4. **What only the LLM finds**: 241 values in types the regexes cannot see: threat-actor
-   (73), filename (58), malware-type (46), regkey, mutex, btc, vulnerability, onion-address.
-   These are the module's added value and need a human-labelled set to be scored.
+3. **Against the classic superset agreement is low by construction**: F1 0.29 (v1, 65
+   reports) and 0.41 (v2, 95 reports), kappa negative in both. The classic-only values are
+   URLs and domains (802 of 918 in v2), a large part of them reference links and vendor sites
+   (108 flagged `reporter-domain`; the flag only catches hosts named in the entry metadata, so
+   it undercounts). On hashes the two agree: recall of classic md5/sha1/sha256 is 0.79-0.94
+   (v2); on ip-dst 0.14, url 0.15, domain 0.01 (classic derives a domain from every URL; the
+   LLM reports the URL, and matching is by value).
+4. **What only the LLM finds**: 660 values (v2) in types the regexes cannot see: filename
+   (349), threat-actor (109), malware-type (63), regkey, vulnerability, named pipe, pdb, mutex,
+   btc, onion-address. These are the module's added value and need a human-labelled set to be
+   scored; on the 3 gold lists every such value was literally in the text (precision 1.0).
 5. **Superset artefacts found on the way**: iocextract's IPv6 regex matched times such as
    `23:00:15` (116 false IPs before `genai/classic.py` validated candidates with `ipaddress`),
    and its e-mail regex swallows the preceding word. The comparison refangs values before
    matching so a defanged LLM value equals its refanged classic twin.
-6. **Speed**: median 12 s per report, max 54 s (v1); the whole v1 pass took 66 minutes
-   including a GPU-server reboot.
+6. **Speed**: median 12 s per report, max 54 s (v1); the v1 pass took 66 minutes including a
+   GPU-server reboot, the v2 re-run of 35 reports 71 minutes.
 
 ## Method
 

@@ -2,6 +2,7 @@
 
 ## 2026-09-04 (benchmark)
 
+- `genai/summarize.py`: the structural check's URL pattern no longer swallows a closing backtick or sentence punctuation (a summary quoting `` `https://…/verify`. `` failed as "indicator not in input"). Unit test added.
 - First extraction benchmark run on 100 orkl.eu reports: results and interpretation in `docs/BENCHMARKS.md` (Results), generated reports `docs/BENCHMARKS_extraction.md` (as deployed) and `docs/BENCHMARKS_extraction-v2.md` (8000-token cluster). `genai/classic.py` validates IPv6 candidates (iocextract matched times as IPs); `benchmarks/metrics.py` refangs values before matching. New IMPROVEMENTS items 25-26 (answer budget, defanged values).
 - Added `genai/classic.py`: deterministic regex IoC extractor over `iocextract` 1.16.1 (new
   dependency in `pyproject.toml`/`uv.lock`, GPL, transitive `regex`), refanging defanged values

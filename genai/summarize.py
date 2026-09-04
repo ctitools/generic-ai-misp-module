@@ -14,7 +14,9 @@ KINDS = ("report", "event")
 _INDICATOR_RES = (
     re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b"),  # IPv4
     re.compile(r"\b[a-f0-9]{32}\b|\b[a-f0-9]{40}\b|\b[a-f0-9]{64}\b", re.I),  # hashes
-    re.compile(r"https?://[^\s)\]>\"']+"),  # urls
+    re.compile(
+        r"https?://[^\s)\]>\"'`]+?(?=[.,;:]*(?:\s|$|[)\]>\"'`]))"
+    ),  # urls, no trailing punctuation
     re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.I),
     re.compile(r"\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", re.I),  # uuids
     re.compile(  # domains with a common TLD

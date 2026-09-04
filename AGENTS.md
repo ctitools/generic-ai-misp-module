@@ -127,7 +127,7 @@ If you add or change a pipeline, leave behind:
 
 1. You will find the DEVELOPER_HOST and _USER in your .env 
 2. You have ssh access there. Only operate in DEVELOPER_HOST_DIRECTORY. Never somewhere else! You are sandboxed.
-3. Generally, follow the README, ARCHITECTURE.md notes to set things up
+3. Generally, follow the README and docs/ARCHITECTURE.md notes to set things up
 
 On the DEVELOPMENT_HOST, do:
 

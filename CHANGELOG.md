@@ -15,6 +15,13 @@
 - Added a round-trip quality gate: `process_event(event, e2etest=False)` gained the `e2etest` flag that writes the processed event to `tests/e2etests/<uuid>.json`; `tests/test_e2e_roundtrip.py` fetches 10 random events from the live instance (seedable with `E2E_SEED`, last run recorded in `tests/e2etests/last_run.json`) and proves the files are semantically identical to the originals via the new `tests/misp_compare.py` (own tests in `tests/test_misp_compare.py`).
 - `validate_event()` now builds the `MISPEvent` with `force_timestamps=True`; PyMISP otherwise dropped the event `timestamp` on published events.
 - Moved the `.env` loader and a small read-only MISP client (`MispApi`: `fetch`, `index`) into `tests/conftest.py`, shared by the live e2e test and the gate.
+- Consolidated all documentation under `docs/` (`git mv` of ARCHITECTURE, BENCHMARKS, USE-CASES, IMPROVEMENTS, architecture.png); README got a documentation index; links fixed.
+- Rewrote `docs/USE-CASES.md` around the two use-cases in focus: CTI info extraction (`extract_iocs`, high-confidence only, five deterministic post-filters) and summarization (`summarize(event, kind="report"|"event")`); other hackathon ideas parked as one-liners. Tagging rule: LLM-suggested attributes are tagged, LLM-suggested event-level content tags the event.
+- New `docs/PROMPTS.md`: prompts shipped as a MISP galaxy (cluster = use-case + model/digest + sampling parameters + prompt text), resolution order, v1 prompt texts.
+- New `docs/TESTING.md`: existing layers, per-use-case test plan with gates, and the deterministic-summary strategy (pinned model digest/server/prompt hash, seed 42 / temperature 0 / think off, three strictness levels, structural gate). Measured on `nanu`: three identical requests → identical output.
+- Rewrote `docs/requirements.md` to the current module (full-event input, no fallback, two use-cases, prompt galaxy, tagging MUST); obsolete requirements dropped.
+- `docs/ARCHITECTURE.md`: planned-hooks section (dispatch, LLM boundary, prompt resolution, tagging).
+- Module metadata: author "Aaron Kaplan / ctitools", name "Generic AI MISP module".
 - Verified locally: `pytest` 49 passed / 4 skipped (events absent on the instance), `ruff`, `pylint` clean; the gate passed 10/10 on three seeds.
 
 ## 2026-06-15

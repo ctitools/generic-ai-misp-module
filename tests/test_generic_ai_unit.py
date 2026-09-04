@@ -15,7 +15,7 @@ def test_introspection_and_version() -> None:
         "format": "misp_standard",
     }
     info = generic_ai.version()
-    assert info["name"] == "Generic AI"
+    assert info["name"] == "Generic AI MISP module"
     assert info["module-type"] == ["expansion"]
     assert not info["config"]
     assert "config" not in generic_ai.moduleinfo  # version() must not mutate the global

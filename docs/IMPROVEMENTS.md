@@ -61,8 +61,8 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     (seed/temperature), `reference_uploaded_file`, the pydantic schema and the
     `status_code/metadata/answer/extra_tags` envelope exist only in the diagram. Decide per item
     whether it belongs in `process_event()`'s signature or in `moduleconfig`.
-16. **Old fixture `tests/fixtures/orkl-sample.txt` — open.** No test uses it any more. Keep it
-    for the benchmark suite (below) or delete it.
+16. **Old fixture `tests/fixtures/orkl-sample.txt` — resolved.** Kept for the extraction recall
+    report planned in TESTING.md (UC1, informational).
 
 ## 4. Repository hygiene
 

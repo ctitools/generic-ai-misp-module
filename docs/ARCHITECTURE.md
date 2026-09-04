@@ -31,6 +31,28 @@ caller / MISP ──POST /query──▶ misp-modules ──handler(json)──�
 with one EventReport). Real AI logic — summarisation, extraction, tagging — goes there and keeps
 the contract "MISP Event in, MISP Event out".
 
+### Planned hooks (next code round; contract in USE-CASES.md, tests in TESTING.md)
+
+```text
+process_event(event, use_case, …)
+   ├─ use_case == "extraction"     → extract_iocs(event)              → event + tagged Attributes/Objects
+   └─ use_case == "summarization"  → summarize(event, kind)           → event + tagged EventReport + event tags
+                                       kind == "report": input = event_report
+                                       kind == "event":  input = render_event(event)  (sorted, deterministic)
+both:  prompt cluster (galaxy) ──┐
+       input text ───────────────┼─▶ llm_chat(messages, params)  ──▶ post-filters / structural checks ──▶ tag ──▶ event
+       sampling params ──────────┘        (one function, OpenAI-compatible chat, JSON mode for UC1)
+```
+
+- **LLM boundary**: exactly one function talks to the network (`llm_chat`); tests mock it.
+  Endpoint and key come from `.env` only; timeout → error, no fallback.
+- **Prompt resolution**: `prompt_*` config → galaxy cluster (uuid or value) → inline text →
+  bundled default; the cluster also fixes temperature/seed/top_p/max_tokens/think (PROMPTS.md).
+- **Tagging**: pinned `ai-computer-assisted` strings on every LLM-suggested attribute (UC1) or
+  on the event (UC2). Nothing LLM-made leaves untagged.
+- **Metadata** in the response: model name + digest, cluster uuid/version/prompt hash,
+  rejected candidates with reasons, timing.
+
 ### Schema provenance (why PyMISP validates, not a JSON schema)
 
 Checked on 2026-09-04:
@@ -79,7 +101,7 @@ This is just here for reference. We want to improve on that version and make it 
 
 After discussions between Alex (Univ. College Dublin), Christian T., Aaron K, Andras (CIRCL), we arrived at the following architecture:
 
-![architecture](./architecture.png)
+![architecture](architecture.png)
 
 The input parameters (marked as "* A") are:
 

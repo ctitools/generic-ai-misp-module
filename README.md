@@ -11,8 +11,18 @@ will later hold the real AI logic. Today both hooks are dummies.
 - validation: [PyMISP](https://github.com/MISP/PyMISP) (`MISPEvent.load`)
 - output: the processed MISP Event, a second MISP Event built from the report, and the report markdown
 
-For the architecture and design history see [ARCHITECTURE.md](ARCHITECTURE.md),
-for use cases [USE-CASES.md](USE-CASES.md), for the repo analysis [IMPROVEMENTS.md](IMPROVEMENTS.md).
+## Documentation
+
+| document | content |
+|---|---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | data flow, schema provenance, planned hooks |
+| [docs/USE-CASES.md](docs/USE-CASES.md) | the two use-cases (CTI info extraction, summarization) and their configuration |
+| [docs/PROMPTS.md](docs/PROMPTS.md) | prompts shipped as a MISP galaxy, v1 prompt texts |
+| [docs/TESTING.md](docs/TESTING.md) | test layers, per-use-case test plan, deterministic summaries |
+| [docs/requirements.md](docs/requirements.md) | EARS requirements with status |
+| [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md) | repository analysis and backlog |
+| [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | benchmark ideas |
+| [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) | contributor and agent guidance |
 
 ## Data flow
 
@@ -54,7 +64,7 @@ keys on default clusters so real API output validates. Nothing else is altered.
 
 Why not a JSON schema? The RFC's embedded schema (MISP `format/2.5/schema.json`) does not define
 `EventReport` and has `additionalProperties: false` on Event, so it rejects every event that
-carries a report. See ARCHITECTURE.md, "Schema provenance".
+carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 
 ## Repository layout
 
@@ -70,7 +80,8 @@ carries a report. See ARCHITECTURE.md, "Schema provenance".
 ├── tests/misp_compare.py          semantic MISP-event comparison used by the gate
 ├── tests/e2etests/                events written by process_event(..., e2etest=True)
 ├── logs/                          e2e server log
-├── CHANGELOG.md · IMPROVEMENTS.md · ARCHITECTURE.md · USE-CASES.md · AGENTS.md
+├── docs/                          all documentation (see above)
+├── CHANGELOG.md · AGENTS.md · CLAUDE.md
 └── pyproject.toml
 ```
 

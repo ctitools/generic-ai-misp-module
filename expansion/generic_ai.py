@@ -1,10 +1,11 @@
 """Generic AI MISP module: takes a full MISP Event, validates it, runs two (dummy) hooks.
 
-Data flow (see README.md / ARCHITECTURE.md):
+Data flow (see README.md / docs/ARCHITECTURE.md):
 
     request -> _extract_event -> validate_event -> event (MISPEvent)
         -> get_event_report(event) -> event_report (markdown string)
         -> process_event(event)            -> MISPEvent
+        or...
         -> process_eventReport(event_report) -> MISPEvent
         -> response {"results": {"Event": ..., "ReportEvent": ...}, "event_report": ...}
 """
@@ -20,10 +21,10 @@ misperrors = {"error": "Error"}
 mispattributes = {"input": [], "output": ["Event"], "format": "misp_standard"}
 moduleinfo = {
     "version": "0.3",
-    "author": "CIRCL / ctitools",
+    "author": "Aaron Kaplan / ctitools",
     "description": "Generic AI MISP module operating on a full MISP Event.",
     "module-type": ["expansion"],
-    "name": "Generic AI",
+    "name": "Generic AI MISP module",
     "logo": "",
     "requirements": ["pymisp"],
     "features": (

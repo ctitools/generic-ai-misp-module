@@ -5,12 +5,12 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
 
 ## 1. Security
 
-1. **Secrets in git history — open, needs action.** `.env` was committed in `59b7a76` ("first
-   generated code trial") with a real `MISP_API_KEY` and `OPENAI_API_KEY`. Commit `e3c2128`
-   "removed" them and `29ce262` untracked the file, but `git show 59b7a76:.env` still returns
-   both. The working copy also carries a commented-out 40-character token above
-   `OPENAI_API_KEY`. Treat all three as compromised: rotate the MISP and OpenAI keys, and either
-   rewrite history (`git filter-repo`) or accept that the repo is burned for those keys.
+1. **Secrets in git history — keys rotated (2026-09-04), history still open.** `.env` was
+   committed in `59b7a76` ("first generated code trial") with a then-valid `MISP_API_KEY` and
+   `OPENAI_API_KEY`. Commit `e3c2128` "removed" them and `29ce262` untracked the file, but
+   `git show 59b7a76:.env` still returns both. Both keys have since been rotated, so the
+   remaining choice is whether to rewrite history (`git filter-repo`) before the repo is
+   shared more widely, or leave the revoked values in place.
 2. **TLS verification off by default — done (removed).** `verify_ssl` defaulted to `False`, so
    API keys went to `https://api.openai.com` over an unverified channel. If an HTTP backend
    returns, default to verified TLS; the e2e tests' `MISP_VERIFY_SSL=false` opt-in is for the

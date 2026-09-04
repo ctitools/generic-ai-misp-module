@@ -1,218 +1,147 @@
+import copy
 import json
-from pathlib import Path
 
 import pytest
+from conftest import FIXTURE_FILES, NO_REPORT, TWO_REPORTS, load_fixture
+from pymisp import MISPEvent
 
 from expansion import generic_ai
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-ORKL_SAMPLE_PATH = PROJECT_ROOT / "tests" / "fixtures" / "orkl-sample.txt"
-ORKL_SAMPLE_TEXT = ORKL_SAMPLE_PATH.read_text(encoding="utf-8")
-EXPECTED_AI_TAG_NAMES = [
-    'ai-computer-assisted:assistance-level="ai-generated"',
-    'ai-computer-assisted:review-level="unreviewed"',
-]
 
-
-def test_introspection_declares_misp_standard_text_support() -> None:
+def test_introspection_and_version() -> None:
     assert generic_ai.introspection() == {
-        "input": ["text", "comment"],
-        "output": ["EventReport"],
+        "input": [],
+        "output": ["Event"],
         "format": "misp_standard",
     }
+    info = generic_ai.version()
+    assert info["name"] == "Generic AI"
+    assert info["module-type"] == ["expansion"]
+    assert not info["config"]
+    assert "config" not in generic_ai.moduleinfo  # version() must not mutate the global
 
 
-def test_version_exposes_expected_configuration() -> None:
-    version = generic_ai.version()
-    assert version["name"] == "Generic AI"
-    assert version["module-type"] == ["expansion"]
-    assert "backend" in version["config"]
-    assert "event_report_name" in version["config"]
+def test_handler_without_query_returns_false() -> None:
+    assert generic_ai.handler() is False
 
 
-def test_dict_handler_returns_event_report_for_raw_text() -> None:
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "text": ORKL_SAMPLE_TEXT,
-        }
+def test_handler_rejects_invalid_json() -> None:
+    assert generic_ai.handler("{not json")["error"].startswith("Invalid JSON request")
+
+
+@pytest.mark.parametrize("path", FIXTURE_FILES, ids=lambda p: p.stem)
+def test_every_fixture_event_validates_and_round_trips(path) -> None:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    result = generic_ai.dict_handler({"module": "generic_ai", "event": raw})
+    assert "error" not in result
+    event = result["results"]["Event"]["Event"]
+    assert event["uuid"] == raw["Event"]["uuid"]
+    assert event["info"] == raw["Event"]["info"]
+    assert len(event.get("Attribute", [])) == len(raw["Event"].get("Attribute", []))
+    assert len(event.get("Object", [])) == len(raw["Event"].get("Object", []))
+
+
+def test_wrapped_bare_and_export_style_inputs_are_equivalent(event_with_report) -> None:
+    wrapped = generic_ai.dict_handler({"event": event_with_report})
+    bare = generic_ai.dict_handler({"event": event_with_report["Event"]})
+    export_style = generic_ai.dict_handler({"data": [event_with_report]})
+    assert wrapped["event_report"] == bare["event_report"] == export_style["event_report"]
+    assert (
+        wrapped["results"]["Event"]["Event"]["uuid"]
+        == bare["results"]["Event"]["Event"]["uuid"]
+        == export_style["results"]["Event"]["Event"]["uuid"]
     )
 
-    report = response["results"]["EventReport"][0]
-    assert report["name"] == "Generic AI Summary (summarization)"
-    assert "Emotet Is Not Dead (Yet)" in report["content"]
-    assert "Emotet Is Not Dead (Yet)" in response["answer"]["summary"]
-    assert response["metadata"]["mode"] == "deterministic-fallback"
-    assert response["results"]["Tag"] == [
-        {"name": EXPECTED_AI_TAG_NAMES[0], "local": False},
-        {"name": EXPECTED_AI_TAG_NAMES[1], "local": False},
-    ]
-    assert response["tags"] == EXPECTED_AI_TAG_NAMES
+
+def test_input_dict_is_not_mutated(event_with_report) -> None:
+    before = copy.deepcopy(event_with_report)
+    generic_ai.dict_handler({"event": event_with_report})
+    assert event_with_report == before
 
 
-def test_dict_handler_supports_text_attribute_requests() -> None:
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "attribute": {
-                "type": "text",
-                "value": ORKL_SAMPLE_TEXT,
-                "uuid": "1c6152e4-61f0-4cc9-a4e0-2f96f0e2167c",
-            },
-        }
-    )
-
-    report = response["results"]["EventReport"][0]
-    assert report["distribution"] == "0"
-    assert "Emotet attacks leveraging malicious macros" in response["answer"]["summary"]
-    assert "## Metadata" in report["content"]
+def test_event_report_is_the_report_markdown(event_with_report) -> None:
+    result = generic_ai.dict_handler({"event": event_with_report})
+    reports = event_with_report["Event"]["EventReport"]
+    assert len(reports) == 1
+    assert result["event_report"] == reports[0]["content"]
+    # process_eventReport() dummy wraps the markdown into a new event's EventReport
+    report_event = result["results"]["ReportEvent"]["Event"]
+    # PyMISP strips surrounding whitespace when it stores report content
+    assert report_event["EventReport"][0]["content"] == reports[0]["content"].strip()
+    assert report_event["uuid"] != event_with_report["Event"]["uuid"]
 
 
-def test_dict_handler_rejects_unsupported_attribute_types() -> None:
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "attribute": {
-                "type": "ip-src",
-                "value": "8.8.8.8",
-                "uuid": "1c6152e4-61f0-4cc9-a4e0-2f96f0e2167c",
-            },
-        }
-    )
-
-    assert response == {"error": "Unsupported attribute type."}
+def test_multiple_reports_are_joined() -> None:
+    raw = load_fixture(TWO_REPORTS)
+    contents = [r["content"] for r in raw["Event"]["EventReport"]]
+    assert len(contents) == 2
+    assert generic_ai.dict_handler({"event": raw})["event_report"] == "\n\n".join(contents)
 
 
-def test_dict_handler_requires_text_input() -> None:
-    response = generic_ai.dict_handler({"module": "generic_ai"})
-    assert response == {
-        "error": 'This module requires either a "text" field or a supported "attribute" field.'
+def test_deleted_reports_are_skipped(event_with_report) -> None:
+    event_with_report["Event"]["EventReport"][0]["deleted"] = True
+    assert generic_ai.dict_handler({"event": event_with_report})["event_report"] == ""
+
+
+def test_event_without_report_gives_empty_string() -> None:
+    result = generic_ai.dict_handler({"event": load_fixture(NO_REPORT)})
+    assert "error" not in result
+    assert result["event_report"] == ""
+
+
+@pytest.mark.parametrize(
+    ("request_body", "fragment"),
+    [
+        ({}, 'under "event" or "data"'),
+        ({"event": "not a dict"}, 'under "event" or "data"'),
+        ({"data": []}, 'under "event" or "data"'),
+        ({"event": {"Event": {"date": "2024-01-01"}}}, '"info" is required'),
+        ({"event": {"Event": {"info": "x", "date": "not-a-date"}}}, "date"),
+        ({"event": {"Event": {"info": "x", "distribution": 9}}}, "distribution"),
+        ({"event": {"Event": {"info": "x", "EventReport": [{"content": "c"}]}}}, "name"),
+        (
+            {"event": {"Event": {"info": "x", "Attribute": [{"type": "nope", "value": "v"}]}}},
+            "nope",
+        ),
+    ],
+)
+def test_invalid_events_are_rejected(request_body, fragment) -> None:
+    result = generic_ai.dict_handler(request_body)
+    assert result["error"].startswith("Invalid MISP Event: ")
+    assert fragment in result["error"]
+
+
+def test_default_galaxy_cluster_with_distribution_is_accepted() -> None:
+    # MISP's /events/view output looks like this; PyMISP alone would reject it.
+    cluster = {
+        "uuid": "b7a2c8a4-0a17-4c0a-9d5d-3d5f7a5f1c11",
+        "value": "x",
+        "default": True,
+        "distribution": "3",
+        "sharing_group_id": "0",
     }
+    galaxy = {
+        "uuid": "c5f6f4c6-9d68-4b6f-9d3a-0c4b3d5a2f22",
+        "name": "g",
+        "type": "g",
+        "GalaxyCluster": [copy.deepcopy(cluster)],
+    }
+    event = {
+        "info": "x",
+        "Galaxy": [copy.deepcopy(galaxy)],
+        "Attribute": [{"type": "text", "value": "v", "Galaxy": [copy.deepcopy(galaxy)]}],
+    }
+    result = generic_ai.dict_handler({"event": event})
+    assert "error" not in result, result
+    assert len(result["results"]["Event"]["Event"]["Galaxy"]) == 1
 
 
-def test_live_backend_uses_ollama_response(monkeypatch: pytest.MonkeyPatch) -> None:
-    captured: dict[str, object] = {}
-
-    def fake_request_json(url: str, payload: dict[str, object], **_: object) -> dict[str, object]:
-        captured["url"] = url
-        captured["payload"] = payload
-        return {"model": "gemma4:latest", "message": {"content": "Backend summary"}}
-
-    monkeypatch.setattr(generic_ai, "_request_json", fake_request_json)
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "text": "A CTI report that should go through the live backend.",
-            "config": {"backend": "ollama", "default_model_id": "gemma4:latest"},
-        }
-    )
-
-    assert captured["url"] == "http://127.0.0.1:11434/api/chat"
-    assert response["answer"]["summary"] == "Backend summary"
-    assert response["metadata"]["backend"] == "ollama"
-    assert response["metadata"]["mode"] == "live-backend"
+def test_process_event_is_identity(event_with_report) -> None:
+    event = generic_ai.validate_event(event_with_report["Event"])
+    assert generic_ai.process_event(event) is event
 
 
-def test_openai_compatible_backend_allows_missing_api_key(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    captured: dict[str, object] = {}
-
-    def fake_request_json(
-        url: str,
-        _payload: dict[str, object],
-        *,
-        headers: dict[str, str],
-        timeout: int,
-        verify_ssl: bool,
-    ) -> dict[str, object]:
-        captured["url"] = url
-        captured["headers"] = headers
-        captured["timeout"] = timeout
-        captured["verify_ssl"] = verify_ssl
-        return {
-            "model": "gemma4:latest",
-            "choices": [{"message": {"content": "OpenAI compatible summary"}}],
-        }
-
-    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-    monkeypatch.setattr(generic_ai, "_request_json", fake_request_json)
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "text": "A CTI report that should go through the OpenAI compatible path.",
-            "config": {
-                "backend": "openai",
-                "api_base": "http://10.72.0.4:11434/v1",
-                "default_model_id": "gemma4:latest",
-                "verify_ssl": False,
-            },
-        }
-    )
-
-    assert captured["url"] == "http://10.72.0.4:11434/v1/chat/completions"
-    assert captured["headers"] == {"Content-Type": "application/json"}
-    assert response["answer"]["summary"] == "OpenAI compatible summary"
-    assert response["metadata"]["backend"] == "openai"
-    assert response["metadata"]["mode"] == "live-backend"
-
-
-def test_request_json_rejects_non_http_urls() -> None:
-    # pylint: disable=protected-access
-    with pytest.raises(generic_ai.BackendError, match=r"Only http\(s\) backend URLs are allowed"):
-        generic_ai._request_json(
-            "file:///tmp/evil",
-            {},
-            headers={"Content-Type": "application/json"},
-            timeout=1,
-            verify_ssl=False,
-        )
-
-
-def test_backend_failure_falls_back_deterministically(monkeypatch: pytest.MonkeyPatch) -> None:
-    def raising_request_json(*_: object, **__: object) -> dict[str, object]:
-        raise generic_ai.BackendError("boom")
-
-    monkeypatch.setattr(generic_ai, "_request_json", raising_request_json)
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "text": "First sentence. Second sentence. Third sentence.",
-            "config": {"backend": "ollama", "default_model_id": "gemma4:latest"},
-        }
-    )
-
-    assert response["metadata"]["mode"] == "fallback-after-backend-error"
-    assert response["metadata"]["backend_error"] == "boom"
-    assert response["answer"]["summary"] == "First sentence. Second sentence. Third sentence."
-
-
-def test_config_can_override_sentence_and_character_limits() -> None:
-    response = generic_ai.dict_handler(
-        {
-            "module": "generic_ai",
-            "text": (
-                "Sentence one is intentionally long to consume the available "
-                "characters quickly while describing multiple artifacts, "
-                "infrastructure details, and response actions in a single "
-                "breath. "
-                "Sentence two should not appear in the summary when the character budget is tight."
-            ),
-            "config": {"summary_sentences": 1, "summary_chars": 80},
-        }
-    )
-
-    assert response["answer"]["summary"].endswith("...")
-    assert len(response["answer"]["summary"]) <= 80
-
-
-def test_handler_wraps_json_requests() -> None:
-    payload = json.dumps(
-        {
-            "module": "generic_ai",
-            "text": ORKL_SAMPLE_TEXT,
-        }
-    )
-    response = generic_ai.handler(payload)
-    assert response["results"]["EventReport"][0]["name"] == "Generic AI Summary (summarization)"
-    assert "Emotet Is Not Dead (Yet)" in response["answer"]["summary"]
+def test_process_event_report_returns_misp_event() -> None:
+    result = generic_ai.process_eventReport("# Title\n\nbody")
+    assert isinstance(result, MISPEvent)
+    assert result.event_reports[0].content == "# Title\n\nbody"

@@ -1,5 +1,60 @@
 
 # Architecture 
+
+## Current data flow (v0.3, branch `with_full_event`)
+
+The module no longer works on a single attribute. It takes a **full MISP Event** and returns MISP Events.
+
+```text
+caller / MISP ──POST /query──▶ misp-modules ──handler(json)──▶ expansion/generic_ai.py
+                                                                  │
+   {"event": {"Event": …}}  or  {"data": [{"Event": …}]}          │ _extract_event
+                                                                  ▼
+                                                    PyMISP MISPEvent.load()   ← validation
+                                                                  │  (PyMISPError → {"error": …})
+                                                                  ▼
+                                                      event: MISPEvent
+                                                       │              │
+                                          get_event_report(event)     │
+                                                       │              │
+                                          event_report: str (markdown of all non-deleted EventReports)
+                                                       │              │
+                                 process_eventReport(event_report)   process_event(event)
+                                            → MISPEvent                  → MISPEvent
+                                                       └──────┬───────┘
+                                                              ▼
+              {"results": {"Event": {...}, "ReportEvent": {...}}, "event_report": "..."}
+```
+
+`process_event()` and `process_eventReport()` are the extension points. Both are dummies today
+(`process_event` returns its input; `process_eventReport` wraps the markdown into a fresh event
+with one EventReport). Real AI logic — summarisation, extraction, tagging — goes there and keeps
+the contract "MISP Event in, MISP Event out".
+
+### Schema provenance (why PyMISP validates, not a JSON schema)
+
+Checked on 2026-09-04:
+
+- `MISP/misp-rfc` (`misp-core-format/raw.md`, draft-20): the **prose** defines `EventReport`
+  (MUST: `uuid`, `event_id`, `name`, `content`, `distribution`, `sharing_group_id`, `timestamp`,
+  `deleted`). The **embedded JSON Schema** (`id` → `MISP/MISP` `format/2.5/schema.json`, last
+  substantive change 2018) does not define `EventReport` and sets `additionalProperties: false`
+  on `Event`, so it rejects any event that carries a report.
+- `MISP/MISP` `format/2.4/schema.json`, `format/2.5/schema.json` (branches 2.4, 2.5, develop): no `EventReport`.
+- `MISP/PyMISP` `pymisp/data/schema.json`, `schema-lax.json`: no `EventReport`; PyMISP has
+  deprecated `load(validate=True)` because "PyMISP is more flexible at loading events than the schema".
+
+Decision: validation is PyMISP `MISPEvent.load()`. Known gap versus a schema: PyMISP checks
+semantics (dates, distributions, required names/values, attribute types) but tolerates unknown
+keys. Known PyMISP-vs-MISP mismatch handled in the module: `distribution` / `sharing_group_id` on
+default galaxy clusters (MISP emits them, PyMISP rejects them) are dropped before loading.
+
+### Test data
+
+`fixtures/output/*.json` are eight real events exported from the MISP instance in `.env`
+(`hashes.csv` lists md5 → uuid). Five carry EventReports. The unit tests, the local misp-modules
+e2e test and the live-instance e2e test all use this set, so results are comparable across runs.
+
 ## PoC version 1
 
 Two years ago, we did a ["CTI Info Extractor" PoC](https://github.com/aaronkaplan/stochasticCTIExtractor)

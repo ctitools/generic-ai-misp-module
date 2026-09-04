@@ -1,127 +1,132 @@
 # AI MISP Module
 
-This repository now contains a runnable custom `misp-modules` scaffold for a Generic AI MISP enrichment module.
-
-The first loop is intentionally thin:
+A custom [misp-modules](https://github.com/MISP/misp-modules) expansion module that takes a
+**full MISP Event** ([MISP core format](https://www.misp-standard.org/rfc/misp-standard-core.html)),
+validates it, extracts the event's `EventReport` markdown and passes both through two hooks that
+will later hold the real AI logic. Today both hooks are dummies.
 
 - module name: `generic_ai`
 - module type: `expansion`
-- supported input: raw `text` requests or MISP `attribute` requests with `text` / `comment`
-- output format: MISP `EventReport` in `misp_standard` format
-- current behavior: live backend summarization when configured, with deterministic fallback when unavailable
+- input: a full MISP Event (see *Input shapes*)
+- validation: [PyMISP](https://github.com/MISP/PyMISP) (`MISPEvent.load`)
+- output: the processed MISP Event, a second MISP Event built from the report, and the report markdown
 
-The verified live backend path uses Ollama through its OpenAI-compatible endpoint at `http://10.72.0.4:11434/v1`.
-The fallback keeps the module executable while preserving the Generic AI request shape described in the architecture notes.
+For the architecture and design history see [ARCHITECTURE.md](ARCHITECTURE.md),
+for use cases [USE-CASES.md](USE-CASES.md), for the repo analysis [IMPROVEMENTS.md](IMPROVEMENTS.md).
 
-The development-host bootstrap intentionally installs the base upstream `misp-modules` package, not the full `all` extra. That means the server logs warnings for optional upstream modules that are not installed, but the custom `generic_ai` scaffold still loads and runs correctly.
+## Data flow
 
-For a general architecture see [ARCHITECTURE.md](ARCHITECTURE.md).
-For use-case descriptions see [USE-CASES.md](USE-CASES.md).
+```text
+POST /query {"module": "generic_ai", "event": {"Event": {...}}}
+   │
+   ├─ 1. _extract_event()        accept "event" or "data"[0], unwrap {"Event": ...}
+   ├─ 2. validate_event()        PyMISP MISPEvent.load()  → error dict on invalid input
+   ├─ 3. event                   the validated pymisp.MISPEvent
+   ├─ 4. get_event_report()      event_report = markdown of all non-deleted EventReports ("" if none)
+   ├─ 5. process_event(event)             → MISPEvent   (dummy: returns event unchanged)
+   │     process_eventReport(event_report) → MISPEvent   (dummy: new event holding the markdown)
+   └─ 6. response
+        {"results": {"Event": {"Event": ...}, "ReportEvent": {"Event": ...}},
+         "event_report": "<markdown>"}
+```
 
-**Repository Layout**
+All of this lives in [expansion/generic_ai.py](expansion/generic_ai.py) (about 130 lines).
+To add real behaviour, replace the bodies of `process_event()` and `process_eventReport()`.
+
+### Input shapes
+
+Both are accepted and equivalent:
+
+| shape | body |
+|---|---|
+| direct | `{"module": "generic_ai", "event": {"Event": {...}}}` (bare `{...}` without the wrapper works too) |
+| export-module style | `{"module": "generic_ai", "data": [{"Event": {...}}]}` (what misp-modules sends to export modules) |
+
+### Validation
+
+PyMISP is the validator: bad dates, distributions outside 0–5, an `EventReport` without a
+`name`, unknown attribute types, a missing `info` and similar problems come back as
+`{"error": "Invalid MISP Event: ..."}`.
+
+One normalisation happens before loading: MISP's `/events/view` output sets `distribution` and
+`sharing_group_id` on *default* galaxy clusters, which PyMISP refuses. The module drops those two
+keys on default clusters so real API output validates. Nothing else is altered.
+
+Why not a JSON schema? The RFC's embedded schema (MISP `format/2.5/schema.json`) does not define
+`EventReport` and has `additionalProperties: false` on Event, so it rejects every event that
+carries a report. See ARCHITECTURE.md, "Schema provenance".
+
+## Repository layout
 
 ```text
 .
-├── expansion/
-│   └── generic_ai.py
-├── tests/
-│   ├── fixtures/orkl-sample.txt
-│   ├── test_generic_ai_e2e.py
-│   └── test_generic_ai_unit.py
-├── artifacts/
-├── logs/
-├── CHANGELOG.md
+├── expansion/generic_ai.py        the module
+├── fixtures/output/*.json         8 real MISP events (5 with EventReports), used by all tests
+├── fixtures/output/hashes.csv     md5 → event uuid map of the fixture set
+├── tests/conftest.py              fixture loading
+├── tests/test_generic_ai_unit.py  in-process tests of the handler
+├── tests/test_generic_ai_e2e.py   real misp-modules server + live MISP instance
+├── logs/                          e2e server log
+├── CHANGELOG.md · IMPROVEMENTS.md · ARCHITECTURE.md · USE-CASES.md · AGENTS.md
 └── pyproject.toml
 ```
 
-**Development Host Bootstrap**
+## Setup
 
-Run these commands from the local workstation in this repository so the local tree is mirrored into the sandboxed development host directory.
+Python 3.14 and [uv](https://docs.astral.sh/uv/). A `.venv` is expected at the repo root.
+
+```bash
+uv pip install --python .venv/bin/python -e ".[dev,e2e]"
+```
+
+## Run
+
+```bash
+.venv/bin/python -m misp_modules -c . -l 127.0.0.1 -p 6666
+```
+
+## Verify
+
+```bash
+curl -s http://127.0.0.1:6666/modules | jq '.[] | select(.name=="generic_ai")'
+```
+
+```bash
+jq -c '{module: "generic_ai", event: .}' fixtures/output/10a94632-a0a1-4062-a3a5-95fe321ae045.json \
+  | curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- \
+  | jq '{uuid: .results.Event.Event.uuid, report: .event_report[:120]}'
+```
+
+Expected: the input uuid echoed back and the first 120 characters of the report markdown.
+
+## Tests
+
+```bash
+.venv/bin/pytest -q
+```
+
+- unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; the two hooks
+- e2e, local: starts `misp-modules` on a free port and POSTs every fixture event to `/query`
+- e2e, live: fetches the fixture uuids from `MISP_BASE_URL` with `MISP_API_KEY` (both from `.env`), runs them through the module and compares the report with the fixture. Skipped when `.env` is missing, the key is rejected, or an event is not on the instance. The dev instance has a self-signed certificate; run with `MISP_VERIFY_SSL=false` to accept it (tests only, never the module):
+
+```bash
+MISP_VERIFY_SSL=false .venv/bin/pytest -q
+```
+
+Lint before pushing:
+
+```bash
+.venv/bin/ruff check . && .venv/bin/ruff format --check expansion tests && .venv/bin/pylint expansion tests
+```
+
+## Development host
+
+The sandboxed development host from `.env` can run the same loop. Mirror the tree and run pytest there:
 
 ```bash
 set -a && source .env
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" "mkdir -p \"${DEVELOPER_HOST_DIRECTORY}\""
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'curl -LsSf https://astral.sh/uv/install.sh | sh'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && uv python install 3.12 && uv venv --python 3.12 .venv'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && [ -d misp-modules ] || git clone https://github.com/MISP/misp-modules.git'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && uv pip install --python .venv/bin/python -e ./misp-modules'
-rsync -az --delete \
-  --exclude '.git' \
-  --exclude '.env' \
-  --exclude '.venv' \
-  --exclude '__pycache__' \
-  --exclude '.pytest_cache' \
-  --exclude '.ruff_cache' \
-  --exclude '.semgrep' \
+rsync -az --delete --exclude '.git' --exclude '.env' --exclude '.venv' --exclude '__pycache__' \
+  --exclude '.pytest_cache' --exclude '.ruff_cache' \
   ./ "${DEVELOPER_USER}@${DEVELOPER_HOST}:${DEVELOPER_HOST_DIRECTORY}/generic-ai-misp-module/"
+ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'/generic-ai-misp-module" && uv venv --python 3.14 .venv && uv pip install --python .venv/bin/python -e ".[dev,e2e]" && .venv/bin/pytest -q'
 ```
-
-**Run Command**
-
-On the development host:
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-cd "$DEVELOPER_HOST_DIRECTORY"
-.venv/bin/python -m misp_modules -c ./generic-ai-misp-module -l 127.0.0.1 -p 6666
-```
-
-For MISP_HOST integration the verified service listener was started on `0.0.0.0:6666` so MISP could reach it from outside the development host.
-
-**Verification Step**
-
-From the development host:
-
-```bash
-curl -s http://127.0.0.1:6666/modules | python3 -m json.tool
-jq -Rs --arg uuid "0d2f54fb-3910-445c-aeb6-5fd28a7532d9" '{
-  module: "generic_ai",
-  attribute: {
-    type: "text",
-    uuid: $uuid,
-    value: ("# ORKL CTI Report\n\n- Source fixture: tests/fixtures/orkl-sample.txt\n\n" + .)
-  },
-  use_case_category: "summarization",
-  config: {
-    backend: "openai",
-    api_base: "http://10.72.0.4:11434/v1",
-    default_model_id: "gemma4:latest",
-    verify_ssl: false,
-    summary_chars: 700
-  }
-}' generic-ai-misp-module/tests/fixtures/orkl-sample.txt |
-  curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- |
-  jq .
-```
-
-**Artifact Path**
-
-Saved verification artifacts include:
-
-- `artifacts/live_openai_compat_response.json`
-- `artifacts/misp_e2e_result.json`
-- `artifacts/misp_e2e_event_reports.json`
-- `artifacts/misp_e2e_fetched_event.json`
-- `logs/live_openai_compat_metrics.json`
-- `logs/misp_e2e_metrics.json`
-
-**Data Flow**
-
-1. MISP or a caller posts a `text` attribute or raw text to `/query`.
-2. `expansion/generic_ai.py` extracts the input text and sends it to the configured backend.
-3. The verified live path uses `backend=openai` with `api_base=http://10.72.0.4:11434/v1`, which targets Ollama's OpenAI-compatible API.
-4. If the backend fails or is not configured, the module falls back to a deterministic summary.
-5. The module returns `results.EventReport` plus `results.Tag` with `ai-computer-assisted` tags for `ai-generated` and `unreviewed`.
-6. On `MISP_HOST`, the verified enrichment route is `enrich_attribute` on a `text` attribute, which stores the generated `EventReport` on the event and tags the event accordingly.
-
-**Verified MISP_HOST Flow**
-
-The successful end-to-end run used:
-
-- report source: `tests/fixtures/orkl-sample.txt`
-- event input: one `text` attribute containing a markdown-wrapped ORKL report
-- enrichment route: `misp.enrich_attribute(<attribute_uuid>, "generic_ai")`
-- result: a generated `EventReport` stored on the same event
-- event tags: `ai-computer-assisted:assistance-level="ai-generated"`, `ai-computer-assisted:review-level="unreviewed"`
-
-The successful run metadata is captured in `artifacts/misp_e2e_result.json`.

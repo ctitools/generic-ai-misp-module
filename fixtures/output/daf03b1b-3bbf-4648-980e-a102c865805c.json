@@ -1,0 +1,155 @@
+{
+  "Event": {
+    "analysis": "0",
+    "date": "2025-12-15",
+    "extends_uuid": "",
+    "info": "Ransomware attack",
+    "protected": false,
+    "publish_timestamp": "1784894184",
+    "published": true,
+    "threat_level_id": "1",
+    "timestamp": "1765832757",
+    "uuid": "daf03b1b-3bbf-4648-980e-a102c865805c",
+    "Orgc": {
+      "name": "CIRCL",
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f"
+    },
+    "Tag": [
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:ransomware=\"Qilin\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Acquire Infrastructure - T1583\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domains - T1583.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#075300",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obtain Capabilities - T1588\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Tool - T1588.002\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#054100",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter - T1059\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#064d00",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Accounts - T1078.002\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Web Service - T1567\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"External Remote Services - T1133\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "relationship_type": ""
+      }
+    ],
+    "Object": [
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "24",
+        "timestamp": "1765832756",
+        "uuid": "fadc38f9-0522-4a52-8dee-f47ed8319055",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "md5",
+            "timestamp": "1765829263",
+            "to_ids": true,
+            "type": "md5",
+            "uuid": "d60fbb07-1b14-4f29-925c-1a54177da3d5",
+            "value": "7a686ec4ff3d0959a1e4380957d79e36"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "text",
+            "timestamp": "1765829263",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "d98e48b0-cadb-48ef-a799-427b1b830cf3",
+            "value": "Backdoor"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1765832757",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "99021a4b-b194-4cf9-a67f-cb91995462f5",
+            "value": "rm.dll"
+          }
+        ]
+      }
+    ]
+  }
+}

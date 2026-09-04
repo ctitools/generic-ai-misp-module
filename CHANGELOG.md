@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-09-04
+
+- Rewrote `expansion/generic_ai.py` (609 → ~130 lines): the module now takes a **full MISP Event** instead of a text attribute. Removed the OpenAI/Ollama backends, prompts, deterministic summariser and the 13 runtime settings.
+- Input accepted under `event` (`{"Event": {...}}` or bare) or export-module style under `data[0]`.
+- Validation with PyMISP `MISPEvent.load()`; invalid input returns `{"error": "Invalid MISP Event: ..."}`. Added a normalisation for `distribution`/`sharing_group_id` on default galaxy clusters, which MISP emits but PyMISP rejects.
+- New functions `validate_event()`, `get_event_report()` (markdown of all non-deleted EventReports), and the dummy hooks `process_event(event) -> MISPEvent` and `process_eventReport(event_report) -> MISPEvent`.
+- Response shape: `{"results": {"Event": ..., "ReportEvent": ...}, "event_report": "..."}`.
+- `handler()` now returns an error dict on malformed JSON; `version()` no longer mutates `moduleinfo`.
+- Added `fixtures/output/` (8 real MISP events, 5 with EventReports, plus `hashes.csv` / `manifest.json`) as the shared test set.
+- Rewrote the tests: 21 unit tests (all fixtures validate and round-trip, input shapes, report extraction, 8 rejection cases, hooks), local e2e against a real `misp-modules` server for every fixture, and live e2e fetching the fixture uuids from the MISP instance in `.env` (skips on missing key / 404 / unreachable; `MISP_VERIFY_SSL=false` for the self-signed dev cert).
+- `pyproject.toml`: Python `>=3.14`, dependency `pymisp>=2.5.34.2`, extras `dev` (pytest, ruff, pylint) and `e2e` (misp-modules), build system, version `0.3.0` (module and package versions now agree).
+- Docs: README rewritten for the new data flow; ARCHITECTURE.md gained the current flow, the schema-provenance check (no official JSON schema defines `EventReport`) and the test-data note; AGENTS.md updated (Python 3.14, PyMISP approved); new IMPROVEMENTS.md with the repository analysis.
+- Verified locally: `pytest` 42 passed / 4 skipped (events absent on the instance), `ruff`, `pylint` clean.
+
 ## 2026-06-15
 
 - updated use-cases.

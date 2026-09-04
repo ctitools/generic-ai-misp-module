@@ -1,0 +1,1085 @@
+{
+  "Event": {
+    "analysis": "2",
+    "date": "2025-07-23",
+    "extends_uuid": "",
+    "info": "OSINT -  Disrupting active exploitation of on-premises SharePoint vulnerabilities",
+    "protected": false,
+    "publish_timestamp": "1784894129",
+    "published": true,
+    "threat_level_id": "1",
+    "timestamp": "1753257959",
+    "uuid": "59ed4725-5f2a-4844-8dc4-e6926dbcb5ce",
+    "Orgc": {
+      "name": "CIRCL",
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f"
+    },
+    "Tag": [
+      {
+        "colour": "#079fdf",
+        "local": false,
+        "name": "misp-galaxy:threat-actor=\"APT31\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#10c700",
+        "local": false,
+        "name": "misp-galaxy:threat-actor=\"Emissary Panda\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#004646",
+        "local": false,
+        "name": "type:OSINT",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0071c3",
+        "local": false,
+        "name": "osint:lifetime=\"perpetual\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0087e8",
+        "local": false,
+        "name": "osint:certainty=\"50\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:white",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:clear",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:threat-actor=\"Storm-2603\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Collection - T1119\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:producer=\"Microsoft\"",
+        "relationship_type": ""
+      }
+    ],
+    "Attribute": [
+      {
+        "category": "External analysis",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253704",
+        "to_ids": false,
+        "type": "vulnerability",
+        "uuid": "266775fc-9479-469f-b8e0-88d13314e32f",
+        "value": "CVE-2025-53770"
+      },
+      {
+        "category": "External analysis",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253704",
+        "to_ids": false,
+        "type": "vulnerability",
+        "uuid": "ad9f4469-da60-4c1d-ae25-3eca36146257",
+        "value": "CVE-2025-49704"
+      },
+      {
+        "category": "External analysis",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253704",
+        "to_ids": false,
+        "type": "vulnerability",
+        "uuid": "1a675651-525b-4c5d-9a68-61c07474dbd9",
+        "value": "CVE-2025-53771"
+      },
+      {
+        "category": "External analysis",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253704",
+        "to_ids": false,
+        "type": "vulnerability",
+        "uuid": "b31b00ea-2794-4ecb-9434-0cbbfe4c5ad4",
+        "value": "CVE-2025-49706"
+      },
+      {
+        "category": "Network activity",
+        "comment": "IP address exploiting SharePoint vulnerabilities",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253793",
+        "to_ids": true,
+        "type": "ip-dst",
+        "uuid": "4a5de7ae-aa75-4085-8d42-e62faa52647e",
+        "value": "134.199.202.205"
+      },
+      {
+        "category": "Network activity",
+        "comment": "IP address exploiting SharePoint vulnerabilities",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253793",
+        "to_ids": true,
+        "type": "ip-dst",
+        "uuid": "441282ca-78ea-43e6-850c-6fb3044e02df",
+        "value": "104.238.159.149"
+      },
+      {
+        "category": "Network activity",
+        "comment": "IP address exploiting SharePoint vulnerabilities",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253793",
+        "to_ids": true,
+        "type": "ip-dst",
+        "uuid": "c057cab1-6800-4d2f-bf7e-4f21055b30a2",
+        "value": "188.130.206.168"
+      },
+      {
+        "category": "Network activity",
+        "comment": "Post exploitation C2",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253810",
+        "to_ids": true,
+        "type": "ip-dst",
+        "uuid": "b5c3ec74-e09a-43fc-bcef-55b9548aaec5",
+        "value": "131.226.2.6"
+      },
+      {
+        "category": "Network activity",
+        "comment": "Ngrok tunnel delivering PowerShell to C2",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253878",
+        "to_ids": true,
+        "type": "url",
+        "uuid": "14b167a6-03dc-4a0b-bc3e-2865f6655986",
+        "value": "c34718cbb4c6.ngrok-free.app/file.ps1"
+      },
+      {
+        "category": "Payload delivery",
+        "comment": "Hash of spinstall0.aspx",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1753253898",
+        "to_ids": true,
+        "type": "sha256",
+        "uuid": "3ab096d8-56e9-429c-aa38-c79219c8f1c7",
+        "value": "92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514"
+      }
+    ],
+    "Object": [
+      {
+        "comment": "CVE-2025-49706: Enriched via the vulnerability_lookup module",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "9",
+        "timestamp": "1753253712",
+        "uuid": "eafb8083-91c0-4318-a665-0aca4f402072",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "4dae3128-87e7-40cf-b865-8281ca168cd3",
+            "referenced_uuid": "b31b00ea-2794-4ecb-9434-0cbbfe4c5ad4",
+            "relationship_type": "related-to",
+            "timestamp": "1753253712",
+            "uuid": "23e6fae8-bc5a-4dc7-a2ba-0e3c4c32d536"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "3ff6fe33-bcee-4654-aae6-fbee65bcb55e",
+            "value": "https://vulnerability.circl.lu/vuln/CVE-2025-49706"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "1f98fb69-feb4-49b7-8874-31b2557e6476",
+            "value": "CVE-2025-49706"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "published",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "a2b9a151-423d-48fc-a993-1bf80e78911d",
+            "value": "2025-07-08T16:58:07.343000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "modified",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "29c65adb-c24e-486d-bc22-31113b4b7eed",
+            "value": "2025-07-23T03:55:22.461000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "56255801-793a-4d54-96f3-c6c2e1755290",
+            "value": "PUBLISHED"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253712",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "f3e4848a-7ef3-401a-b938-6a2d5b0391ba",
+            "value": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49706"
+          }
+        ]
+      },
+      {
+        "comment": "CVE-2025-53771: Enriched via the vulnerability_lookup module",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "9",
+        "timestamp": "1753253718",
+        "uuid": "637605c4-e7bf-4384-ae0c-50282077146d",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "5465ef48-6645-4841-b8cf-0ca9f596af4e",
+            "referenced_uuid": "1a675651-525b-4c5d-9a68-61c07474dbd9",
+            "relationship_type": "related-to",
+            "timestamp": "1753253718",
+            "uuid": "e1b13427-7e13-469d-9206-c18aebda3985"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "1175300e-f981-4ae5-b208-2a6bf7ac5624",
+            "value": "https://vulnerability.circl.lu/vuln/CVE-2025-53771"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "6a20b20a-bc86-4a86-8fcb-accaad333db8",
+            "value": "CVE-2025-53771"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "published",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "884dc4d6-952b-4993-920d-bcbf2c9acea6",
+            "value": "2025-07-20T22:16:52.203000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "modified",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "30480567-f68a-4ad5-87ce-20395fc057fb",
+            "value": "2025-07-22T21:03:27.322000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "76a0dd8d-7de7-4fc3-821a-55d5e15db72d",
+            "value": "PUBLISHED"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253718",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "c02a2d6a-43ed-4b88-9404-a39c3ea95703",
+            "value": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53771"
+          }
+        ]
+      },
+      {
+        "comment": "CVE-2025-49704: Enriched via the vulnerability_lookup module",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "9",
+        "timestamp": "1753253724",
+        "uuid": "82bab98a-3ca3-4a8a-ab5c-a08bd7e90b74",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "d3bc2ed1-c11a-4297-802a-0c287b28109e",
+            "referenced_uuid": "ad9f4469-da60-4c1d-ae25-3eca36146257",
+            "relationship_type": "related-to",
+            "timestamp": "1753253724",
+            "uuid": "23de198f-c9e0-4de4-a583-81ffd4f23676"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "469af93c-615f-45f9-b8eb-7131e1455aa2",
+            "value": "https://vulnerability.circl.lu/vuln/CVE-2025-49704"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "d8cd6602-a849-471d-ad7b-3ab33f32bea8",
+            "value": "CVE-2025-49704"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "published",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "830970d9-8fe6-487b-a7c3-0e9964a87afc",
+            "value": "2025-07-08T16:58:05.908000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "modified",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "06c4b9e2-ce01-42e0-af7c-8cbcdb3982ab",
+            "value": "2025-07-22T21:04:05.006000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5f691367-7da3-42c5-a3a8-2b54f2ca5fb3",
+            "value": "PUBLISHED"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253724",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "420c68e8-5cf9-4b4a-a3ec-abd10cd3b142",
+            "value": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49704"
+          }
+        ]
+      },
+      {
+        "comment": "CVE-2025-49704: Enriched via the vulnerability_lookup module",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "9",
+        "timestamp": "1753253733",
+        "uuid": "55b6cca8-5070-4ace-9fe4-960568d09f83",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "6c2f3501-eec7-4c61-986d-758339976606",
+            "referenced_uuid": "ad9f4469-da60-4c1d-ae25-3eca36146257",
+            "relationship_type": "related-to",
+            "timestamp": "1753253733",
+            "uuid": "ae1040df-526b-40af-85bb-f76f0c873b35"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "ff102ffd-040d-410f-8423-91420bc6c3cf",
+            "value": "https://vulnerability.circl.lu/vuln/CVE-2025-49704"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "a632637c-8726-4e40-a416-03dd4b511a69",
+            "value": "CVE-2025-49704"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "published",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "91f8e4f1-2842-459c-9874-90c893ee4cbf",
+            "value": "2025-07-08T16:58:05.908000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "modified",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "086d53c6-9e3c-44ab-94b9-bfddef5c8f38",
+            "value": "2025-07-22T21:04:05.006000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "ce83e3b9-411a-4899-a07a-50d58eb7d8c6",
+            "value": "PUBLISHED"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253733",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "93785cf1-7326-4e7b-aac0-2d65bcd19a19",
+            "value": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49704"
+          }
+        ]
+      },
+      {
+        "comment": "CVE-2025-53770: Enriched via the vulnerability_lookup module",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "9",
+        "timestamp": "1753253741",
+        "uuid": "3546c078-3759-4346-a3fc-96e0f6e3a335",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "2cabe708-02fc-4ef3-8817-e549233fab8f",
+            "referenced_uuid": "266775fc-9479-469f-b8e0-88d13314e32f",
+            "relationship_type": "related-to",
+            "timestamp": "1753253741",
+            "uuid": "349bde70-3d2b-438a-8a1e-8ffc3ff600f7"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "200735fc-253b-47fd-9a65-61cc865cabad",
+            "value": "https://vulnerability.circl.lu/vuln/CVE-2025-53770"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "90095431-cebe-40e2-8a1a-5d6fd161d9c5",
+            "value": "CVE-2025-53770"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "published",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "8db2bfc6-b96c-4e9b-b37a-8404f4c9f718",
+            "value": "2025-07-20T01:06:33.607000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "modified",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "5cd59fb9-c358-48ca-8de1-bfdaa77ee7d3",
+            "value": "2025-07-23T03:55:21.046000+00:00"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "40cd1048-d837-424a-b5e4-0761e8fb4acb",
+            "value": "PUBLISHED"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "references",
+            "timestamp": "1753253741",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "dece4358-0e54-401b-9592-da35bc34a0fb",
+            "value": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770"
+          }
+        ]
+      },
+      {
+        "comment": "File path for stolen web configs",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1753253856",
+        "uuid": "3b42535a-8793-4363-9ab0-d0d2ceaeaf4d",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1753253856",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b1ef6fbf-4108-4a18-a7cf-7892407020a2",
+            "value": "\\1[5-6]\\TEMPLATE\\LAYOUTS\\debug_dev.js"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1753253938",
+        "uuid": "730d4dda-1567-4eed-90f6-7c1ab67e4072",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "File containing web config data, including MachineKey data",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1753253938",
+            "to_ids": false,
+            "type": "filename",
+            "uuid": "e9a7843e-546c-459d-b6aa-d1c8512279b2",
+            "value": "debug_dev.js"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "state",
+            "timestamp": "1753253938",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "f5b64297-d86b-4205-aac2-f118979864d4",
+            "value": "Malicious"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1753253983",
+        "uuid": "19ae442a-320e-4e4d-bfbd-3d8eafcec9b0",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "Web shell used by threat actors   Actors have also modified the file name in a variety of ways, such as spinstall.aspx, spinstall1.aspx, spinstall2.aspx",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1753253983",
+            "to_ids": false,
+            "type": "filename",
+            "uuid": "b9ecc6ba-6f4a-47ae-bf28-6d19ff6d6645",
+            "value": "Spinstall0.aspx"
+          }
+        ]
+      },
+      {
+        "comment": "Detect network indicators of compromise and file hashes via ASIM",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257511",
+        "uuid": "01133105-0699-45e2-a76b-789fd0c19cb0",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257511",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "c8924375-0cb1-442e-8f7c-6f5c011b846e",
+            "value": "Sentinel Advanced Security Information Model"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257511",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "7b23dcf2-f348-4f27-b3a9-94094c0bf6f2",
+            "value": "//IP list and domain list- _Im_NetworkSession\r\nlet lookback = 30d;\r\nlet ioc_ip_addr = dynamic([\"131.226.2.6\", \"134.199.202.205\", \"104.238.159.149\", \"188.130.206.168\"]);\r\nlet ioc_domains = dynamic([\"c34718cbb4c6.ngrok-free.app\"]);\r\n_Im_NetworkSession(starttime=todatetime(ago(lookback)), endtime=now())\r\n| where DstIpAddr in (ioc_ip_addr) or DstDomain has_any (ioc_domains)\r\n| summarize imNWS_mintime=min(TimeGenerated), imNWS_maxtime=max(TimeGenerated),\r\n  EventCount=count() by SrcIpAddr, DstIpAddr, DstDomain, Dvc, EventProduct, EventVendor"
+          }
+        ]
+      },
+      {
+        "comment": "Detect network indicators of compromise and file hashes via ASIM",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257550",
+        "uuid": "c0711993-a55b-447f-9dcd-258e3b2e335c",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257550",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "fdfff627-3d16-4a22-8369-a76026aa27ab",
+            "value": "Sentinel Advanced Security Information Model"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257550",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b4d0abdb-59bc-46c4-8fc5-08bb09c09fb8",
+            "value": "//IP list - _Im_WebSession\r\nlet lookback = 30d;\r\nlet ioc_ip_addr = dynamic([\"131.226.2.6\", \"134.199.202.205\", \"104.238.159.149\", \"188.130.206.168\"]);\r\nlet ioc_sha_hashes =dynamic([\"92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514\"]);\r\n_Im_WebSession(starttime=todatetime(ago(lookback)), endtime=now())\r\n| where DstIpAddr in (ioc_ip_addr) or FileSHA256 in (ioc_sha_hashes)\r\n| summarize imWS_mintime=min(TimeGenerated), imWS_maxtime=max(TimeGenerated),\r\n  EventCount=count() by SrcIpAddr, DstIpAddr, Url, Dvc, EventProduct, EventVendor"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257617",
+        "uuid": "304ebba7-6d07-48fe-9f26-5083537d3e7e",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257617",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "0498cbf6-8ada-4c97-8188-dd3cd9135ee3",
+            "value": "Sentinel Advanced Security Information Model"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257617",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5b72847b-0376-49f7-8d66-50f4dd4bd6ae",
+            "value": "// file hash list - imFileEvent\r\nlet ioc_sha_hashes = dynamic([\"92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514\"]);\r\nimFileEvent\r\n| where SrcFileSHA256 in (ioc_sha_hashes) or TargetFileSHA256 in (ioc_sha_hashes)\r\n| extend AccountName = tostring(split(User, @'')[1]), \r\n  AccountNTDomain = tostring(split(User, @'')[0])\r\n| extend AlgorithmType = \"SHA256\""
+          }
+        ]
+      },
+      {
+        "comment": "Look for the creation of spinstall0.aspx, which indicates successful post-exploitation of CVE-2025-53770. ",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257658",
+        "uuid": "4ed768a1-d1df-463c-8d36-0c20777cf0ce",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257658",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "193e41d7-50ff-4e0a-9c80-6019d297da74",
+            "value": "Microsoft Defender XDR"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257658",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "bce45dbd-1875-4ae1-b8f4-a7fe65feb317",
+            "value": "DeviceFileEvents \r\n| where FolderPath has_any (\"microsoft shared\\\\Web Server Extensions\\\\15\\\\TEMPLATE\\\\LAYOUTS\", \"microsoft shared\\\\Web Server Extensions\\\\16\\\\TEMPLATE\\\\LAYOUTS\") \r\n| where FileName contains \"spinstall\"\r\n| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName, FolderPath, ReportId, ActionType, SHA256 \r\n| order by Timestamp desc"
+          }
+        ]
+      },
+      {
+        "comment": "Look for process creation where w3wp.exe is spawning encoded PowerShell involving the spinstall0.aspx file or the file paths it\u2019s been known to be written to.",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257695",
+        "uuid": "ac90d2e9-9eda-4ab4-b88d-070b20fe0e85",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257695",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "33303523-8d42-4f7c-9928-581f5cd41c58",
+            "value": "Microsoft Defender XDR"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257695",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "4cabba17-5933-43c9-bdd3-1fd615c77b1f",
+            "value": "DeviceProcessEvents\r\n| where InitiatingProcessFileName has \"w3wp.exe\"\r\n    and InitiatingProcessCommandLine !has \"DefaultAppPool\"\r\n    and FileName =~ \"cmd.exe\"\r\n    and ProcessCommandLine has_all (\"cmd.exe\", \"powershell\")\r\n    and ProcessCommandLine has_any (\"EncodedCommand\", \"-ec\")\r\n| extend CommandArguments = split(ProcessCommandLine, \" \")\r\n| mv-expand CommandArguments to typeof(string)\r\n| where CommandArguments matches regex \"^[A-Za-z0-9+/=]{15,}$\"\r\n| extend B64Decode = replace(\"\\\\x00\", \"\", base64_decodestring(tostring(CommandArguments)))   \r\n| where B64Decode contains \"spinstall\", @'C:\\PROGRA~1\\COMMON~1\\MICROS~1\\WEBSER~1\\15\\TEMPLATE\\LAYOUTS', @'C:\\PROGRA~1\\COMMON~1\\MICROS~1\\WEBSER~1\\16\\TEMPLATE\\LAYOUTS')"
+          }
+        ]
+      },
+      {
+        "comment": "Look for the web shell dropped via the PowerShell command.",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257738",
+        "uuid": "821949aa-229d-4395-8dd7-d868b0003944",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257738",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "14d7dd48-d809-43f9-8363-3371bbd1379b",
+            "value": "Microsoft Defender XDR"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257738",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "e8fefbde-57d4-4bb9-bb75-e59d0104bae6",
+            "value": "DeviceFileEvents\r\n| where Timestamp >ago(7d)\r\n| where InitiatingProcessFileName=~\"powershell.exe\"\r\n| where FileName contains \"spinstall\""
+          }
+        ]
+      },
+      {
+        "comment": "Look at Microsoft Defender for Endpoint telemetry to determine if specific alerts fired in your environment.",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257775",
+        "uuid": "e50b637b-f8be-4509-8a10-c06a9a9b2480",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257775",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5248c2f1-e026-4224-b01f-3b9c52e02a14",
+            "value": "Microsoft Defender XDR"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257775",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "032c8e88-5fcd-48b6-944b-367e264fa8d9",
+            "value": "AlertEvidence \r\n| where Timestamp > ago(7d) \r\n| where Title has \"SuspSignoutReq\" \r\n| extend _DeviceKey = iff(isnotempty(DeviceId), bag_pack_columns(DeviceId, DeviceName),\"\") \r\n| summarize min(Timestamp), max(Timestamp), count_distinctif(DeviceId,isnotempty(DeviceId)), make_set(Title), make_set_if(_DeviceKey, isnotempty(_DeviceKey) )"
+          }
+        ]
+      },
+      {
+        "comment": "Look for devices vulnerable to the CVEs listed in this event",
+        "deleted": false,
+        "description": "An object describing a query, along with its format.",
+        "meta-category": "misc",
+        "name": "query",
+        "template_uuid": "006539b3-f68a-4a02-a213-e600762d39b5",
+        "template_version": "4",
+        "timestamp": "1753257821",
+        "uuid": "f032f14f-c187-4202-bc16-d527aedc2329",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "format",
+            "timestamp": "1753257821",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "224a777f-356a-4d53-9999-0e93c76e0540",
+            "value": "Microsoft Defender XDR"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "query",
+            "timestamp": "1753257821",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "735f722e-b51a-457b-abb7-0831a3700b2c",
+            "value": "DeviceTvmSoftwareVulnerabilities \r\n| where CveId in (\"CVE-2025-49704\",\"CVE-2025-49706\",\"CVE-2025-53770\",\"CVE-2025-53771\")"
+          }
+        ]
+      }
+    ],
+    "EventReport": [
+      {
+        "content": "# Disrupting active exploitation of on-premises SharePoint vulnerabilities | Microsoft Security Blog\r\nOn July 19, 2025, Microsoft Security Response Center (MSRC) [published a blog](https://msrc.microsoft.com/blog/2025/07/customer-guidance-for-sharepoint-vulnerability-cve-2025-53770/) addressing active attacks against on-premises SharePoint servers that exploit CVE-2025-49706, a spoofing vulnerability, and CVE-2025-49704, a remote code execution vulnerability. These vulnerabilities affect on-premises SharePoint servers only and do not affect SharePoint Online in Microsoft 365. Microsoft has released new comprehensive security updates for all supported versions of SharePoint Server (Subscription Edition, 2019, and 2016) that protect customers against these new vulnerabilities. Customers should apply these updates immediately to ensure they are protected.\r\n\r\nThese comprehensive security updates address newly disclosed security vulnerabilities in [CVE-2025-53770](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770) that are related to the previously disclosed vulnerability CVE-2025-49704. The updates also address the security bypass vulnerability [CVE-2025-53771](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53771) for the previously disclosed CVE-2025-49706.\u00a0\r\n\r\nAs of this writing, Microsoft has observed two named Chinese nation-state actors, Linen Typhoon and Violet Typhoon exploiting these vulnerabilities targeting internet-facing SharePoint servers. In addition, we have observed another China-based threat actor, tracked as Storm-2603, exploiting these vulnerabilities. Investigations into other actors also using these exploits are still ongoing. With the rapid adoption of these exploits, Microsoft assesses with high confidence that threat actors will continue to integrate them into their attacks against unpatched on-premises SharePoint systems. This blog shares details of observed exploitation of CVE-2025-49706 and CVE-2025-49704 and the follow-on tactics, techniques, and procedures (TTPs) by threat actors. We will update this blog with more information as our investigation continues.\r\n\r\nMicrosoft recommends customers to use supported versions of on-premises SharePoint servers with the latest security updates. To stop unauthenticated attacks from exploiting this vulnerability, customers should also integrate and enable Antimalware Scan Interface (AMSI) and Microsoft Defender Antivirus (or equivalent solutions) for all on-premises SharePoint deployments and configure AMSI to enable Full Mode [as detailed in Mitigations section below](#mitigation-and-protection-guidance). Customers should also rotate SharePoint server ASP.NET machine keys, restart Internet Information Services (IIS), and deploy Microsoft Defender for Endpoint or equivalent solutions.\r\n\r\nObserved tactics and techniques\r\n-------------------------------\r\n\r\nMicrosoft observed multiple threat actors conducting reconnaissance and attempting exploitation of on-premises SharePoint servers through a POST request to the ToolPane endpoint.\r\n\r\n![A screenshot of a computer](https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2025/07/Fig1-Post-request-1024x171.webp)\r\n\r\nFigure 1. POST request to ToolPane endpoint\r\n\r\n### Post-exploitation activities\r\n\r\nThreat actors who successfully executed the authentication bypass and remote code execution exploits against vulnerable on-premises SharePoint servers have been observed using a web shell in their post-exploitation payload.\r\n\r\n### Web shell deployment\r\n\r\nIn observed attacks, threat actors send a crafted POST request to the SharePoint server, uploading a malicious script named _spinstall0.aspx._ Actors have also modified the file name in a variety of ways, such as _spinstall.aspx_, _spinstall1.aspx_, _spinstall2.aspx,_ etc. The _spinstall0.aspx_ script contains commands to retrieve MachineKey data and return the results to the user through a GET request, enabling the theft of the key material by threat actors.\r\n\r\n### Related IOCs and hunting queries\r\n\r\nMicrosoft provides indicators of compromise (IOCs) to identify and hunt for this web shell in the [Indicators of compromise](#indicators-of-compromise) section of this blog. Microsoft provides related hunting queries to find this dropped file in the [Hunting queries](#hunting-queries) section of this blog.\r\n\r\nAttribution\r\n-----------\r\n\r\nAs early as July 7, 2025, Microsoft analysis suggests threat actors were attempting to exploit CVE-2025-49706 and CVE-2025-49704 to gain initial access to target organizations. These actors include Chinese state actors Linen Typhoon and Violet Typhoon and another China-based actor Storm-2603. \u00a0The TTPs employed in these exploit attacks align with previously observed activities of these threat actors.\r\n\r\n### Linen Typhoon\r\n\r\nSince 2012, Linen Typhoon has focused on stealing intellectual property, primarily targeting organizations related to government, defense, strategic planning, and human rights. This threat actor is known for using drive-by compromises and historically has relied on existing exploits to compromise organizations.\r\n\r\n### Violet Typhoon\r\n\r\nSince 2015, the Violet Typhoon activity group has been dedicated to espionage, primarily targeting former government and military personnel, non-governmental organizations (NGOs), think tanks, higher education, digital and print media, financial and health related sectors in the United States, Europe, and East Asia. This group persistently scans for vulnerabilities in the exposed web infrastructure of target organizations, exploiting discovered weaknesses to install web shells.\r\n\r\n### Storm-2603\r\n\r\nThe group Microsoft tracks as Storm-2603 is assessed with medium confidence to be a China-based threat actor. Microsoft has not identified links between Storm-2603 and other known Chinese threat actors. Microsoft tracks this threat actor in association with attempts to steal MachineKeys via the on-premises SharePoint vulnerabilities. Although Microsoft has observed this threat actor deploying Warlock and Lockbit ransomware in the past, Microsoft is currently unable to confidently assess the threat actor\u2019s objectives.\r\n\r\nAdditional actors may use these exploits to target unpatched on-premises SharePoint systems, further emphasizing the need for organizations to implement mitigations and security updates immediately.\r\n\r\nMitigation and protection guidance\r\n----------------------------------\r\n\r\nMicrosoft has released security updates that fully protect customers using all supported versions of SharePoint affected by\u00a0[CVE-2025-53770](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770)\u00a0and\u00a0[CVE-2025-53771](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53771). Customers should apply these updates immediately.\r\n\r\nCustomers using SharePoint Server should follow the guidance below.\r\n\r\n1.  **Use or upgrade to supported versions of on-premises Microsoft SharePoint Server.**\r\n    *   Supported versions: SharePoint Server 2016, 2019, and SharePoint Subscription Edition\r\n2.  **Apply the latest security updates.**\r\n3.  **Ensure the** [**Antimalware Scan Interface**](https://learn.microsoft.com/windows/win32/amsi/antimalware-scan-interface-portal) **is turned on and configured correctly and deploy** [**Defender Antivirus**](https://learn.microsoft.com/defender-endpoint/microsoft-defender-antivirus-on-windows-server) **on all SharePoint servers**\r\n    *   Configure [Antimalware Scan Interface](https://learn.microsoft.com/en-us/sharepoint/security-for-sharepoint-server/configure-amsi-integration)\u00a0(AMSI) integration in SharePoint, enable [Full Mode](https://learn.microsoft.com/en-us/sharepoint/security-for-sharepoint-server/configure-amsi-integration#configure-amsi-via-user-interface) for optimal protection, and deploy [Defender Antivirus](https://learn.microsoft.com/defender-endpoint/microsoft-defender-antivirus-on-windows-server) on all SharePoint servers which will stop unauthenticated attackers from exploiting this vulnerability.\r\n    *   Note: AMSI integration was enabled by default in the September 2023 security update for SharePoint Server 2016/2019 and the Version 23H2 feature update for SharePoint Server Subscription Edition.\r\n    *   If you cannot enable AMSI, we recommend you consider disconnecting your server from the internet until you have applied the most current security update linked above. If the server cannot be disconnected from the internet, consider using a VPN or proxy requiring authentication or an authentication gateway to limit unauthenticated traffic.\r\n4.  **Deploy Microsoft Defender for Endpoint, or equivalent solutions**\r\n    *   We recommend organizations to deploy Defender for Endpoint to detect and block post-exploit activity.\r\n5.  **Rotate SharePoint Server ASP.NET machine keys**\r\n    *   After applying the latest security updates above or enabling AMSI, it is critical that customers rotate SharePoint server ASP.NET machine keys and restart Internet Information Services (IIS) on all SharePoint servers.\r\n        1.  Manually via PowerShell\r\n            *   To update the machine keys using PowerShell, use [the Set-SPMachineKey cmdlet](https://learn.microsoft.com/sharepoint/security-for-sharepoint-server/improved-asp-net-view-state-security-key-management).\r\n        2.  Manually via Central Admin: Trigger the Machine Key Rotation timer job by performing the following steps:\r\n            *   Navigate to the\u00a0**Central Administration**\u00a0site.\r\n            *   Go to\u00a0**Monitoring**\u00a0->\u00a0**Review job definition**.\r\n            *   Search for\u00a0**Machine Key Rotation Job**\u00a0and select\u00a0**Run Now**.\r\n    *   After the rotation has completed, restart IIS on all SharePoint servers using _iisreset.exe_.\r\n    *   NOTE: If you cannot enable AMSI, you will need to rotate your keys after you install the new security update.\r\n\r\nIndicators of compromise\r\n------------------------\r\n\r\n\r\n\r\n* Indicator: Spinstall0.aspx\r\n  * Type: File name\r\n  * Description: Web shell used by threat actors \u00a0 Actors have also modified the file name in a variety of ways, such as spinstall.aspx, spinstall1.aspx, spinstall2.aspx\r\n* Indicator: debug_dev.js\r\n  * Type: File name\r\n  * Description: File containing web config data, including MachineKey data\r\n* Indicator: 92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514\r\n  * Type: SHA-256\r\n  * Description: Hash of spinstall0.aspx\r\n* Indicator: c34718cbb4c6.ngrok-free[.]app/file.ps1\r\n  * Type: URL\r\n  * Description: Ngrok tunnel delivering PowerShell to C2\r\n* Indicator: \\1[5-6]\\TEMPLATE\\LAYOUTS\\debug_dev.js\r\n  * Type: File path\r\n  * Description: File path for stolen web configs\r\n* Indicator: 131.226.2[.]6\r\n  * Type: IP\r\n  * Description: Post exploitation C2\r\n* Indicator: 134.199.202[.]205\r\n  * Type: IP\r\n  * Description: IP address exploiting SharePoint vulnerabilities\r\n* Indicator: 104.238.159[.]149\r\n  * Type: IP\r\n  * Description: IP address exploiting SharePoint vulnerabilities\r\n* Indicator: 188.130.206[.]168\r\n  * Type: IP\r\n  * Description: IP address exploiting SharePoint vulnerabilities\r\n\r\n\r\nMicrosoft Defender XDR coverage\r\n-------------------------------\r\n\r\nMicrosoft Defender XDR customers get coordinated protection across endpoints, identities, email, and cloud apps to detect, prevent, investigate, and respond to threats like the SharePoint exploitation activity described in this blog.\u00a0\r\n\r\nCustomers with provisioned access can also use [Microsoft Security Copilot in Microsoft Defender](https://learn.microsoft.com/en-us/defender-xdr/security-copilot-in-microsoft-365-defender) to investigate and respond to incidents, hunt for threats, and protect their organization with relevant threat intelligence.\r\n\r\nThe following table outlines the tactics observed in the exploitation attacks discussed in this blog, along with Microsoft Defender protection coverage at each stage of the attack chain:\u00a0\r\n\r\n\r\n\r\n* Tactic\u00a0: Initial access\u00a0\r\n  * Observed activity\u00a0: Use of known vulnerabilities to exploit internet-facing SharePoint servers\u00a0\r\n  * Microsoft Defender coverage\u00a0: Microsoft Defender Antivirus\u2013 Exploit:Script/SuspSignoutReq.A\u00a0\u2013 Exploit:Script/SuspSignoutReqBody.A \u00a0Microsoft Defender for Endpoint\u00a0\u2013 \u2018SuspSignoutReq\u2019 malware was blocked on a SharePoint server\u00a0\u2013 Possible exploitation of SharePoint server vulnerabilities\u00a0\r\n* Tactic\u00a0: Execution\u00a0\r\n  * Observed activity\u00a0: PowerShell script execution used to launch payloads\u00a0\r\n  * Microsoft Defender coverage\u00a0: Microsoft Defender Antivirus\u00a0 \u2013 Trojan:Win32/HijackSharePointServer.A\u00a0Microsoft Defender for Endpoint\u00a0 \u2013 Suspicious IIS worker process behavior\u00a0\r\n* Tactic\u00a0: Persistence\u00a0\r\n  * Observed activity\u00a0: Web shell used to steal machine keys and persist access\u00a0\r\n  * Microsoft Defender coverage\u00a0: Microsoft Defender Antivirus\u2013 Trojan:PowerShell/MachineKeyFinder.DA!amsi\u00a0 Microsoft Defender for Endpoint\u2013 Possible web shell installation\r\n* Tactic\u00a0: Defense evasion\u00a0\r\n  * Observed activity\u00a0: Payload reflectively loaded via IIS process\u00a0\r\n  * Microsoft Defender coverage\u00a0: Microsoft Defender for Endpoint\u2013 IIS worker process loaded suspicious .NET assembly\r\n* Tactic\u00a0: Collection\u00a0\r\n  * Observed activity\u00a0: Web shell used to extract MachineKey data\u00a0\r\n  * Microsoft Defender coverage\u00a0: Microsoft Defender Antivirus\u2013 Trojan:PowerShell/MachineKeyFinder.DA!amsi\u00a0Microsoft Defender for Endpoint\u2013 Possible web shell installation\r\n\r\n\r\nNote: These alerts can also be triggered by unrelated threat activity\u00a0\r\n\r\n### Vulnerability management\r\n\r\nCustomers using Microsoft Defender Vulnerability Management can identify exposed devices and track remediation efforts based on the following CVEs:\u00a0\r\n\r\n*   CVE-2025-53770 \u2013 SharePoint ToolShell Auth Bypass and RCE\u00a0\r\n*   CVE-2025-53771 \u2013 SharePoint ToolShell Path Traversal\u00a0\r\n*   CVE-2025-49704 \u2013 SharePoint RCE\u00a0\r\n*   CVE-2025-49706 \u2013 SharePoint Post-auth RCE\u00a0\r\n\r\nNavigate to **Vulnerability management** > **Software vulnerabilities**, filter by CVE, and look for **Evidence of Exploitation** tags for affected assets.\u00a0\r\n\r\n### External Attack Surface Management (Defender EASM)\u00a0\r\n\r\nMicrosoft Defender External Attack Surface Management (Defender EASM) provides visibility into exposed internet-facing SharePoint instances. The following Attack Surface Insights may indicate vulnerable but not necessarily exploited services:\u00a0\r\n\r\n*   CVE-2025-49704 \u2013 SharePoint RCE\u00a0\r\n*   CVE-2025-53770 \u2013 SharePoint ToolShell Auth Bypass and RCE\u00a0\r\n*   CVE-2025-53771 \u2013 SharePoint ToolShell Path Traversal\u00a0\r\n\r\nNote: A \u201cPotential\u201d insight signals that a service is detected but version validation is not possible. Customers should manually verify patching status.\u00a0\r\n\r\nHunting queries\r\n---------------\r\n\r\n### Microsoft Defender XDR\r\n\r\nTo locate possible exploitation activity, run the following queries in Microsoft Defender XDR security center.\u00a0\u00a0\r\n\r\n**Successful exploitation via file creation**\u00a0\u00a0\r\n\r\nLook for the creation of _spinstall0.aspx_, which indicates successful post-exploitation of CVE-2025-53770.\u00a0\r\n\r\n```\r\nDeviceFileEvents \r\n| where FolderPath has_any (\"microsoft shared\\\\Web Server Extensions\\\\15\\\\TEMPLATE\\\\LAYOUTS\", \"microsoft shared\\\\Web Server Extensions\\\\16\\\\TEMPLATE\\\\LAYOUTS\") \r\n| where FileName contains \"spinstall\"\r\n| project Timestamp, DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName, FolderPath, ReportId, ActionType, SHA256 \r\n| order by Timestamp desc\r\n\r\n```\r\n\r\n\r\n**Post-exploitation PowerShell dropping web shell**\r\n\r\nLook for process creation where _w3wp.exe_ is spawning encoded PowerShell involving the _spinstall0.aspx_ file or the file paths it\u2019s been known to be written to.\r\n\r\n```\r\nDeviceProcessEvents\r\n| where InitiatingProcessFileName has \"w3wp.exe\"\r\n    and InitiatingProcessCommandLine !has \"DefaultAppPool\"\r\n    and FileName =~ \"cmd.exe\"\r\n    and ProcessCommandLine has_all (\"cmd.exe\", \"powershell\")\r\n    and ProcessCommandLine has_any (\"EncodedCommand\", \"-ec\")\r\n| extend CommandArguments = split(ProcessCommandLine, \" \")\r\n| mv-expand CommandArguments to typeof(string)\r\n| where CommandArguments matches regex \"^[A-Za-z0-9+/=]{15,}$\"\r\n| extend B64Decode = replace(\"\\\\x00\", \"\", base64_decodestring(tostring(CommandArguments)))   \r\n| where B64Decode contains \"spinstall\", @'C:\\PROGRA~1\\COMMON~1\\MICROS~1\\WEBSER~1\\15\\TEMPLATE\\LAYOUTS', @'C:\\PROGRA~1\\COMMON~1\\MICROS~1\\WEBSER~1\\16\\TEMPLATE\\LAYOUTS')\r\n\r\n```\r\n\r\n\r\n**Post-exploitation web shell dropped**\r\n\r\nLook for the web shell dropped via the PowerShell command.\r\n\r\n```\r\nDeviceFileEvents\r\n| where Timestamp >ago(7d)\r\n| where InitiatingProcessFileName=~\"powershell.exe\"\r\n| where FileName contains \"spinstall\"\r\n\r\n```\r\n\r\n\r\n**Exploitation detected by Defender**\r\n\r\nLook at Microsoft Defender for Endpoint telemetry to determine if specific alerts fired in your environment.\r\n\r\n```\r\nAlertEvidence \r\n| where Timestamp > ago(7d) \r\n| where Title has \"SuspSignoutReq\" \r\n| extend _DeviceKey = iff(isnotempty(DeviceId), bag_pack_columns(DeviceId, DeviceName),\"\") \r\n| summarize min(Timestamp), max(Timestamp), count_distinctif(DeviceId,isnotempty(DeviceId)), make_set(Title), make_set_if(_DeviceKey, isnotempty(_DeviceKey) )\r\n\r\n```\r\n\r\n\r\n### Unified advanced hunting queries\r\n\r\n**Find exposed devices**\r\n\r\nLook for devices vulnerable to the CVEs listed in blog.\r\n\r\n```\r\nDeviceTvmSoftwareVulnerabilities \r\n| where CveId in (\"CVE-2025-49704\",\"CVE-2025-49706\",\"CVE-2025-53770\",\"CVE-2025-53771\") \r\n\r\n```\r\n\r\n\r\n### Microsoft Sentinel\r\n\r\nMicrosoft Sentinel customers can use the TI Mapping analytics (a series of analytics all prefixed with \u2018TI map\u2019) to automatically match the malicious domain indicators mentioned in this blog post with data in their workspace. If the TI Map analytics are not currently deployed, customers can install the Threat Intelligence solution from the\u00a0[Microsoft Sentinel Content Hub](https://learn.microsoft.com/azure/sentinel/sentinel-solutions-deploy)\u00a0to have the analytics rule deployed in their Sentinel workspace.\r\n\r\nOur post on\u00a0[web shell threat hunting with Microsoft Sentinel](https://techcommunity.microsoft.com/t5/microsoft-sentinel-blog/web-shell-threat-hunting-with-azure-sentinel/ba-p/2234968)\u00a0also provides guidance on looking for web shells in general.\u00a0Several hunting queries are also available below:\u00a0\r\n\r\n*   [Web shell detection](https://github.com/Azure/Azure-Sentinel/blob/master/Solutions/Web%20Shells%20Threat%20Protection/Hunting%20Queries/PotentialWebshell.yaml)\r\n*   [Possible Webshell drop](https://github.com/Azure/Azure-Sentinel/blob/master/Solutions/Web%20Shells%20Threat%20Protection/Hunting%20Queries/Possible%20webshell%20drop.yaml)\r\n*   [Malicious web application requests linked with Microsoft Defender for Endpoint alerts](https://github.com/Azure/Azure-Sentinel/blob/master/Solutions/Web%20Shells%20Threat%20Protection/Analytic%20Rules/MaliciousAlertLinkedWebRequests.yaml)\u00a0\r\n*   [Web shell activity](https://github.com/Azure/Azure-Sentinel/blob/master/Solutions/Web%20Shells%20Threat%20Protection/Hunting%20Queries/WebShellActivity.yaml)\u00a0\r\n\r\nBelow are the queries using\u00a0[Sentinel Advanced Security Information Model (ASIM) functions](https://learn.microsoft.com/azure/sentinel/normalization)\u00a0to hunt threats across both Microsoft first-party and third-party data sources. ASIM also supports deploying parsers to specific workspaces\u00a0[from GitHub](https://aka.ms/DeployASIM), using an ARM template or manually.\r\n\r\n**Detect network indicators of compromise and file hashes via ASIM**\r\n\r\n```\r\n//IP list and domain list- _Im_NetworkSession\r\nlet lookback = 30d;\r\nlet ioc_ip_addr = dynamic([\"131.226.2.6\", \"134.199.202.205\", \"104.238.159.149\", \"188.130.206.168\"]);\r\nlet ioc_domains = dynamic([\"c34718cbb4c6.ngrok-free.app\"]);\r\n_Im_NetworkSession(starttime=todatetime(ago(lookback)), endtime=now())\r\n| where DstIpAddr in (ioc_ip_addr) or DstDomain has_any (ioc_domains)\r\n| summarize imNWS_mintime=min(TimeGenerated), imNWS_maxtime=max(TimeGenerated),\r\n  EventCount=count() by SrcIpAddr, DstIpAddr, DstDomain, Dvc, EventProduct, EventVendor\r\n\r\n```\r\n\r\n\r\n```\r\n//IP list - _Im_WebSession\r\nlet lookback = 30d;\r\nlet ioc_ip_addr = dynamic([\"131.226.2.6\", \"134.199.202.205\", \"104.238.159.149\", \"188.130.206.168\"]);\r\nlet ioc_sha_hashes =dynamic([\"92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514\"]);\r\n_Im_WebSession(starttime=todatetime(ago(lookback)), endtime=now())\r\n| where DstIpAddr in (ioc_ip_addr) or FileSHA256 in (ioc_sha_hashes)\r\n| summarize imWS_mintime=min(TimeGenerated), imWS_maxtime=max(TimeGenerated),\r\n  EventCount=count() by SrcIpAddr, DstIpAddr, Url, Dvc, EventProduct, EventVendor\r\n\r\n```\r\n\r\n\r\n```\r\n// file hash list - imFileEvent\r\nlet ioc_sha_hashes = dynamic([\"92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514\"]);\r\nimFileEvent\r\n| where SrcFileSHA256 in (ioc_sha_hashes) or TargetFileSHA256 in (ioc_sha_hashes)\r\n| extend AccountName = tostring(split(User, @'')\r\n[1]), \r\n  AccountNTDomain = tostring(split(User, @'')\r\n[0])\r\n| extend AlgorithmType = \"SHA256\"\r\n\r\n```\r\n\r\n\r\nMicrosoft Security Copilot\r\n--------------------------\r\n\r\nMicrosoft Security Copilot customers can use the standalone experience to [create their own prompts](https://learn.microsoft.com/copilot/security/prompting-security-copilot#create-your-own-prompts) or run the following [prebuilt promptbooks](https://learn.microsoft.com/copilot/security/using-promptbooks) to automate incident response or investigation tasks related to this threat:\r\n\r\n*   Vulnerability impact assessment\r\n\r\nNote that some promptbooks require access to plugins for Microsoft products such as Microsoft Defender XDR or Microsoft Sentinel.\r\n\r\nThreat intelligence reports\r\n---------------------------\r\n\r\nMicrosoft customers can use the following reports in Microsoft products to get the most up-to-date information about the threat actor, malicious activity, and techniques discussed in this blog. These reports provide the intelligence, protection information, and recommended actions to prevent, mitigate, or respond to associated threats found in customer environments.\r\n\r\n### Microsoft Defender Threat Intelligence\r\n\r\n*   [CVE-2025-53770 \u2013 Microsoft SharePoint server remote code execution vulnerability](https://security.microsoft.com/intel-profiles/CVE-2025-53770)\r\n\r\nMicrosoft Security Copilot customers can also use the [Microsoft Security Copilot integration](https://learn.microsoft.com/defender/threat-intelligence/security-copilot-and-defender-threat-intelligence?bc=%2Fsecurity-copilot%2Fbreadcrumb%2Ftoc.json&toc=%2Fsecurity-copilot%2Ftoc.json#turn-on-the-security-copilot-integration-in-defender-ti) in Microsoft Defender Threat Intelligence, either in the Security Copilot standalone portal or in the [embedded experience](https://learn.microsoft.com/defender/threat-intelligence/using-copilot-threat-intelligence-defender-xdr) in the Microsoft Defender portal to get more information about this threat actor.\r\n\r\nMITRE ATT&CK techniques observed\u00a0\r\n---------------------------------\r\n\r\nThreat actors have exhibited use of the following attack techniques. For standard industry documentation about these techniques, refer to the [MITRE ATT&CK framework](https://attack.mitre.org/).\u00a0\r\n\r\n**Initial Access**\r\n\r\n*   [T1190 Exploit public-facing application](https://attack.mitre.org/techniques/T1190/) | Use of known vulnerabilities to exploit internet facing on-premises SharePoint severs\u00a0\r\n\r\n**Execution**\r\n\r\n*   [T1059.001 Command and scripting interpreter: PowerShell](https://attack.mitre.org/techniques/T1059/001/) | Use of a web shell to run PowerShell to read and transmit MachineKey data to attacker\r\n\r\n**Persistence**\r\n\r\n*   [T1505.003 Server software component: web shell](https://attack.mitre.org/techniques/T1505/003/) | Threat actors install web shell after exploiting SharePoint vulnerability\r\n\r\n**Defense Evasion**\r\n\r\n*   [T1620 Reflective code loading](https://attack.mitre.org/techniques/T1620/) | Reflectively loaded payloads\r\n\r\n**Collection**\r\n\r\n*   [T1119 Automated collection](https://attack.mitre.org/techniques/T1119/) | Use of web shell to display MachineKey data\r\n\r\nReferences\r\n----------\r\n\r\n*   [CodeWhiteSec POC](https://x.com/codewhitesec/status/1944743478350557232) (X)\r\n*   [Khoa Dinh POC](https://x.com/_l0gg/status/1943256506675401106) (X)\r\n*   [CVE-2025-53770](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770) (MSRC)\r\n*   [CVE-2025-49704](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49704) (MSRC\r\n*   [CVE-2025-49706](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49706) (MSRC\r\n*   [CVE-2025-53771](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53771) (MSRC)\r\n\r\nLearn more\r\n----------\r\n\r\nMeet the experts behind Microsoft Threat Intelligence, Incident Response, and the Microsoft Security Response Center at our [VIP Mixer at Black Hat 2025](https://microsoftsecurityevents.eventbuilder.com/events/11f048838dabd650892acff3dd777035?ref=blog). Discover how our end-to-end platform can help you strengthen resilience and elevate your security posture.\r\n\r\nFor the latest security research from the Microsoft Threat Intelligence community, check out the [Microsoft Threat Intelligence Blog](https://aka.ms/threatintelblog).\r\n\r\nTo get notified about new publications and to join discussions on social media, follow us on [LinkedIn](https://www.linkedin.com/showcase/microsoft-threat-intelligence), [X (formerly Twitter)](https://x.com/MsftSecIntel), and [Bluesky](https://bsky.app/profile/threatintel.microsoft.com).\r\n\r\nTo hear stories and insights from the Microsoft Threat Intelligence community about the ever-evolving threat landscape, listen to the [Microsoft Threat Intelligence podcast](https://thecyberwire.com/podcasts/microsoft-threat-intelligence).",
+        "deleted": false,
+        "name": " Disrupting active exploitation of on-premises SharePoint vulnerabilities ",
+        "timestamp": "1753253664",
+        "uuid": "a786bef7-f765-4bb9-b231-895586c7e8ce"
+      }
+    ]
+  }
+}

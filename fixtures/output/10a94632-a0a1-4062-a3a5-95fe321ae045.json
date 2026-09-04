@@ -1,0 +1,1792 @@
+{
+  "Event": {
+    "analysis": "1",
+    "date": "2026-06-01",
+    "extends_uuid": "",
+    "info": "Phishing Campaign Targeting Hotel Customers in Luxembourg",
+    "protected": false,
+    "publish_timestamp": "1784894195",
+    "published": true,
+    "threat_level_id": "3",
+    "timestamp": "1780658606",
+    "uuid": "10a94632-a0a1-4062-a3a5-95fe321ae045",
+    "Orgc": {
+      "name": "CIRCL",
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f"
+    },
+    "Tag": [
+      {
+        "colour": "#004646",
+        "local": false,
+        "name": "type:OSINT",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0071c3",
+        "local": false,
+        "name": "osint:lifetime=\"perpetual\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:white",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:clear",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:financial-fraud=\"Phishing\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:financial-fraud=\"Mobile Fraud\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Link - T1192\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0073de",
+        "local": false,
+        "name": "phishing:psychological-acceptability=\"high\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#002f5a",
+        "local": false,
+        "name": "phishing:techniques=\"sms-phishing\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"luxembourg\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Hospitality\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Hotels\"",
+        "relationship_type": "targets"
+      }
+    ],
+    "Attribute": [
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780412384",
+        "to_ids": false,
+        "type": "phone-number",
+        "uuid": "cdbd8be9-5aba-4418-b5c4-4a96af62a9d9",
+        "value": "+31613570733"
+      },
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780478628",
+        "to_ids": true,
+        "type": "phone-number",
+        "uuid": "4853bb9f-b188-4b00-82f4-48add1aef69a",
+        "value": "+447470766507"
+      },
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780478628",
+        "to_ids": true,
+        "type": "phone-number",
+        "uuid": "cfa07f79-6618-4b5b-ab61-88fc0bba19d7",
+        "value": "+447346922620"
+      },
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780489620",
+        "to_ids": true,
+        "type": "phone-number",
+        "uuid": "2f482afa-4298-4d0a-8100-8281ef6258dd",
+        "value": "+447990119737"
+      },
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780489620",
+        "to_ids": true,
+        "type": "phone-number",
+        "uuid": "76ccf757-a4d1-46a9-af63-f5c50bd066a2",
+        "value": "+447423152571"
+      },
+      {
+        "category": "Person",
+        "comment": "",
+        "deleted": false,
+        "disable_correlation": false,
+        "timestamp": "1780658171",
+        "to_ids": true,
+        "type": "phone-number",
+        "uuid": "4577991e-79a4-420a-a7de-eb74bb08eba5",
+        "value": "+6283180060342"
+      }
+    ],
+    "Object": [
+      {
+        "comment": "Enriched via the url_import module",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780301288",
+        "uuid": "4d23f974-2645-421a-bb12-42c45a37af64",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780301288",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "4f700f04-cd31-4adc-9deb-f3ec26bf4846",
+            "value": "https://hotel.assistgrid.live/329844276"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780301288",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b2428578-64d1-4149-8347-29fa8a5cb105",
+            "value": "live"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "subdomain",
+            "timestamp": "1780301288",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "57c3ad3e-b6b9-4631-8cea-c2a7e34dc668",
+            "value": "hotel"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780301288",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1713f281-e73a-4f7a-98e5-c0b304ec24c4",
+            "value": "/329844276"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780301288",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "ec1e22f9-7b97-4109-b58c-d22a60e79d0f",
+            "value": "hotel.assistgrid.live"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780301288",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "388cd913-2675-4f04-99d6-acf042865647",
+            "value": "assistgrid"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780301288",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "5c5ca27e-9ed5-45c4-a093-7ccccc8ac8f1",
+            "value": "assistgrid.live"
+          }
+        ]
+      },
+      {
+        "comment": "Enriched via the url_import module",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780301358",
+        "uuid": "8624cbe1-b7f3-46b7-a662-ee7b9211cafa",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780301358",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "dd0be516-2741-4e2f-b33d-25629c8bd537",
+            "value": "https://hotel.assistgrid.click/282372891"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780301358",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "e91832c3-0656-43a5-8039-3414f5858d21",
+            "value": "click"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "subdomain",
+            "timestamp": "1780301358",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "96949cc0-5d46-41d5-ad9d-10371c54dba9",
+            "value": "hotel"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780301358",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "2adfd849-3294-42b7-abe5-b2890df7d16e",
+            "value": "/282372891"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780301358",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "878d642c-0673-4513-a502-45028dcbd444",
+            "value": "hotel.assistgrid.click"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780301358",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "81419aac-1a02-4cd4-8e92-0f561da475c2",
+            "value": "assistgrid"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780301358",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "a9967909-91ea-4e54-84c0-dc89c541a419",
+            "value": "assistgrid.click"
+          }
+        ]
+      },
+      {
+        "comment": "Enriched via the url_import module",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780301456",
+        "uuid": "9c9cf550-8313-412d-8576-e102ed4b3d7c",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780301456",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "bb47df08-f9c8-4cb8-b9b5-6c5ae6fffae2",
+            "value": "https://hotel.flawconnect.help/185454615"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780301456",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "6684298f-f627-4d15-93a3-7932df6ff487",
+            "value": "help"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "subdomain",
+            "timestamp": "1780301456",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "8db4e73d-ce19-456b-9ce2-0196d5f9b4ee",
+            "value": "hotel"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780301456",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "87c8526f-c6be-449a-ab05-400b498b27f1",
+            "value": "/185454615"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780301456",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "4f34a8db-9751-4d50-800b-e723b6a9a58f",
+            "value": "hotel.flawconnect.help"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780301456",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "bf39f987-3ed5-45b3-a84b-b31f5e5959f7",
+            "value": "flawconnect"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780301456",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "81f58dd2-6616-4893-b09d-d608662d7a65",
+            "value": "flawconnect.help"
+          }
+        ]
+      },
+      {
+        "comment": "https://lookyloo.circl.lu/tree/74052d73-acb0-4158-a991-85998d41a25e",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780301556",
+        "uuid": "411b5984-74e9-4908-8255-77bf9403c73f",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780301528",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "767a2cf3-23d3-477b-b9ff-d53d32d676dd",
+            "value": "https://stay-hotel607923.com/58991721"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780301528",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "86b273eb-8301-4dcd-b5f5-580164f0e08e",
+            "value": "com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780301528",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "3cb14baf-64f5-49ee-852d-bed8c8dbd3ba",
+            "value": "/58991721"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780301528",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "a495feb3-1492-4ae9-9a2b-ec6c407dc9a1",
+            "value": "stay-hotel607923.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780301528",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "8fcf59e3-bacb-4b63-8ff3-eecb93cb7166",
+            "value": "stay-hotel607923"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780301556",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "ae6cc1e4-865a-4e34-a6ee-a53a0964a919",
+            "value": "stay-hotel607923.com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Phone number based on the E.164 international public telecommunication numbering plan",
+        "meta-category": "mobile",
+        "name": "phone-number",
+        "template_uuid": "c4b5a67c-63d2-11ec-90d6-0242ac120003",
+        "template_version": "1",
+        "timestamp": "1780302393",
+        "uuid": "33fbae11-986f-49e7-a6f0-a51dd04cd3e7",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "eb430b61-4e10-413f-af50-a434f271a72b",
+            "referenced_uuid": "411b5984-74e9-4908-8255-77bf9403c73f",
+            "relationship_type": "redirects-to",
+            "timestamp": "1780302393",
+            "uuid": "07114639-31f5-44d5-a9c8-c5c06f18ce69"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Person",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "phone-number",
+            "timestamp": "1780302198",
+            "to_ids": false,
+            "type": "phone-number",
+            "uuid": "4ab5e574-7ab7-4467-a91b-644687b97959",
+            "value": "+37128214537"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Phone number based on the E.164 international public telecommunication numbering plan",
+        "meta-category": "mobile",
+        "name": "phone-number",
+        "template_uuid": "c4b5a67c-63d2-11ec-90d6-0242ac120003",
+        "template_version": "1",
+        "timestamp": "1780302457",
+        "uuid": "55883eb5-e89a-4717-8c34-dc14ed9d19d6",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "0cb99056-48d2-43ed-b5e7-4bbce528d411",
+            "referenced_uuid": "411b5984-74e9-4908-8255-77bf9403c73f",
+            "relationship_type": "redirects-to",
+            "timestamp": "1780302457",
+            "uuid": "350905a3-be8e-490e-ab52-e336601f31e2"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Person",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "phone-number",
+            "timestamp": "1780302220",
+            "to_ids": false,
+            "type": "phone-number",
+            "uuid": "81788127-0fbc-4908-ab2f-7eccaceed60f",
+            "value": "+37128242112"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Phone number based on the E.164 international public telecommunication numbering plan",
+        "meta-category": "mobile",
+        "name": "phone-number",
+        "template_uuid": "c4b5a67c-63d2-11ec-90d6-0242ac120003",
+        "template_version": "1",
+        "timestamp": "1780302261",
+        "uuid": "a8a005f8-0c5d-46c7-9cc8-cfbc569cf122",
+        "Attribute": [
+          {
+            "category": "Person",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "phone-number",
+            "timestamp": "1780302261",
+            "to_ids": false,
+            "type": "phone-number",
+            "uuid": "fe7c2a87-65be-48c9-8077-dc33a2f348bd",
+            "value": "+447557925833"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Phone number based on the E.164 international public telecommunication numbering plan",
+        "meta-category": "mobile",
+        "name": "phone-number",
+        "template_uuid": "c4b5a67c-63d2-11ec-90d6-0242ac120003",
+        "template_version": "1",
+        "timestamp": "1780302425",
+        "uuid": "7b78bac7-25b7-43ba-b33e-82723b9641e6",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "890050c2-6eb5-41a7-b74e-37c13f39c51f",
+            "referenced_uuid": "9c9cf550-8313-412d-8576-e102ed4b3d7c",
+            "relationship_type": "redirects-to",
+            "timestamp": "1780302425",
+            "uuid": "a4885b8d-435e-48d8-a1ed-fe1516fc608e"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Person",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "phone-number",
+            "timestamp": "1780302276",
+            "to_ids": false,
+            "type": "phone-number",
+            "uuid": "7dd513e4-af68-458d-8fb1-8d7b31dbeaf4",
+            "value": "+551150392460"
+          }
+        ]
+      },
+      {
+        "comment": "https://lookyloo.circl.lu/tree/edc209fa-7e27-47f3-8312-65861330c534",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780326922",
+        "uuid": "ec469fc8-a406-4a9c-8eac-14223247c2cf",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780326922",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "7e600518-99a2-46b6-86ab-3b45ac758718",
+            "value": "https://stays-house492133.com/57478812"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780326922",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "69f79c6b-c6cb-4012-8d4f-f3a509899a30",
+            "value": "com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780326922",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "34e09223-e9b4-4f29-ad8f-9d31b2111a6e",
+            "value": "/57478812"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780326922",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "d35cbb20-0a89-48b5-9caf-30d625fe969c",
+            "value": "stays-house492133.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780326922",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "a37ca973-d1ab-4d51-9910-636bb0e0d3af",
+            "value": "stays-house492133"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780326922",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "74c88373-5cb2-4668-9660-b56363eec47c",
+            "value": "stays-house492133.com"
+          }
+        ]
+      },
+      {
+        "comment": "https://lookyloo.circl.lu/tree/4ea2742c-e49b-480b-90b1-49583aeb18d6",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780326991",
+        "uuid": "695ad4e3-cdc5-4cbc-86ef-57ef7c0b447a",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780326991",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "e6631f8e-321c-4f90-95d9-3aadb47a65cb",
+            "value": "https://stay-hotel607923.com/57223347"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780326991",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "e85cacfe-923c-4713-b635-17710ee82df3",
+            "value": "com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780326991",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "0f44ac4e-0208-43e4-9c1c-854a7bc4d9fe",
+            "value": "/57223347"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780326991",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "ca716439-4dfd-491d-bb97-127d2616eae2",
+            "value": "stay-hotel607923.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780326991",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "926a7147-dd2c-49c7-ac78-b37eb6e93510",
+            "value": "stay-hotel607923"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780326991",
+            "to_ids": false,
+            "type": "domain",
+            "uuid": "4777fe55-3238-4115-a3df-a67ed83280af",
+            "value": "stay-hotel607923.com"
+          }
+        ]
+      },
+      {
+        "comment": "https://lookyloo.circl.lu/tree/9e657f2b-c5b0-4320-9030-c794d15af0cc",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780404192",
+        "uuid": "8679bb40-99f3-440d-a242-b9abcf58f32d",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780404192",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "e106e559-184f-4f9a-bbc9-a74ce6c4d213",
+            "value": "https://hotels-stays23314.com/59465665"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780404192",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "25e4419e-31a0-48ac-b342-b8d699d68f48",
+            "value": "com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780404192",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "37f5f783-15f0-48fa-8ea6-8bbf07bfb670",
+            "value": "/59465665"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780404192",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "1e91df41-e899-4fca-a83f-1bbecee3c799",
+            "value": "hotels-stays23314.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780404192",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "47b8ac3e-8886-485d-badc-19b1a1d04bf7",
+            "value": "hotels-stays23314"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780404192",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "1a20230f-2e65-4ab3-b0a6-2a2c44e057bd",
+            "value": "hotels-stays23314.com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780412326",
+        "uuid": "7e7cf411-6972-4670-9bfc-6a5074928fd5",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780412326",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "69b1e5d5-3c48-4fd2-bd28-6378c1344cbb",
+            "value": "https://booking.hotel-stay139028.com/reservation/yXkD963ft"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780412326",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "4535fab0-29c2-42d9-a3a6-83a103832186",
+            "value": "hotel-stay139028.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780412326",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "0e9a53fc-1f86-4157-a49c-00c28ef8cc54",
+            "value": "hotel-stay139028"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780412326",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "32256ae3-05e7-4b30-a618-f191e22026e9",
+            "value": "booking.hotel-stay139028.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780412326",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "d5ba2358-aef3-4c65-a306-5d51255a9e59",
+            "value": "reservation/yXkD963ft"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780412326",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "dfb51be1-386b-4ed3-8869-c47c8ed144b3",
+            "value": "com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780478568",
+        "uuid": "6ad861fb-d6d3-4dc5-8344-24069b619551",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780478568",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "3134baa2-32d7-4976-a9fc-ecc3612f6d8a",
+            "value": "https://stay-rooms100012.com/58818960"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780478568",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "c134e407-7553-45df-b743-7ba3a304f20d",
+            "value": "stay-rooms100012.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "4e5b0c0c-b2e5-4aa2-b607-576b231dd780",
+            "value": "stay-rooms100012"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780478568",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "c0ce8483-336d-40b4-a4c3-a66852b4d4e1",
+            "value": "stay-rooms100012.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "ip-dst",
+            "uuid": "390d7d86-d1db-45a5-bac5-002afc667b2d",
+            "value": "188.114.96.3"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "ip-dst",
+            "uuid": "7618875c-bead-4a59-ae8c-cdb705b53e8c",
+            "value": "188.114.97.3"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "ip-dst",
+            "uuid": "12224129-86aa-4292-87a2-22690fec885f",
+            "value": "2a06:98c1:3120::3"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "ip-dst",
+            "uuid": "aa41a9cd-9622-4589-a44e-71bf3e7da2c2",
+            "value": "2a06:98c1:3121::3"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "c580895f-8df3-49fd-ba51-121d403f7e1b",
+            "value": "58818960"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780478568",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "e297665b-43e2-477b-ae3c-9c83a646ca1a",
+            "value": "com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780478733",
+        "uuid": "f57fc458-366a-442d-957c-f31831e74553",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780478733",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "79e660ca-26e4-425c-ba8e-e90ce0a96068",
+            "value": "https://guest.saisuarneo.net/et/a45bdb62748a075c/5567814195"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780478734",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "cee645b6-d95d-4d84-8817-92176377ecfe",
+            "value": "saisuarneo.net"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780478734",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5a81221c-6be2-4d31-ad54-2a543dbf444a",
+            "value": "saisuarneo"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780478734",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "4e1be719-baba-46b9-8bc5-f5f768e13f37",
+            "value": "guest.saisuarneo.net"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780478734",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b75be2ac-a20d-445c-b3c0-05c4f3dadadd",
+            "value": "/et/a45bdb62748a075c/5567814195"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780478734",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b9a2f65e-5a8c-4875-8576-d8eb3d9ac020",
+            "value": "net"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780478906",
+        "uuid": "a606b925-0170-4f05-8e3f-3bcf5571b6b4",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780478906",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "44d73a8a-aedc-46bf-b6d5-2afce2674453",
+            "value": "http://process-booking.com/210999115"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780478906",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "28d3ded3-9579-4f74-970d-fa84734b197e",
+            "value": "process-booking.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780478906",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "f8ecc9c7-80da-46ca-bf3f-90d496b9ee9b",
+            "value": "process-booking"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780478906",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "d6525760-c7b6-4a89-9056-087803a1fbec",
+            "value": "process-booking.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780478906",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "b439dbc9-4a99-4506-b4d9-6ae7aaac5b07",
+            "value": "179.43.189.226"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780478906",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "2fb7e115-2776-4e22-b14a-8217ea4de292",
+            "value": "210999115"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780478906",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "45d459ec-4edb-49fb-be3d-0cf5f6816a36",
+            "value": "com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780489949",
+        "uuid": "614214c3-a4d2-4d95-a263-98bb2a0131b0",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780489949",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "eed32433-b7ba-448f-b0a7-9ecdd5d1c000",
+            "value": "https://resrve.yyhdbz.com/de/c54bd8d08c26e14e/5356218406"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780489949",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "0d4f718d-fb9f-4309-a99a-90f8c354b77b",
+            "value": "yyhdbz.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780489949",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1ba65800-55ad-47a7-bc7b-1acf17f82b8f",
+            "value": "yyhdbz"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780489949",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "1ae6fa78-6830-44b8-a538-8b1c9ac48c36",
+            "value": "resrve.yyhdbz.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780489949",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "6f0a8a41-d555-4f76-a55b-3d30d6e97cbf",
+            "value": "172.65.211.209"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780489949",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "099c6ec4-8063-4b1c-b89d-a07869d9fa72",
+            "value": "/c54bd8d08c26e14e/5356218406"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780489949",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1df83aa0-66e5-4fef-98cb-2e98afcbed57",
+            "value": ".com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780490102",
+        "uuid": "d63eead5-28f1-4ef9-ba7c-9aa87963acd0",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780490102",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "02265c00-cb70-4a5a-85e2-a161b1e3c4be",
+            "value": "https://resrve.rhzxcpa.com/de/360c0cda161f3d71/6585295245"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780490102",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "bb094bde-bfe9-4fcf-9f2e-f1cae2c2a90d",
+            "value": "rhzxcpa.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780490102",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b9e07ee9-cd6a-46c4-9210-4af810d4bb8d",
+            "value": "rhzxcpa"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780490102",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "46126213-8f52-45fd-a112-44a4e929b979",
+            "value": "resrve.rhzxcpa.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780490102",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "2a429583-5063-452f-a54b-7b4b03cef9c4",
+            "value": "172.65.211.209"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780490102",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "8998c813-cc87-44a4-8737-5270515f3e0d",
+            "value": "/de/360c0cda161f3d71/6585295245"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780490102",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "7b474ccf-e782-4871-a41b-b43d0f7b8498",
+            "value": ".com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780490554",
+        "uuid": "c589b565-9c58-464c-92bf-3a7c4190d365",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "be3bd11e-d1d9-4f31-b19d-a71bf818f9e7",
+            "value": "https://reserve.fx313199.com/sk/8be305894637cdba/6706752044"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "4517df41-9923-40c5-bcf4-1e7d5d1b5898",
+            "value": "fx313199.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780490554",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "2ca3a6c1-9f4e-4eb8-a8b7-5e659c91b14a",
+            "value": "fx313199"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "c790f250-6980-497d-ad5a-29fdad9d1827",
+            "value": "reserve.fx313199.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "18aa743f-211a-4205-b269-a03ff78829b4",
+            "value": "172.67.176.229"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "5096d4d1-8455-4e83-80bd-59e763a8b2b4",
+            "value": "104.21.88.107"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "95357836-80b1-4548-a809-7cb2588ec863",
+            "value": "2606:4700:3035::6815:586b"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780490554",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "a6801f57-4790-4069-8014-072cd0c3a552",
+            "value": "2606:4700:3037::ac43:b0e5"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780490554",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "62062671-4276-45a6-bff5-34db15b5388f",
+            "value": "/sk/8be305894637cdba/6706752044"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780490554",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "e8579c60-754a-44ce-852b-3863627f2bbf",
+            "value": "com"
+          }
+        ]
+      },
+      {
+        "comment": "RTIR: 4859540",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1780658606",
+        "uuid": "94c61fc6-0cb2-494d-9193-b52a9729871d",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "05829d5e-6f0e-4e49-8184-82783d857926",
+            "value": "https://hotels-stays55501.com/57915348"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "7c60a042-0939-44f7-a90a-d2c4ad097e7c",
+            "value": "hotels-stays55501.com"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain_without_tld",
+            "timestamp": "1780658606",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "d9bc224a-2de3-4813-be64-6151d431ae15",
+            "value": "hotels-stays55501"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "host",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "hostname",
+            "uuid": "dc49a01a-00de-40a8-b9af-2c6d88776177",
+            "value": "hotels-stays55501.com"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "f9be0772-4105-42f5-bfad-bdb19a58d933",
+            "value": "172.67.215.65"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "0732e363-cea8-402e-a506-f0ca728aca6a",
+            "value": "172.67.215.65"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "830c4774-79cf-4619-9e8d-11e7e78d70b8",
+            "value": "2606:4700:3032::ac43:d741"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1780658606",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "f227fae6-23e9-42f8-9c34-7b8c49120a78",
+            "value": "2606:4700:3031::6815:1804"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "resource_path",
+            "timestamp": "1780658606",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "4997bc31-daa8-4d95-a02b-e19c9c050572",
+            "value": "57915348"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "tld",
+            "timestamp": "1780658606",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1e8f02e1-a41f-48f8-9412-c5169643264f",
+            "value": "com"
+          }
+        ]
+      }
+    ],
+    "EventReport": [
+      {
+        "content": "## Executive Summary\r\n\r\nCIRCL has been informed of a phishing campaign targeting customers of hotels in Luxembourg. A significant number of hotel guests have received fraudulent messages through different communication channels, including WhatsApp messages containing malicious URLs.\r\n\r\nThe phishing messages are particularly convincing because they include information related to legitimate hotel bookings. This increases the likelihood that victims will trust the message and engage with the fraudulent website or communication channel.\r\n\r\nThe apparent objective of the campaign is to trick hotel customers into making payments to an actor-controlled account or payment infrastructure.\r\n\r\n## Observed Activity\r\n\r\nVictims have reported receiving messages that appear to reference real hotel reservations. These messages may include booking-related information that is accurate or sufficiently close to a legitimate reservation to appear trustworthy.\r\n\r\nThe phishing messages typically contain a URL and encourage the recipient to take action, such as confirming a reservation, updating payment details, or completing a payment.\r\n\r\nAt this stage, CIRCL assesses that the information used in the phishing messages may originate from data associated with services operated by myLighthouse, a platform used in the hotel and hospitality sector.\r\n\r\nThe exact origin of the data exposure is currently unclear. Possible scenarios include, but are not limited to:\r\n\r\n- a vulnerability affecting a service or integration;\r\n- abuse or compromise of one or more hotel accounts;\r\n- unauthorised access to or exfiltration of booking-related data;\r\n- misuse of legitimate access to hotel or booking-management systems.\r\n\r\nThe investigation by Lighthouse has not yet clearly established the precise source of the data used in the phishing campaign.\r\n\r\n## Impact\r\n\r\nThe campaign may affect hotel customers who have made legitimate bookings in Luxembourg (not limited) and who receive fraudulent communications referencing those bookings.\r\n\r\nPotential impacts include:\r\n\r\n- financial loss due to fraudulent payments;\r\n- disclosure of personal or payment-related information;\r\n- loss of trust in hotel communication channels;\r\n- increased workload for hotels, financial institutions, and incident response teams.\r\n\r\n## Recommendations for Hotel Owners and Operators Using myLighthouse\r\n\r\nCIRCL recommends that hotels using myLighthouse take the following actions as a priority:\r\n\r\n1. **Reset credentials**\r\n   - Reset passwords for all accounts associated with myLighthouse.\r\n   - Ensure that passwords are unique and not reused across other services.\r\n\r\n2. **Enable and enforce multi-factor authentication**\r\n   - Enable MFA for all accounts where available.\r\n   - Lighthouse has announced enforcement of MFA as of 1 June.\r\n   - Hotels should verify that MFA is active for all relevant users and accounts.\r\n\r\n3. **Review account access**\r\n   - Review active users and remove accounts that are no longer required.\r\n   - Check whether any unexpected or unauthorised accounts have access.\r\n   - Review access rights and apply the principle of least privilege.\r\n\r\n4. **Inform customers about legitimate payment procedures**\r\n   - Clearly communicate the official payment methods used by the hotel.\r\n   - Remind customers that unexpected payment requests received through WhatsApp, SMS, or unofficial channels should be treated with suspicion.\r\n   - Provide customers with a trusted contact point to verify payment requests.\r\n\r\n5. **Monitor for suspicious activity**\r\n   - Monitor customer reports of phishing attempts.\r\n   - Review logs, where available, for unusual access patterns.\r\n   - Report suspicious URLs and related indicators to CIRCL.\r\n\r\n## Recommendations for Victims and Hotel Customers\r\n\r\nIf you receive a message via WhatsApp, SMS, email, or another channel that refers to your hotel booking and asks you to click a link or make a payment, CIRCL recommends the following:\r\n\r\n1. **Do not click on the URL**\r\n   - Do not open links contained in suspicious or unexpected messages.\r\n   - Do not enter personal, booking, or payment information on websites reached through such links.\r\n\r\n2. **Verify directly with the hotel**\r\n   - Contact the hotel using contact details obtained from the official hotel website or your original booking confirmation.\r\n   - Do not rely on phone numbers, links, or contact details provided in the suspicious message.\r\n\r\n3. **If you interacted with the phishing site**\r\n   - Contact your bank or financial provider immediately.\r\n   - Notify them that you may have been targeted by payment fraud.\r\n   - Follow their instructions regarding card blocking, transaction monitoring, or chargeback procedures.\r\n   - Notify the policy if you want to fill a complain.\r\n\r\n4. **Preserve evidence**\r\n   - Keep the suspicious message, phone number, URL, screenshots, and any payment details.\r\n   - These elements can help incident responders and service providers limit the impact of the campaign.\r\n\r\n## Reporting Phishing URLs to CIRCL\r\n\r\nCIRCL welcomes reports from users, victims, hotels, and service providers.\r\n\r\nPhishing URLs can be submitted to Lookyloo at [https://lookyloo.circl.lu/capture](https://lookyloo.circl.lu/capture)\r\n\r\nWhen submitting a URL, please mark the capture as phishing. This helps CIRCL and partners analyse the infrastructure, identify related campaigns, and support takedown or mitigation actions to reduce the impact on victims.\r\n\r\n## Indicators of Compromise\r\n\r\nIndicators may vary depending on the hotel, the communication channel, and the infrastructure used by the threat actor.\r\n\r\nA MISP event [https://misppriv.circl.lu/events/view/10a94632-a0a1-4062-a3a5-95fe321ae045](https://misppriv.circl.lu/events/view/10a94632-a0a1-4062-a3a5-95fe321ae045) is available with all the indicators collected from the reported cases.\r\n\r\nThe threat actor appears to rotate phishing URLs frequently and also changes the phone numbers used to send WhatsApp messages, making static blocking and indicator-based detection more difficult.\r\n\r\nHotels and victims are encouraged to report phishing URLs and related artefacts to CIRCL for analysis.\r\n\r\n## Conclusion\r\n\r\nThis phishing campaign is notable because it uses legitimate booking-related information to increase credibility and pressure victims into making fraudulent payments.\r\n\r\nHotels using myLighthouse should urgently reset credentials, ensure MFA is enabled and enforced, review access rights, and communicate clearly with customers about legitimate payment methods.\r\n\r\nCustomers who receive suspicious booking-related messages should not click on links, should verify requests directly with the hotel, and should contact their financial provider immediately if they engaged with the phishing site or made a payment.\r\n\r\nCIRCL continues to collect reports and encourages the submission of phishing URLs through Lookyloo to support analysis and mitigation.\r\n~                                                                                                                                                ",
+        "deleted": false,
+        "name": "TR-99 - Phishing Campaign Targeting Hotel Customers in Luxembourg",
+        "timestamp": "1780302043",
+        "uuid": "028a36a6-6cd5-4b37-b3ef-2645225e63c9"
+      }
+    ]
+  }
+}

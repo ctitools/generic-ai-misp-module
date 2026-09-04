@@ -30,6 +30,9 @@ caller / MISP ──POST /query──▶ misp-modules ──handler(json)──�
 to `genai/extract.py` / `genai/summarize.py`; `process_eventReport()` is still a dummy. Code lives
 in the `genai/` package because misp-modules loads every `.py` in `expansion/` as a module, so
 helpers cannot sit next to `generic_ai.py`; the module adds the repo root to `sys.path` on import.
+`genai/classic.py` is the odd one out: a regex baseline over `iocextract` (refang on) that
+benchmarks and tests compare the LLM extraction against. It is deliberately not imported by
+`generic_ai.py` or `extract.py`, and a unit test keeps it that way.
 
 ### Use-case hooks (contract in USE-CASES.md, tests in TESTING.md)
 

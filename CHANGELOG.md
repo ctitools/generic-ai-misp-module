@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04 (benchmark)
+
+- Added `genai/classic.py`: deterministic regex IoC extractor over `iocextract` 1.16.1 (new
+  dependency in `pyproject.toml`/`uv.lock`, GPL, transitive `regex`), refanging defanged values
+  and returning sorted `(misp_type, value)` pairs plus a `python -m genai.classic` CLI. Benchmark
+  and test tooling only — never on the request path (`tests/test_classic_unit.py` enforces it, plus
+  the gold-subset gate on `orkl-sample`). Supply-chain notes in IMPROVEMENTS.md item 24.
+
 ## 2026-09-04 (use-cases)
 
 - Implemented the two use-cases in a new `genai/` package: `extract.py` (CTI info extraction: LLM proposes JSON candidates, five deterministic filters — in-source, known type, format, duplicate, confidence — decide; file/vulnerability objects; every added attribute AI-tagged) and `summarize.py` (`kind=report|event`, deterministic event rendering, structural gate: headings, ≤ 200 words, no indicator that is not in the input; summary attached as a new EventReport, event AI-tagged).

@@ -81,3 +81,17 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     were "none" (still open: decide whether those three are wanted).
 22. **`moduleinfo["author"]` was "OpenCode" — done.** Now "CIRCL / ctitools".
 23. **misp-modules was an undeclared test dependency — done.** Declared as the `e2e` extra.
+
+## 5. Dependencies
+
+24. **`iocextract` 1.16.1 (benchmark baseline, 2026-09-04).** Declared in `pyproject.toml`
+    and `uv.lock` but used only by `genai/classic.py` (tests and benchmarks); the request path
+    never imports it (`tests/test_classic_unit.py` checks). Supply-chain notes: released
+    2023-09-22, license GPL, wheel sha256
+    `64b0c7faaf127974d780bbdf1e62b29e213495a112ca3befd1f1ae15e0693fc4`
+    (from `https://pypi.org/pypi/iocextract/1.16.1/json`); one transitive dependency, `regex`
+    2026.9.3 (Apache-2.0 AND CNRI-Python, released 2026-09-01). Nothing is younger than 48 h,
+    the names match the well-known packages, no maintainer change observed. Known wart: on
+    Python 3.14 the first import emits `SyntaxWarning`s for invalid escapes in iocextract's own
+    source (cosmetic, compile-time only), and its email regex swallows the word before the
+    address, which `classic.py` works around.

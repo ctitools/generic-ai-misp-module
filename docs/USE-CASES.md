@@ -128,3 +128,7 @@ Collected during hackathon 2026; kept as one-liners so they are not lost.
   for the next round; until then recall on defanged reports is low by design.
 - Precision on the fixture reports was 1.0 once the gold lists were complete; every extra
   indicator the model found (filenames, threat-actor names) was literally in the text.
+- A classical, deterministic baseline exists for benchmarks: `genai/classic.py` wraps
+  `iocextract` (regex, refang enabled) and returns a *superset* of `ip-dst`, `url`, `domain`,
+  `email` and hash indicators, including defanged ones. It is test/benchmark tooling only and
+  is never used by the module (`python -m genai.classic <textfile> [-o out.json]`).

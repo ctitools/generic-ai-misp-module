@@ -8,7 +8,7 @@ version = "0.3.0"
 description = "Custom MISP expansion module: full MISP Event in, processed MISP Event out"
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = ["pymisp>=2.5.34.2"]
+dependencies = ["pymisp>=2.5.34.2", "iocextract>=1.16.1"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff", "pylint"]

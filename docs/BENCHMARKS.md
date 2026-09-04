@@ -1,5 +1,22 @@
 # Benchmarks
 
+## Running: LLM extraction over the orkl sample
+
+Data flow: `benchmarks/data/orkl/sample.json` (`{"seed", "n", "ids": [...]}`) and one
+`benchmarks/data/orkl/<id>.json` per report (`id`, `title`, `plain_text`, ...) are produced by
+the sampler; `benchmarks/run_llm.py` wraps each report as a MISP event with one EventReport,
+sends it through `expansion.generic_ai.dict_handler` with `use_case=extraction` (the module as
+deployed, LLM from `.env`) and writes one result per report.
+
+```bash
+.venv/bin/python -m benchmarks.run_llm                 # all ids in sample.json, resumable
+.venv/bin/python -m benchmarks.run_llm --ids a,b --force
+```
+
+- artifact: `benchmarks/results/<id>.llm.json` = `{"model", "prompt", "indicators": [[type, value], ...], "rejected", "seconds"}`, or `{"error", "seconds"}` (a report is never dropped)
+- progress: `logs/benchmark-llm.log` (ok/fail counts, reports/s, ETA); exit code 2 when the LLM is unreachable
+- verification: `.venv/bin/pytest -q tests/test_run_llm_unit.py` (offline, mocked LLM)
+
 Benchmarks exist per use-case and per community profile.
 
 **Note well**: there are different MISPs out there which focus on different aspects. Such as law enforcement, classical CERTs, drones, etc.

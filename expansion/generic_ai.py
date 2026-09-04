@@ -207,7 +207,8 @@ def dict_handler(request: dict[str, Any]) -> dict[str, Any]:
     metadata: dict[str, Any] = {}
     try:
         processed = process_event(event, settings=resolve_settings(request), metadata=metadata)
-    except (ValueError, llm.LLMError) as error:
+    except (ValueError, llm.LLMError, PyMISPError) as error:
+        # PyMISPError: an accepted candidate PyMISP still refuses (e.g. an unparsable datetime)
         return {"error": str(error)}
     return {
         "results": {

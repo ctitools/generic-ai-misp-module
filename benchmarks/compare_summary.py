@@ -126,7 +126,10 @@ def report(rows: list[dict], prompt: prompts.Prompt) -> str:
         "",
         "## Gate",
         "",
-        table(["outcome", "count"], [["summary produced", len(ok)], *sorted(errors.items())]),
+        table(
+            ["outcome / gate problem (one error can carry several)", "count"],
+            [["summary produced", len(ok)], *sorted(errors.items())],
+        ),
         pie("Gate outcome", {"ok": len(ok), **errors}),
         "## Length (words, headings excluded by the gate; limit " + str(prompt.max_words) + ")",
         "",

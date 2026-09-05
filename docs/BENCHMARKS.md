@@ -51,11 +51,52 @@ What the numbers say:
 `python -m benchmarks.run_llm --use-case summarization` writes one `<id>.summary.json` per
 sampled report (the module as deployed, `summary_kind=report`); a second pass into another
 directory measures determinism; `python -m benchmarks.compare_summary --second-dir …` writes
-[BENCHMARKS_summary.md](BENCHMARKS_summary.md). There is no reference summary to score
-against, so the report measures: the module's own structural gate (pass rate and the failing
-rule), length in words, headings present, coverage of the regex baseline's hashes/IPs/URLs
-(informational), timing, and determinism (byte-identical rate between two passes with the same
-seed, word-level similarity otherwise). Results are summarised in "Results" once run.
+the report. There is no reference summary to score against, so the report measures: the
+module's own structural gate (pass rate and the failing rule), length in words, headings
+present, coverage of the regex baseline's hashes/IPs/URLs (informational), timing, and
+determinism (byte-identical rate between two passes with the same seed).
+
+### Results (2026-09-05, same 100 orkl reports, qwen3.8 digest 22130167c4c2)
+
+Generated reports: [BENCHMARKS_summary.md](BENCHMARKS_summary.md) (cluster
+`summary-report/qwen3.8-v1`, the default) and
+[BENCHMARKS_summary-v2.md](BENCHMARKS_summary-v2.md) (`summary-report/qwen3.8-v2`, the
+candidate written after the v1 run; docs/PROMPTS.md).
+
+| | v1 (default) | v2 (candidate) |
+|---|---|---|
+| summaries passing the gate | 28 / 100 | 96 / 100 |
+| answer truncated (max_tokens 600 / 1000) | 35 | 0 |
+| over 200 words | 36 | 1 |
+| indicator not in the input | 2 | 3 |
+| words: median / p90 / max | 184 / 205 / 208 | 124 / 165 / 187 |
+| all four headings present | 28 / 28 | 96 / 96 |
+| coverage of classic hashes/IPs/URLs (mean) | 0.42 | 0.31 |
+| seconds per report: median / max | 6.3 / 13.6 | 4.7 / 9.3 |
+| determinism: byte-identical in a second pass | 27 / 27 paired (one report flipped between pass and fail) | 96 / 96 |
+
+What the numbers say:
+
+1. **v1 fails on 72 of 100 real reports**, although it passed every test on the dummy event:
+   the model overshoots a soft "at most 200 words" on long reports (35 answers hit the
+   600-token budget, 36 came back at 201-261 words). The gate did its job; the prompt did not.
+2. **v2 passes 96**: a numbered hard rule with margin (150 words), no preamble, at most five
+   copy-exact indicators plus "and N more", and a 1000-token budget so the gate rather than
+   truncation is the judge. Summaries are shorter (median 124 words) and faster (4.7 s).
+3. **Of the 3 v2 "indicator not in input" rejections, two are correct** (CVE ids the model
+   added from memory; they are not in the report). The third was a GUID that the PDF text
+   breaks across a line; the gate now also matches against the whitespace-free source
+   (`genai/summarize.py`), so this case passes. The remaining over-length report is 1 of 100.
+4. **Coverage** of the regex baseline's hashes/IPs/URLs drops from 0.42 to 0.31 with v2: it
+   deliberately lists at most five indicators. A summary is not an indicator list; extraction
+   is the use-case for that.
+5. **Determinism holds**: every paired summary is byte-identical across two passes with seed
+   42 and temperature 0; the only difference between v1 passes was one report that failed the
+   gate in one pass and passed in the other (generation is deterministic, the word count sat on
+   the limit).
+
+Decision pending: make v2 the default cluster (then re-record `tests/golden/summary-report.md`
+and review it).
 
 ## Method
 

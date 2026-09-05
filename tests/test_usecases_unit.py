@@ -408,3 +408,12 @@ def test_summary_v2_cluster_is_selectable_but_not_default() -> None:
     assert (
         "150 words" in v2.text and v2.headings == prompts.resolve_prompt("summary-report").headings
     )
+
+
+def test_check_summary_accepts_values_broken_across_lines_in_the_source() -> None:
+    prompt = prompts.resolve_prompt("summary-report")
+    source = "driver {5AE3F37E-4EAE-41AE-8240-\r\n35465B5E81EB}"
+    source += " and hash d41d8cd98f00b204\ne9800998ecf8427e"
+    summary = "\n".join(f"## {h}" for h in prompt.headings)
+    summary += "\nGUID 5AE3F37E-4EAE-41AE-8240-35465B5E81EB, hash d41d8cd98f00b204e9800998ecf8427e."
+    assert not [p for p in summarize.check_summary(summary, source, prompt) if "indicator" in p]

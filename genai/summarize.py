@@ -61,11 +61,12 @@ def check_summary(summary: str, source: str, prompt: prompts.Prompt) -> list[str
     if prompt.max_words and words > prompt.max_words:
         problems.append(f"{words} words > {prompt.max_words}")
     source_lower = refang(source).lower()  # a summary may refang what the report defanged
+    joined = re.sub(r"\s+", "", source_lower)  # PDFs break hashes and GUIDs across lines
     foreign = {
         m.group(0)
         for rx in _INDICATOR_RES
         for m in rx.finditer(refang(summary))
-        if m.group(0).lower() not in source_lower
+        if m.group(0).lower() not in source_lower and m.group(0).lower() not in joined
     }
     problems += [f"indicator not in input: {f}" for f in sorted(foreign)]
     return problems

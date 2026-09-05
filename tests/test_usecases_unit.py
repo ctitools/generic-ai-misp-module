@@ -256,7 +256,7 @@ def test_summary_of_report_is_attached_and_event_tagged(event, fake_llm) -> None
     assert all(not _tags(a) & AI_TAGS for a in event.attributes)
     assert (
         metadata["kind"] == "report"
-        and metadata["prompt"]["cluster"] == "summary-report/qwen3.8-v1"
+        and metadata["prompt"]["cluster"] == "summary-report/qwen3.8-v2"
     )
 
 
@@ -360,7 +360,7 @@ def test_passthrough_default_makes_no_llm_call(dummy_event, monkeypatch) -> None
 
 def test_prompt_resolution() -> None:
     default = prompts.resolve_prompt("summary-report")
-    assert default.value == "summary-report/qwen3.8-v1" and default.params["seed"] == 42
+    assert default.value == "summary-report/qwen3.8-v2" and default.params["seed"] == 42
     assert prompts.resolve_prompt("summary-report", default.uuid) == default
     inline = prompts.resolve_prompt("summary-report", "Summarise: {{input}}")
     assert inline.value == "inline" and inline.headings == default.headings
@@ -402,7 +402,7 @@ def test_check_summary_refangs_before_comparing() -> None:
     assert problems == ["indicator not in input: 198.51.100.9"]
 
 
-def test_summary_v2_cluster_is_selectable_but_not_default() -> None:
+def test_summary_v2_cluster_is_the_default_and_v1_stays_selectable() -> None:
     v2 = prompts.resolve_prompt("summary-report", "summary-report/qwen3.8-v2")
     assert v2.version == 2 and v2.params["max_tokens"] == 1000 and v2.max_words == 200
     assert (

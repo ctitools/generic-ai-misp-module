@@ -63,7 +63,7 @@ Generated reports: [BENCHMARKS_summary.md](BENCHMARKS_summary.md) (cluster
 [BENCHMARKS_summary-v2.md](BENCHMARKS_summary-v2.md) (`summary-report/qwen3.8-v2`, the
 candidate written after the v1 run; docs/PROMPTS.md).
 
-| | v1 (default) | v2 (candidate) |
+| | v1 (default until 2026-09-05) | v2 (default now) |
 |---|---|---|
 | summaries passing the gate | 28 / 100 | 96 / 100 |
 | answer truncated (max_tokens 600 / 1000) | 35 | 0 |
@@ -95,8 +95,8 @@ What the numbers say:
    gate in one pass and passed in the other (generation is deterministic, the word count sat on
    the limit).
 
-Decision pending: make v2 the default cluster (then re-record `tests/golden/summary-report.md`
-and review it).
+Decision taken 2026-09-05: v2 is the default cluster; `tests/golden/summary-report.md` re-recorded
+and reviewed.
 
 ## Method
 

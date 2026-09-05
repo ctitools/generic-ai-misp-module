@@ -115,13 +115,14 @@ Report:
 
 Parameters: `temperature 0, seed 42, top_p 1, max_tokens 600, think false`.
 
-### `summary-report/qwen3.8-v2` (benchmark candidate, not the default)
+### `summary-report/qwen3.8-v2` (the default since 2026-09-05)
 
 Written after the first summarization benchmark (2026-09-05): with v1, the model overshot the
 200-word limit on most real reports (answers truncated at 600 tokens, or 220-235 words) and once
 shortened a hash. v2 states the limit as a hard rule with margin (150 words), forbids preamble,
 caps the Indicators section at five copy-exact values, and raises `max_tokens` to 1000 so the
-module's gate, not truncation, is the judge. uuid `5c2d9e4f-8a1b-4c6d-9e0f-1a2b3c4d5e6f`.
+module's gate, not truncation, is the judge. On the 100-report orkl benchmark v2 passed the gate
+on 96 reports, v1 on 28 (docs/BENCHMARKS.md); v1 stays selectable by value or uuid. uuid `5c2d9e4f-8a1b-4c6d-9e0f-1a2b3c4d5e6f`.
 
 ```
 You are a CTI analyst writing an analyst assessment of the following report for a MISP event.

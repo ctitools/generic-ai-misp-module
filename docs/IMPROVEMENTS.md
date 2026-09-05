@@ -145,4 +145,18 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     who labelled and when in the file; keep the precision gate at ≥ 0.95 and add a recall
     floor once the set is large enough to make one meaningful. Overlaps with item 27 (the
     adjudication of LLM-only values is the same labelling work).
+33. **Move from `urllib` to `requests`, everywhere (Aaron, 2026-09-05).** HTTP is done with
+    `urllib.request` in `genai/llm.py` (the LLM client), `benchmarks/orkl.py` (orkl.eu),
+    `tests/conftest.py` (the read-only MISP client) and `tests/test_generic_ai_e2e.py`
+    (misp-modules server); `genai/classic.py` and `benchmarks/compare.py` only use
+    `urllib.parse` for URL splitting (stdlib, can stay). `requests` is already installed as a
+    transitive dependency of PyMISP (2.34.2), so this adds no new package to the tree; declare
+    it explicitly in `pyproject.toml` with a pinned version and note it under section 5.
+    TODO, one refactor across the repo: replace `Request`/`urlopen` with `requests.Session`
+    calls (timeouts kept, `verify=` for the tests' self-signed dev MISP, `raise_for_status`),
+    map `requests.exceptions` where `urllib.error` is handled today (`llm.LLMError`, the
+    conftest live gates, the orkl client's base-URL guard, semgrep's dynamic-urllib finding
+    disappears), keep behaviour byte-for-byte (same error messages, same timeouts), then run the
+    offline suite, the `--require-live` run and one benchmark pass as the gate. Update
+    ARCHITECTURE.md ("llm.py is the only network code") and CLAUDE.md.
 

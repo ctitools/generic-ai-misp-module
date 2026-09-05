@@ -178,6 +178,7 @@ mentioned is in the dummy event, and that nothing is invented. Only then is the 
 |---|---|---|---|---|
 | module contract / validation | ✔ | ✔ | ✔ | – |
 | round-trip gate | – | – | ✔ | – |
+| write path: module output lands in MISP (attributes, report, tags) | – | – | ✔ (creates/deletes org-only events) | ✔ |
 | UC1 extraction | ✔ | ✔ | – | precision gate, determinism |
 | UC2 summary `report` | ✔ | ✔ | – | L3 gate, determinism, golden |
 | UC2 summary `event` | ✔ | ✔ | – | L3 gate, determinism, golden |

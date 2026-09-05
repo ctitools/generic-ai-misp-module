@@ -149,6 +149,7 @@ Layers (details in [docs/TESTING.md](docs/TESTING.md)):
 - e2e, local: starts `misp-modules` on a free port and POSTs every fixture event to `/query`
 - live LLM (`-m live_llm`): determinism, extraction precision gate, summary gate and goldens against the endpoint in `.env`
 - live MISP (`-m live_misp`): fetches the fixture uuids from `MISP_BASE_URL`, runs them through the module, and the round-trip quality gate on 10 random events
+- live write path (`tests/test_e2e_misp_write.py`, needs both): creates an event on the dev MISP with an orkl.eu report (`tests/fixtures/orkl/`) as EventReport, runs extraction and summarization through the module, pushes the result back with PyMISP, verifies the attributes, the new report and the `ai-computer-assisted` tags on the instance, then deletes the event. Every such event is distribution "your organisation only" and never published; `E2E_KEEP=1` keeps it for inspection.
 
 Every run ends with a **live gates** summary (`llm: ran …` / `skipped: …` / `not requested`).
 Without `--require-live` an unavailable live system skips its layer, so a green run only proves
@@ -175,7 +176,8 @@ hit the module's 120 s timeout. Check reachability with:
 .venv/bin/python -c "from genai import llm; s=llm.LLMSettings.from_env(); print(s, llm.is_reachable(s))"
 ```
 
-MISP: a reachable instance and an API key; the tests never write. Four of the eight fixture
+MISP: a reachable instance and an API key. The read-only layers only fetch; the write-path
+test creates and deletes its own org-only, unpublished events. Four of the eight fixture
 uuids no longer exist on the CIRCL dev instance and skip individually (a data problem, not a
 missing system; they stay skips even with `--require-live`).
 

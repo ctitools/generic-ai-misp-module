@@ -1,0 +1,101 @@
+id,title,status,words,coverage,seconds,identical,similarity
+03488f3d,DigitalSide Malware report: MD5: af5e5b2,ok,109,0.23076923076923078,5.394,True,1.0
+0c4cb36b,Malware collection,ok,70,0.75,3.64,True,1.0
+0d2fc4a8,Redis bruteforce Attackers [2024-07-17],ok,72,,4.78,True,1.0
+0ef83690,DigitalSide Malware report: MD5: fe34555,ok,102,0.8,6.848,True,1.0
+0fe4fcd5,DigitalSide Malware report: MD5: 15ca693,ok,116,0.8,6.194,True,1.0
+1557a21b,Agent Tesla - javascript dropper - SMTP ,ok,134,0.3333333333333333,5.249,True,1.0
+1699737c,AlienVault | Backdoored PHP Software,ok,90,0.10204081632653061,4.219,True,1.0
+21d28baf,Honeytrap,ok,73,,4.853,True,1.0
+229a6cc8,Remcos host indicators [2023-09-12],ok,95,0.2777777777777778,5.646,True,1.0
+264575d2,ThreatFox IOCs for 2024-04-12,ok,122,0.0,11.645,True,1.0
+26d4048d,Dionaea,ok,79,,3.541,True,1.0
+2a330185,AlienVault | New modular downloaders fin,ok,142,0.2631578947368421,7.857,True,1.0
+2cfaae22,AlienVault | Carbanak attacks against Ch,ok,94,0.5555555555555556,4.6,True,1.0
+2d6a7f33,AgentTesla downloaded from a .js file (S,ok,147,0.36363636363636365,5.933,True,1.0
+2eef230e,Cowrie,ok,69,,2.698,True,1.0
+30dbf7d0,Unveiling the Weaponized Web Shell Encys,ok,114,,4.2,True,1.0
+317f3edc,Storm-1175 focuses gaze on vulnerable we,ok,179,0.5555555555555556,6.632,True,1.0
+31a5a558,Telnet bruteforce Attackers [2024-01-25],ok,79,,6.954,True,1.0
+361b5b3e,Formbook host indicators [2024-07-02],ok,93,0.2777777777777778,5.314,True,1.0
+3cc0969a,Telnet bruteforce Attackers [2024-03-07],ok,85,,6.356,True,1.0
+44146c5a,RDP bruteforce Attackers [2022-08-10],ok,80,,7.112,True,1.0
+4bf84caa,DigitalSide Malware report: MD5: ac06141,ok,99,0.2857142857142857,4.58,True,1.0
+4e1b163a,"""Subject: [REDACTED] will be Disabled , ",ok,98,1.0,4.165,True,1.0
+4f937fac,"""Subject: RE: SHIPPING DOC - From: chenh",ok,91,,4.088,True,1.0
+4ff7ce39,Nuevo Backdoor en Outlook Atribuido a AP,ok,104,1.0,5.24,True,1.0
+5302ad3a,Detecting Linux Variants of Interlock Ra,ok,129,1.0,5.759,True,1.0
+56e1af4c,0076e384e324fbb55fcb9d42b0ce281c,ok,87,1.0,4.046,True,1.0
+56e1b16a,01ada39c547ab3b4c5bc811203caa493,ok,61,1.0,3.483,True,1.0
+57615970,Targeted attack against DNC,ok,117,0.2631578947368421,4.331,True,1.0
+580f6d79,"Locky 2016-10-25 : Affid=3, DGA=88822 - ",ok,129,0.038461538461538464,7.74,True,1.0
+587940d2,Lokibot host indicators [2024-12-09],ok,79,0.5555555555555556,4.419,True,1.0
+589a41fb,Cerber delivered via malicious Office do,ok,76,1.0,4.082,True,1.0
+58b8193a,Reversing malware in a custom format_ Hi,ok,65,1.0,4.275,True,1.0
+591b7178,Formbook host indicators [2024-05-22],ok,128,0.09803921568627451,8.009,True,1.0
+59aaa45d,Active ransomware attack uses impersonat,ok,89,1.0,3.932,True,1.0
+5a24041c,OSINT - Android Malware Appears Linked t,ok,144,0.17647058823529413,4.991,True,1.0
+5a26b608,"M2M - ""..doc"" 2017-11-30 : ""FL-123456 11",ok,129,0.13793103448275862,7.144,True,1.0
+5b6952a8,DigitalSide Malware report: MD5: d90b513,ok,91,1.0,4.537,True,1.0
+5b6ab2dc,"""Zestawieni VAT-08/ZUS-08"" Campaign",ok,73,1.0,3.975,True,1.0
+5c4970b2,emotet IOC update,ok,102,0.625,5.572,True,1.0
+5c51a54e,OSINT: Excel 4.0 Macro Utilized by TA505,ok,176,0.05555555555555555,10.69,True,1.0
+5c55ff39,emotet IOC update,ok,100,0.4444444444444444,5.527,True,1.0
+5c65d32b,emotet IOC update,ok,100,0.5,5.188,True,1.0
+5c6d7d5f,c2 endpoint delta,ok,70,1.0,4.138,True,1.0
+5c6db438,emotet IOC update,ok,89,1.0,4.338,True,1.0
+5c6dfe96,c2 endpoint delta,ok,76,0.10416666666666667,4.548,True,1.0
+5c974ce1,emotet IOC update,ok,89,0.12195121951219512,6.001,True,1.0
+5ca43fed,emotet IOC update,ok,85,0.02336448598130841,10.593,True,1.0
+5d8f6b9e,emotet IOC update,ok,96,0.10416666666666667,7.159,True,1.0
+5dc46103,emotet IOC update,ok,102,0.06329113924050633,7.366,True,1.0
+5dd58352,emotet IOC update,ok,121,0.060240963855421686,7.239,True,1.0
+5dea53aa,c2 endpoint delta,ok,103,1.0,4.403,True,1.0
+5e207470,emotet IOC update,ok,84,0.4166666666666667,5.322,True,1.0
+5e2890cc,emotet exe 5-tuple,ok,71,1.0,3.958,True,1.0
+5e3008c1,Nice Try: 501 (Ransomware) Not Implement,ok,95,0.3333333333333333,3.607,True,1.0
+5e37c8d1,emotet IOC update,ok,79,1.0,4.779,True,1.0
+5e65434b,UPDATE binary C2 additions,ok,97,,5.318,True,1.0
+5f0ee937,UPDATE binary C2 additions,ok,112,,5.01,True,1.0
+5f13849e,DigitalSide Malware report: MD5: b1a1bcb,ok,113,0.8,6.036,True,1.0
+5f15a68b,emotet IOC update,ok,65,0.17857142857142858,4.977,True,1.0
+5f15caee,emotet exe 5-tuple,ok,72,1.0,4.048,True,1.0
+7082388a,SSH bruteforce Attackers [2026-08-14],ok,84,,6.477,True,1.0
+719d64ec,ATR_82599,ok,109,0.6666666666666666,3.943,True,1.0
+71ee28a1,DigitalSide Malware report: MD5: 22faf22,ok,118,1.0,6.041,True,1.0
+7ef5c2f6,SSH bruteforce Attackers [2025-03-09],ok,80,,14.19,True,1.0
+813bc4df,Tibet Lurk,ok,84,0.75,3.112,True,1.0
+84248423,AlienVault | ChinaZ Updates Toolkit by I,ok,101,0.5,5.29,True,1.0
+85b11f6b,njRAT host indicators [2024-02-21],ok,98,0.3333333333333333,4.754,True,1.0
+9a50d10e,AgentTesla in ISO mail attachment (SMTP ,ok,61,0.3333333333333333,3.485,True,1.0
+a8e25d5c,AlienVault | Parallax RAT sample CoronaV,ok,125,1.0,5.098,True,1.0
+a9e1a395,"""Subject: Zapytanie ofertowe 7100519 - F",ok,64,1.0,5.121,True,1.0
+ae108754,AgentTesla in .tar email attachment (SMT,ok,89,0.14285714285714285,4.565,True,1.0
+ae41bec2,Урядовою командою реагування на комп'юте,error,0,,9.34,,
+b201e6c4,Telnet bruteforce Attackers [2024-05-15],ok,80,,7.343,True,1.0
+b447f959,AlienVault | Footprints of Fin7,ok,158,0.04285714285714286,7.426,True,1.0
+b62ed471,AlienVault | Zero-day exploit (CVE-2018-,ok,168,,5.385,True,1.0
+be0db1ab,Smoke Loader host indicators [2023-09-26,ok,100,0.21739130434782608,5.435,True,1.0
+c426d9d8,A recent campaign exploiting the Oman Mi,ok,152,0.10256410256410256,8.193,True,1.0
+c4bb38ee,Phishing URL Finding | urlabuse.com,ok,89,1.0,2.571,True,1.0
+ca70216a,CACTUS: Analyzing a Coordinated Ransomwa,ok,154,0.2,6.368,True,1.0
+cb2e2bb7,VNC bruteforce Attackers [2025-11-09],ok,80,,5.377,True,1.0
+ce05e941,Daily Incremental ThreatFox Import - 202,ok,159,0.015151515151515152,8.821,True,1.0
+d266f5a6,Phishing URL Finding,ok,132,1.0,5.11,True,1.0
+d729922e,BazaFlix: BazaLoader Fakes Movie Streami,ok,156,0.2,5.276,True,1.0
+da2397a3,Scam URL findings,ok,75,1.0,3.34,True,1.0
+da61d35d,AlienVault | Goblin Panda continues to t,ok,142,1.0,5.731,True,1.0
+dc0f8ebf,AlienVault | OilRig Targets Technology S,ok,151,0.8333333333333334,6.428,True,1.0
+dc58b05e,Redis bruteforce Attackers [2026-01-13],ok,79,,5.199,True,1.0
+e05c2b5c,Scam URL findings,ok,78,1.0,2.9,True,1.0
+e126ff7c,Formbook in email (.zip) attachment,ok,135,0.2222222222222222,7.01,True,1.0
+e6a2c4ae,VNC bruteforce Attackers [2022-05-22],ok,81,,6.151,True,1.0
+eaab8d40,NPM debug and chalk packages compromised,ok,78,1.0,3.184,True,1.0
+ede6b753,Command and Control in the Fifth Domain,ok,139,0.05747126436781609,5.721,True,1.0
+f178f6aa,DigitalSide Malware report: MD5: 2e091d7,ok,109,0.8,5.729,True,1.0
+f1e3923a,Lokibot host indicators [2023-08-22],ok,92,0.3333333333333333,5.284,True,1.0
+f394628d,DigitalSide Malware report: MD5: d118057,ok,122,0.13636363636363635,6.207,True,1.0
+f85b39fa,DDoSPot,ok,68,,2.371,True,1.0
+f9d71002,Campaign Tracked as STAC6405  Organizati,ok,102,1.0,3.28,True,1.0
+fa2d17b5,Agent Tesla downloader via email attachm,ok,92,0.15384615384615385,5.761,True,1.0
+fbac52a7,AlienVault | Nice Try: 501 (Ransomware) ,ok,76,0.5,3.627,True,1.0

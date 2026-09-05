@@ -5,9 +5,6 @@ can sync, version and override them like any other galaxy, and so that a prompt 
 bundled with the model and the sampling parameters it was validated with. That bundle is what
 makes summaries reproducible ([TESTING.md](TESTING.md)).
 
-Status: design. The galaxy files are created in the code round; the v1 prompt texts below are
-copied into them verbatim.
-
 ## Why a galaxy
 
 - [misp-galaxy](https://github.com/MISP/misp-galaxy) has no prompt galaxy yet (checked
@@ -63,7 +60,10 @@ Copy both files into the instance's custom galaxy directory (`app/files/misp-gal
 instances pull. Editing a prompt = bump `meta.version` and the cluster `version`; the module
 logs the version it used, so drift between instances is visible.
 
-## v1 prompts
+## Prompt texts
+
+The clusters below are the shipped ones; the first cluster of a use-case is the default. Superseded
+clusters stay selectable by value or uuid but are not maintained.
 
 ### `cti-info-extraction/qwen3.8-v1`
 
@@ -99,7 +99,7 @@ truncated the JSON answer on 35 of 100 reports and 5 still overflowed 8000, so t
 10000 (cluster `meta.version` 2). Answers of that size take up to a few minutes on `nanu`, above
 the module's default `request_timeout` of 120 s: raise `GENERIC_AI_REQUEST_TIMEOUT` accordingly.
 
-### `summary-report/qwen3.8-v1`
+### `summary-report/qwen3.8-v1` (superseded 2026-09-05)
 
 ```
 You are a CTI analyst writing an analyst assessment of the following report for a MISP event.
@@ -181,7 +181,7 @@ Event:
 
 Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
 
-### `summary-event/qwen3.8-v1`
+### `summary-event/qwen3.8-v1` (superseded 2026-09-05)
 
 ```
 You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering

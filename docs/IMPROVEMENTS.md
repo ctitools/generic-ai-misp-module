@@ -112,7 +112,7 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
 
 ## 6. Open TODOs from the test-strategy review (2026-09-05, Aaron: keep as backlog)
 
-Details and suggested fixes in docs/TESTING.md section 8; listed here so they are not lost.
+Details and suggested fixes in docs/TESTING.md section 9; listed here so they are not lost.
 
 27. **Correctness of LLM-only findings is unmeasured.** The extraction benchmark scores
     against a regex superset; hashes agree, but the values only the LLM finds (filenames,

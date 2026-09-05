@@ -4,85 +4,71 @@ The first benchmark measures the **CTI info extraction** use-case: the module's 
 against a classical regex extractor and against hand-labelled gold lists. The measured result is
 in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit by hand).
 
-## Results (2026-09-05 after refanging, qwen3.8:latest digest 22130167c4c2, Ollama 0.33.2, seed 42)
+## Current results (v3 test run, 2026-09-05)
 
-Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not
-edit by hand). Prompt cluster `cti-info-extraction/qwen3.8-v1` version 2, `max_tokens` 10000,
-`GENERIC_AI_REQUEST_TIMEOUT=900`. Same sample and model as the previous run; the only change
-is the refang/re-type step in `genai/extract.py` (and the same refang in the classic baseline).
+Model `qwen3.8:latest` digest `22130167c4c2`, Ollama 0.33.2, seed 42 / temperature 0. Extraction
+prompt `cti-info-extraction/qwen3.8-v1` at schema version 3 (`actionable`, `first_seen`,
+`last_seen`, `published`), `max_tokens` 10000, `GENERIC_AI_REQUEST_TIMEOUT=900`. Summary clusters
+`summary-report/qwen3.8-v2` and `summary-event/qwen3.8-v2` (hard 150-word budget, copy-exact
+indicators, capped lists). Generated reports, never edited by hand:
+[BENCHMARKS_extraction.md](BENCHMARKS_extraction.md),
+[BENCHMARKS_summary.md](BENCHMARKS_summary.md) (report kind, 100 orkl.eu reports),
+[BENCHMARKS_summary-event.md](BENCHMARKS_summary-event.md) (event kind, 100 dev-MISP events).
 
-| | before refang | after refang |
+### Extraction, 100 orkl.eu reports
+
+| | value |
+|---|---|
+| reports succeeded | 95 / 100 (5 overflow the 10000-token answer budget, IMPROVEMENTS item 25) |
+| indicators stored | 1379, none defanged |
+| gold view (3 hand-labelled reports): precision / recall / F1 / kappa | 1.00 / 0.92 / 0.96 / 0.93 |
+| vs the regex superset: F1 / Jaccard / kappa (micro) | 0.56 / 0.39 / -0.42 |
+| recall of classic md5 / sha1 / sha256 / ip-dst / url | 0.95 / 0.89 / 0.98 / 0.68 / 0.42 |
+| indicators with a date stated in the text | 36 |
+| `to_ids` lowered (not actionable per the model) | 35, listed for review |
+| rejections: format / confidence / not-in-source / free-text-type / duplicate | 56 / 39 / 33 / 23 / 9 |
+| seconds per report: median / max; whole pass | 9 / 62; 34 min |
+
+How to read it: the classic extractor is a deliberate superset, so an LLM "false positive"
+against it is a value the regexes missed and an LLM "false negative" is often a correct
+omission (reference links, vendor sites); the hashes agree, URLs and domains are where the two
+differ. What only the LLM finds (filenames, threat actors, malware names, registry keys,
+CVEs) is checked to be in the text, not yet to be correct: IMPROVEMENTS items 27 and 32.
+
+### Summarization, report kind, 100 orkl.eu reports
+
+| | value |
+|---|---|
+| summaries passing the gate | 96 / 100 (2 correct rejections of CVE ids not in the text, 1 over length, 1 line-broken GUID since fixed) |
+| words: median / p90 / max | 124 / 165 / 187 |
+| all four headings present | 96 / 96 |
+| coverage of the regex baseline's hashes/IPs/URLs (mean) | 0.31 (at most five indicators are listed, by design) |
+| seconds per report: median / max | 4.7 / 9.3 |
+| byte-identical in a second pass | 96 / 96 |
+
+### Summarization, event kind, 100 real events with 5-300 attributes
+
+| | value |
+|---|---|
+| summaries passing the gate | 99 / 100 (1 answer over the 1000-token budget) |
+| words: median / p90 / max | 95 / 147 / 179 |
+| all four headings present | 99 / 99 |
+| coverage of the event's own hashes/IPs/URLs (mean) | 0.54 |
+| seconds per event: median / max | 5.3 / 14.2 |
+| byte-identical in a second pass | 99 / 99 |
+
+### History of the rounds (tags on `with_full_event`)
+
+| tag | what changed | headline before → after |
 |---|---|---|
-| reports succeeded | 95 / 100 | 95 / 100 |
-| LLM indicators stored | 1227 | 1498 (0 still defanged) |
-| `format` rejections | 220+ | 64 |
-| LLM vs classic: F1 / Jaccard / kappa (micro) | 0.43 / 0.28 / -0.55 | 0.56 / 0.38 / -0.41 |
-| recall of classic ip-dst / url / domain | 0.12 / 0.15 / 0.01 | 0.68 / 0.42 / 0.07 |
-| recall of classic md5 / sha1 / sha256 | 0.95 / 0.84 / 0.90 | 0.95 / 0.89 / 0.98 |
-| gold view (3 reports): precision / recall / F1 / kappa | 1.00 / 0.80 / 0.89 / 0.84 | 1.00 / 0.92 / 0.96 / 0.93 |
-| classic indicators (baseline) | 1878 | 1614 (264 `http:host` artefacts gone) |
+| `benchmark-2026-09-05` | first extraction benchmark; answer budget 2000 → 10000 | 65 → 95 reports succeed |
+| `benchmark-2026-09-05-refang` | refang + hash re-typing in the module, one refang function for module, baseline and metrics | gold recall 0.80 → 0.92, LLM-vs-classic F1 0.43 → 0.56 |
+| `benchmark-2026-09-05-summary` | summary prompts with a hard word budget (report kind) | gate 28 → 96 of 100 |
+| `benchmark-2026-09-05-event` | event kind benchmarked on real events, capped related-events list | gate 29 → 99 of 100 |
+| `benchmark-2026-09-05-dates` | schema v3: dates from the text, `to_ids` lowered, free-text types rejected | gates unchanged, 36 dated, 35 lowered |
 
-What the numbers say:
-
-1. **Refanging was the largest single loss.** 48 of the 100 reports defang; before this round
-   the module rejected 220 correct indicators as malformed and stored 34 still defanged. Now
-   every stored value is a real value, the original spelling is in the attribute comment, and
-   recall of the regex baseline's IPs went from 0.12 to 0.68 and of URLs from 0.15 to 0.42.
-2. **The remaining URL gap is mostly type policy and reference links**: the LLM reports
-   scheme-less URLs (`c34718cbb4c6.ngrok-free.app/file.ps1`) which the `url` format check
-   rejects, and it leaves out the vendor's reference links that the regexes collect
-   (111 of the 469 classic-only values are flagged `reporter-domain`; the flag undercounts).
-3. **Domains**: classic derives a domain from every URL (216), the LLM reports the URL instead;
-   the LLM's 108 domain-only values are bare domains (`evil[.]com` refanged) that iocextract
-   has no extractor for. Matching is by value, so both show up as disagreement, not as errors.
-4. **Gold view**: precision stays 1.00 on all three hand-labelled reports; recall on the
-   defanged report 59ed4725 went from 0.68 to 0.89 (two misses left: the scheme-less ngrok URL
-   and one IP the model did not report), on the Emotet sample 0.94 (`emotet` as a name).
-5. **5 reports still overflow 10000 answer tokens**, unchanged (indicator-dense reports with
-   pretty-printed JSON and a quote per indicator; IMPROVEMENTS item 25).
-6. **What only the LLM finds** is unchanged in kind: filename (321), threat-actor (107),
-   malware-type (69), regkey (27), vulnerability, named pipe, pdb: types regexes cannot see.
-7. **Speed**: median 9 s per report, max 62 s; the pass took 30 minutes.
-8. **Superset artefacts**: iocextract's IPv6 regex matched times (`23:00:15`), and its handling
-   of bare defanged domains produced `http:host` strings; both are gone from the baseline.
-
-### Results after the v3 schema (2026-09-05): dates and `to_ids`
-
-Same sample, model and budget; the extraction prompt is at meta.version 3 (per indicator:
-`actionable`, `first_seen`, `last_seen`; top level: `published`). Generated report:
-[BENCHMARKS_extraction.md](BENCHMARKS_extraction.md).
-
-| | v2 schema (refang round) | v3 schema |
-|---|---|---|
-| reports succeeded | 95 / 100 | 95 / 100 (same 5 overflow) |
-| indicators stored | 1498 | 1379 |
-| LLM vs classic F1 / kappa (micro) | 0.56 / -0.41 | 0.56 / -0.42 |
-| gold view: precision / recall / F1 / kappa | 1.00 / 0.92 / 0.96 / 0.93 | 1.00 / 0.92 / 0.96 / 0.93 |
-| indicators with a date stated in the text | not asked | 36 of 1379 |
-| `to_ids` lowered (not actionable per the model) | not asked | 35 |
-| `free-text-type` rejections (new filter) | – | 23 |
-| seconds per report, whole pass | 30 min | 34 min |
-
-What the numbers say:
-
-1. **The schema change cost nothing on the gates**: precision, recall and the classic
-   comparison are unchanged; the same five reports overflow the answer budget.
-2. **Dates are rare in the text, and the module only takes what is stated**: 36 indicators
-   carry a `first_seen`/`last_seen`; the model set none on the two gold reports with a labelled
-   date (the sentence "as early as July 7, 2025 … CVE-2025-49706" was not turned into a date),
-   so date recall is low and stays informational. The first live run also showed why the
-   publication date must not be applied to indicators: the model took the date of a blog the
-   report *cites* as the report's own date, which would have stamped every indicator with it.
-   `published` is metadata only.
-3. **`to_ids` lowered on 35 indicators**, listed in the report's "Not actionable" table for
-   review: reference links (fox-it, wikipedia, capec.mitre.org), `www.paypal.com` in a phishing
-   write-up, a vendor support address, and a long list of security-product process names
-   (`MsMpEng.exe`, `SAVAdminService.exe` …) from a report on process-killing. Those are exactly
-   the values that should not be exported as detection patterns; the attributes stay on the
-   event with the literal name and the comment `not actionable per report`.
-4. **`other`/`text`/`comment` are rejected** (23 candidates), e.g. a regex-like path fragment
-   `\1[5-6]\TEMPLATE\LAYOUTS\debug_dev.js` the model typed as `other`: free-text types carry no
-   indicator semantics and would have lowered precision on the gold view.
+Details of each round are in the CHANGELOG and in the commits under each tag; the superseded
+generated reports were removed with the v3 clean-up.
 
 ## Summarization benchmark
 
@@ -91,92 +77,11 @@ Two kinds. `report` summarises the EventReport of the 100 orkl reports. `event` 
 real events with 5-300 attributes from the dev MISP (seed 42, read-only, `benchmarks/data/misp/`),
 `run_llm --kind event` renders each event the way the module does and summarises it; the
 coverage reference is then the event's own hashes/IPs/URLs instead of the regex baseline.
-
-`python -m benchmarks.run_llm --use-case summarization` writes one `<id>.summary.json` per
-sampled report (the module as deployed, `summary_kind=report`); a second pass into another
-directory measures determinism; `python -m benchmarks.compare_summary --second-dir …` writes
-the report. There is no reference summary to score against, so the report measures: the
-module's own structural gate (pass rate and the failing rule), length in words, headings
-present, coverage of the regex baseline's hashes/IPs/URLs (informational), timing, and
-determinism (byte-identical rate between two passes with the same seed).
-
-### Results (2026-09-05, same 100 orkl reports, qwen3.8 digest 22130167c4c2)
-
-Generated reports: [BENCHMARKS_summary.md](BENCHMARKS_summary.md) (cluster
-`summary-report/qwen3.8-v1`, the default) and
-[BENCHMARKS_summary-v2.md](BENCHMARKS_summary-v2.md) (`summary-report/qwen3.8-v2`, the
-candidate written after the v1 run; docs/PROMPTS.md).
-
-| | v1 (default until 2026-09-05) | v2 (default now) |
-|---|---|---|
-| summaries passing the gate | 28 / 100 | 96 / 100 |
-| answer truncated (max_tokens 600 / 1000) | 35 | 0 |
-| over 200 words | 36 | 1 |
-| indicator not in the input | 2 | 3 |
-| words: median / p90 / max | 184 / 205 / 208 | 124 / 165 / 187 |
-| all four headings present | 28 / 28 | 96 / 96 |
-| coverage of classic hashes/IPs/URLs (mean) | 0.42 | 0.31 |
-| seconds per report: median / max | 6.3 / 13.6 | 4.7 / 9.3 |
-| determinism: byte-identical in a second pass | 27 / 27 paired (one report flipped between pass and fail) | 96 / 96 |
-
-What the numbers say:
-
-1. **v1 fails on 72 of 100 real reports**, although it passed every test on the dummy event:
-   the model overshoots a soft "at most 200 words" on long reports (35 answers hit the
-   600-token budget, 36 came back at 201-261 words). The gate did its job; the prompt did not.
-2. **v2 passes 96**: a numbered hard rule with margin (150 words), no preamble, at most five
-   copy-exact indicators plus "and N more", and a 1000-token budget so the gate rather than
-   truncation is the judge. Summaries are shorter (median 124 words) and faster (4.7 s).
-3. **Of the 3 v2 "indicator not in input" rejections, two are correct** (CVE ids the model
-   added from memory; they are not in the report). The third was a GUID that the PDF text
-   breaks across a line; the gate now also matches against the whitespace-free source
-   (`genai/summarize.py`), so this case passes. The remaining over-length report is 1 of 100.
-4. **Coverage** of the regex baseline's hashes/IPs/URLs drops from 0.42 to 0.31 with v2: it
-   deliberately lists at most five indicators. A summary is not an indicator list; extraction
-   is the use-case for that.
-5. **Determinism holds**: every paired summary is byte-identical across two passes with seed
-   42 and temperature 0; the only difference between v1 passes was one report that failed the
-   gate in one pass and passed in the other (generation is deterministic, the word count sat on
-   the limit).
-
-Decision taken 2026-09-05: v2 is the default cluster; `tests/golden/summary-report.md` re-recorded
-and reviewed.
-
-### Results, `event` kind (2026-09-05, 100 real events with 5-300 attributes from the dev MISP, seed 42)
-
-Generated reports: [BENCHMARKS_summary-event-v1.md](BENCHMARKS_summary-event-v1.md) (cluster
-`summary-event/qwen3.8-v1`, the default until this round) and
-[BENCHMARKS_summary-event.md](BENCHMARKS_summary-event.md) (`summary-event/qwen3.8-v2`, the
-default now).
-
-| | v1 | v2 |
-|---|---|---|
-| summaries passing the gate | 29 / 100 | 99 / 100 |
-| answer truncated (max_tokens 600 / 1000) | 71 | 1 |
-| over 200 words | 0 | 0 |
-| words: median / p90 / max | 167 / 205 / 212 | 95 / 147 / 179 |
-| all four headings present | 29 / 29 | 99 / 99 |
-| coverage of the event's own hashes/IPs/URLs (mean) | 0.73 | 0.54 |
-| seconds per event: median / max | 6.0 / 15.3 | 5.3 / 14.2 |
-| determinism: byte-identical in a second pass | not measured | 99 / 99 |
-
-What the numbers say:
-
-1. **The event kind failed for the same reason as the report kind**: v1's soft "at most 200
-   words" is ignored on real events; 71 of 100 answers hit the 600-token budget.
-2. **The first v2 draft still lost 10 events**: rule 5 of v1 ("refer to related events by
-   uuid") made the model list every related-event uuid, about ten tokens each, on events with
-   long RelatedEvent lists; 115 words of prose filled 1000 tokens. Capping "## Related events"
-   at five entries (like the indicators) brought it to 99 of 100. The remaining failure is an
-   event whose rendering itself is long; the answer budget is the next lever.
-3. **Coverage drops from 0.73 to 0.54 by design** (at most five indicators listed); the
-   summary is a story, the attributes stay on the event.
-4. **Determinism holds** on all 99 paired summaries.
-5. The `event` kind is now benchmarked, gated and golden-recorded the same way as `report`
-   (docs/TESTING.md coverage matrix), which closes the parity gap in IMPROVEMENTS item 28.
-
-Decision taken 2026-09-05: v2 is the default `summary-event` cluster; `tests/golden/summary-event.md`
-re-recorded and reviewed.
+`python -m benchmarks.run_llm --use-case summarization [--kind event]` writes one result per
+item; a second pass into another directory measures determinism; `compare_summary` writes the
+report. There is no reference summary to score against, so the report measures the module's
+own structural gate (pass rate and the failing rule), length, headings, coverage
+(informational), timing and determinism.
 
 ## Method
 
@@ -197,7 +102,6 @@ re-recorded and reviewed.
 python -m benchmarks.orkl --n 100 --seed 42          # draw the sample -> benchmarks/data/orkl/
 python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # classic extractor (skips sample.json's empty text)
 GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm   # LLM extraction -> benchmarks/results/<id>.llm.json
-python -m benchmarks.compare --results-dir benchmarks/results-v2 --out docs/BENCHMARKS_extraction-v2.md --csv benchmarks/results/extraction-v2.csv
 python -m benchmarks.compare                         # -> docs/BENCHMARKS_extraction.md + results/extraction.csv
 .venv/bin/pytest -q tests/test_compare_unit.py       # offline check of the comparison on synthetic data
 

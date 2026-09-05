@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-09-05 (v3 clean-up)
+
+- Only the current state is documented as results: `docs/BENCHMARKS.md` has one "Current results (v3 test run)" section for extraction and both summary kinds plus a one-line-per-round history table; the superseded generated reports (`BENCHMARKS_summary-v2.md`, `BENCHMARKS_summary-event-v1.md`) and their csv files are removed, `BENCHMARKS_summary.md` is regenerated from the current default cluster's passes. PROMPTS.md marks superseded clusters, TESTING.md records the v3 test run (193 passed, 4 skipped with live systems required) and the current goldens.
 ## 2026-09-05 (tag suggestion via misp-tag-suggest)
 
 - New use-case `tag_suggestion` (UC3, `genai/suggest.py`): POSTs the event to the [misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest) service (`MISP_TAG_SUGGEST_URL`, optional `MISP_TAG_SUGGEST_API_KEY`, `.env` only), adds the suggested taxonomy tags (`score >= suggest_min_score`, existing tags skipped) and the two `ai-computer-assisted` tags to the event; abstention is not an error. Request keys `suggest_limit` (5) and `suggest_min_score` (0.0). No LLM involved. Decision recorded in USE-CASES.md / ARCHITECTURE.md: HTTP, not `import`, because the service needs torch/faiss and this repo allows only pymisp.

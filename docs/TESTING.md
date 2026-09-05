@@ -140,7 +140,7 @@ Golden file `tests/golden/summary-<kind>-<cluster value>.md` starts with a heade
 
 ```
 model: qwen3.8:latest  digest: 22130167c4c2  quant: Q4_K_M  server: ollama 0.33.2
-prompt: summary-report/qwen3.8-v1  prompt_sha256: <hash>  recorded: 2026-09-04
+prompt: summary-report/qwen3.8-v2  prompt_sha256: <hash>  recorded: 2026-09-05
 ---
 ```
 
@@ -190,16 +190,34 @@ a merge with skipped gates is allowed only if the CI log shows the skip reason.
 
 ## 6. Golden files recorded
 
-`tests/golden/summary-report.md` and `summary-event.md` were recorded on 2026-09-04
-(`qwen3.8:latest`, digest `22130167c4c2`, Ollama 0.33.2) and reviewed: every indicator they
-mention is in the dummy event, all four headings are present, both under 200 words.
+`tests/golden/summary-report.md` and `summary-event.md` were recorded on 2026-09-05 with the
+current default clusters (`summary-report/qwen3.8-v2`, `summary-event/qwen3.8-v2`; `qwen3.8:latest`,
+digest `22130167c4c2`, Ollama 0.33.2) and reviewed: every indicator and uuid they mention is in
+the dummy event, all four headings are present, both under 150 words.
 
-## 7. Where tests run
+## 7. The v3 test run (2026-09-05)
+
+Reference run after the v3 clean-up (extraction schema version 3, summary clusters v2 as
+defaults, tag `benchmark-2026-09-05-dates`), with live systems required:
+
+```
+MISP_VERIFY_SSL=false .venv/bin/pytest -q --require-live
+llm: ran (qwen3.8:latest at http://nanu:11434/v1)
+misp: ran (https://misp-dev.lo-res.org) (4 tests skipped)
+193 passed, 4 skipped in 133 s
+```
+
+The 4 skips are the fixture uuids that no longer exist on the dev instance (a data problem,
+counted but never a failure). The tag-suggestion use-case being added in parallel brings its
+own live gate (`suggest`) and errors until `MISP_TAG_SUGGEST_URL` is set; it is not part of this
+run's scope. Benchmarks of the same state: docs/BENCHMARKS.md "Current results".
+
+## 8. Where tests run
 
 Locally, against `nanu` and the dev MISP instance from `.env`. The developer-host loop in
 README.md is an alternative when the laptop cannot reach them, not a requirement.
 
-## 8. Review of the test and benchmark strategy (2026-09-05)
+## 9. Review of the test and benchmark strategy (2026-09-05)
 
 State: 97 tests in 13 files (unit 82, local misp-modules e2e 5, live MISP 6, live LLM 6),
 plus three benchmark rounds (extraction, refang, summarization) with generated reports.

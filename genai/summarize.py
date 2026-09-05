@@ -30,7 +30,7 @@ _INDICATOR_RES = (
 
 def render_event(event: MISPEvent) -> str:
     """Deterministic markdown of the event's content (no timestamps, everything sorted)."""
-    lines = [f"# Event {event.uuid}", f"info: {event.info}", f"date: {event.date}"]
+    lines = [f"# Event {event.uuid}", f"info: {event.info}", f"date: {getattr(event, 'date', '')}"]
     lines.append("tags: " + ", ".join(sorted(t.name for t in event.tags)))
     lines += ["", "## Attributes", "| category | type | value | comment |", "|---|---|---|---|"]
     for a in sorted(event.attributes, key=lambda a: (a.category, a.type, str(a.value))):

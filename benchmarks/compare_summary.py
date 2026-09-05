@@ -54,14 +54,27 @@ def similarity(a: str, b: str) -> float:
     return difflib.SequenceMatcher(None, a.split(), b.split()).ratio()
 
 
-def load(data_dir: Path, results_dir: Path, second_dir: Path | None) -> list[dict]:
+def event_indicators(entry: dict) -> list:
+    """(type, value) of a MISP event's attributes, incl. objects: the coverage reference for
+    the event kind (there is no regex baseline for an event)."""
+    event = entry.get("Event", {})
+    attributes = list(event.get("Attribute", []))
+    for obj in event.get("Object", []):
+        attributes.extend(obj.get("Attribute", []))
+    return [[a["type"], str(a["value"])] for a in attributes]
+
+
+def load(data_dir: Path, results_dir: Path, second_dir: Path | None, ext: str) -> list[dict]:
     rows = []
-    for path in sorted(results_dir.glob("*.summary.json")):
-        uid = path.name.removesuffix(".summary.json")
+    for path in sorted(results_dir.glob(f"*.{ext}.json")):
+        uid = path.name.removesuffix(f".{ext}.json")
         entry_path, classic_path = data_dir / f"{uid}.json", results_dir / f"{uid}.classic.json"
+        entry = _read(entry_path) if entry_path.exists() else {}
         row = {"id": uid, "result": _read(path), "classic": []}
-        row["title"] = (_read(entry_path).get("title") if entry_path.exists() else "") or ""
-        if classic_path.exists():
+        row["title"] = entry.get("title") or entry.get("Event", {}).get("info") or ""
+        if "Event" in entry:
+            row["classic"] = event_indicators(entry)
+        elif classic_path.exists():
             row["classic"] = _read(classic_path)["indicators"]
         second = second_dir / path.name if second_dir else None
         row["second"] = _read(second) if second and second.exists() else None
@@ -90,7 +103,10 @@ def per_report(row: dict) -> list:
     ]
 
 
-def report(rows: list[dict], prompt: prompts.Prompt) -> str:
+def report(  # one table per metric family; pylint: disable=too-many-locals
+    rows: list[dict], prompt: prompts.Prompt, kind: str = "report"
+) -> str:
+    run = "GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --use-case summarization"
     ok = [r for r in rows if "summary" in r["result"]]
     errors = Counter(
         k for r in rows if "error" in r["result"] for k in gate_problems(r["result"]["error"])
@@ -108,7 +124,7 @@ def report(rows: list[dict], prompt: prompts.Prompt) -> str:
     bins = [sum(1 for w in words if lo <= w < lo + 25) for lo in range(0, 250, 25)]
     heading_hits = {h: sum(h in r["result"]["summary"] for r in ok) for h in prompt.headings}
     lines = [
-        "# Summarization benchmark: report summaries on the orkl sample",
+        f"# Summarization benchmark: summary_kind={kind}",
         "",
         f"Date: {date.today()}. Reports: {len(rows)}, summaries: {len(ok)}, "
         f"errors: {len(rows) - len(ok)}.",
@@ -120,9 +136,10 @@ def report(rows: list[dict], prompt: prompts.Prompt) -> str:
         "",
         "**Method.** No reference summaries exist, so this measures the module's own gate "
         "(headings, length, no indicator that is not in the input), length, how much of the "
-        "regex baseline's hashes/IPs/URLs the summary mentions (coverage, informational: a good "
-        "summary need not list every hash), timing, and determinism between two passes with "
-        "the same seed (byte-identical, and word-level similarity otherwise).",
+        + ("event's own hashes/IPs/URLs" if kind == "event" else "regex baseline's hashes/IPs/URLs")
+        + " the summary mentions (coverage, informational: a good summary need not list every "
+        "hash), timing, and determinism between two passes with the same seed (byte-identical, "
+        "and word-level similarity otherwise).",
         "",
         "## Gate",
         "",
@@ -150,7 +167,7 @@ def report(rows: list[dict], prompt: prompts.Prompt) -> str:
         "## Headings present",
         "",
         table(["heading", "summaries"], [[h, n] for h, n in heading_hits.items()]),
-        "## Indicator coverage (share of classic md5/sha1/sha256/ip-dst/url mentioned)",
+        "## Indicator coverage (share of the reference md5/sha1/sha256/ip-dst/url mentioned)",
         "",
         table(
             ["reports with indicators", "mean coverage", "median"],
@@ -196,10 +213,9 @@ def report(rows: list[dict], prompt: prompts.Prompt) -> str:
         "## Reproduce",
         "",
         "```bash",
-        "GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --use-case summarization",
-        "GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --use-case summarization "
-        "--results-dir benchmarks/results-pass2",
-        "python -m benchmarks.compare_summary --second-dir benchmarks/results-pass2",
+        f"{run} --kind {kind}",
+        f"{run} --kind {kind} --results-dir benchmarks/results-pass2",
+        f"python -m benchmarks.compare_summary --kind {kind} --second-dir benchmarks/results-pass2",
         "```",
     ]
     return "\n".join(lines) + "\n"
@@ -212,11 +228,13 @@ def main(argv=None) -> int:
     ap.add_argument("--second-dir", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=Path("docs/BENCHMARKS_summary.md"))
     ap.add_argument("--csv", type=Path, default=Path("benchmarks/results/summary.csv"))
+    ap.add_argument("--kind", choices=("report", "event"), default="report")
     args = ap.parse_args(argv)
-    rows = load(args.data_dir, args.results_dir, args.second_dir)
-    prompt = prompts.resolve_prompt("summary-report")
+    ext = "summary-event" if args.kind == "event" else "summary"
+    rows = load(args.data_dir, args.results_dir, args.second_dir, ext)
+    prompt = prompts.resolve_prompt(f"summary-{args.kind}")
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(report(rows, prompt), encoding="utf-8")
+    args.out.write_text(report(rows, prompt, args.kind), encoding="utf-8")
     args.csv.parent.mkdir(parents=True, exist_ok=True)
     with args.csv.open("w", newline="", encoding="utf-8") as fh:
         csv.writer(fh).writerows([CSV_COLUMNS, *(per_report(r) for r in rows)])

@@ -84,3 +84,38 @@ def test_helpers() -> None:
         == 0.5
     )
     assert compare_summary.similarity("a b c", "a b c") == 1.0
+
+
+def test_event_kind_uses_event_attributes_as_reference(tmp_path: Path) -> None:
+    data, results = tmp_path / "misp", tmp_path / "results"
+    data.mkdir()
+    results.mkdir()
+    event = {
+        "uuid": "u1",
+        "info": "Real event",
+        "Attribute": [
+            {"type": "md5", "value": MD5},
+            {"type": "url", "value": "http://c2.example/"},
+        ],
+    }
+    _dump(data / "u1.json", {"Event": event})
+    summary = (
+        "\n".join(
+            [
+                "## What happened",
+                "## Key indicators",
+                "## Context and attribution",
+                "## Related events",
+            ]
+        )
+        + f"\nHash {MD5} seen."
+    )
+    _dump(
+        results / "u1.summary-event.json", META | {"summary": summary, "words": 8, "seconds": 1.0}
+    )
+    out = tmp_path / "r.md"
+    args = ["--kind", "event", "--data-dir", str(data), "--results-dir", str(results)]
+    assert compare_summary.main([*args, "--out", str(out), "--csv", str(tmp_path / "r.csv")]) == 0
+    md = out.read_text(encoding="utf-8")
+    assert "summary_kind=event" in md and "| 1 | 0.500 | 0.500 |" in md  # md5 yes, url no
+    assert "| Real event |" in md and "event's own hashes/IPs/URLs" in md

@@ -417,3 +417,9 @@ def test_check_summary_accepts_values_broken_across_lines_in_the_source() -> Non
     summary = "\n".join(f"## {h}" for h in prompt.headings)
     summary += "\nGUID 5AE3F37E-4EAE-41AE-8240-35465B5E81EB, hash d41d8cd98f00b204e9800998ecf8427e."
     assert not [p for p in summarize.check_summary(summary, source, prompt) if "indicator" in p]
+
+
+def test_summary_event_v2_cluster_is_selectable() -> None:
+    v2 = prompts.resolve_prompt("summary-event", "summary-event/qwen3.8-v2")
+    assert v2.version == 2 and v2.params["max_tokens"] == 1000 and "150 words" in v2.text
+    assert v2.headings == prompts.resolve_prompt("summary-event").headings

@@ -168,3 +168,39 @@ def test_summarization_use_case_writes_summary_files(data_dir, tmp_path, fake_ll
     assert result["summary"] == SUMMARY and result["words"] == len(SUMMARY.split())
     assert "done=2/2 ok=2 fail=0" in (data_dir / "bench.log").read_text()
     assert not list(results.glob("*.llm.json"))
+
+
+EVENT_SUMMARY = "\n".join(
+    [
+        "## What happened",
+        "A dropper beaconing to 203.0.113.42.",
+        "## Key indicators",
+        "203.0.113.42",
+        "## Context and attribution",
+        "Not present in the event.",
+        "## Related events",
+        "Not present in the event.",
+    ]
+)
+
+
+def test_event_kind_takes_whole_events(tmp_path, monkeypatch, fake_llm) -> None:
+    monkeypatch.setenv("OPENAI_MODEL", "fake-model")
+    calls = fake_llm(EVENT_SUMMARY)
+    data = tmp_path / "misp"
+    data.mkdir()
+    (data / "sample.json").write_text(json.dumps({"seed": 1, "n": 1, "ids": ["e1"]}))
+    event = {
+        "uuid": "8f4e3c2b-1a2b-4c3d-9e8f-0a1b2c3d4e5f",
+        "info": "real event",
+        "Attribute": [{"type": "ip-dst", "value": "203.0.113.42", "category": "Network activity"}],
+    }
+    (data / "e1.json").write_text(json.dumps({"Event": event}))
+    results = tmp_path / "results"
+    args = [*_args(data, results), "--use-case", "summarization", "--kind", "event"]
+    assert run_llm.main(args) == 0
+    result = json.loads((results / "e1.summary-event.json").read_text())
+    assert result["summary"] == EVENT_SUMMARY and result["prompt"]["cluster"].startswith(
+        "summary-event/"
+    )
+    assert "| Network activity | ip-dst | 203.0.113.42 |" in calls[0]  # the rendering was the input

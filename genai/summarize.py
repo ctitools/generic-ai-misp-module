@@ -9,6 +9,7 @@ from typing import Any
 from pymisp import MISPEvent
 
 from genai import llm, prompts
+from genai.refang import refang
 
 KINDS = ("report", "event")
 _INDICATOR_RES = (
@@ -59,11 +60,11 @@ def check_summary(summary: str, source: str, prompt: prompts.Prompt) -> list[str
     words = len(re.findall(r"\S+", re.sub(r"^#.*$", "", summary, flags=re.M)))
     if prompt.max_words and words > prompt.max_words:
         problems.append(f"{words} words > {prompt.max_words}")
-    source_lower = source.lower()
+    source_lower = refang(source).lower()  # a summary may refang what the report defanged
     foreign = {
         m.group(0)
         for rx in _INDICATOR_RES
-        for m in rx.finditer(summary)
+        for m in rx.finditer(refang(summary))
         if m.group(0).lower() not in source_lower
     }
     problems += [f"indicator not in input: {f}" for f in sorted(foreign)]

@@ -29,6 +29,9 @@ $V/python -m benchmarks.orkl --n 100 --seed 42        # 1. sample 100 English re
 $V/python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # 2. classical extractor
 GENERIC_AI_REQUEST_TIMEOUT=900 $V/python -m benchmarks.run_llm   # 3. LLM extraction (needs OPENAI_* in .env)
 $V/python -m benchmarks.compare                       # 4. metrics -> docs + csv
+GENERIC_AI_REQUEST_TIMEOUT=900 $V/python -m benchmarks.run_llm --use-case summarization   # 5. summaries (pass 1)
+GENERIC_AI_REQUEST_TIMEOUT=900 $V/python -m benchmarks.run_llm --use-case summarization --results-dir benchmarks/results-pass2   # 6. pass 2 (determinism)
+$V/python -m benchmarks.compare_summary --second-dir benchmarks/results-pass2   # 7. -> docs/BENCHMARKS_summary.md + csv
 $V/pytest -q tests/test_orkl_unit.py                  # verification of step 1 (offline, fake API)
 ```
 
@@ -47,6 +50,7 @@ Progress (kept/skipped, entries/s) goes to stderr and `logs/benchmark-orkl.log`.
 | `benchmarks/data/orkl/<id>.json` | the raw orkl `data` object of one library entry |
 | `benchmarks/data/orkl/sample.json` | `{"seed", "n", "min_chars", "max_chars", "language", "library_entries", "ids": [...]}` |
 | `benchmarks/results/<id>.classic.json` | `{"tool": "iocextract 1.16.1", "indicators": [[type, value], ...]}` |
+| `benchmarks/results/<id>.summary.json` | `{"model", "prompt", "summary", "words", "seconds"}` or `{"error", "seconds"}` |
 | `benchmarks/results/<id>.llm.json` | `{"model": {...}, "prompt": {...}, "indicators": [[type, value], ...], "rejected": [...], "seconds": float}` |
 | `benchmarks/results/extraction.csv` | per-report metrics (committed) |
 | `docs/BENCHMARKS_extraction.md` | the written-up comparison (committed) |

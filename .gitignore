@@ -23,3 +23,4 @@ benchmarks/data/
 benchmarks/results/*.json
 benchmarks/results/gold/
 benchmarks/results-v2/*.json
+benchmarks/results-pass2/

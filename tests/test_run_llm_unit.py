@@ -142,3 +142,29 @@ def test_stored_values_are_never_defanged(data_dir, tmp_path, fake_llm) -> None:
     assert run_llm.main(_args(data_dir, results)) == 0
     for path in results.glob("*.llm.json"):
         assert not any(is_defanged(v) for _, v in json.loads(path.read_text())["indicators"])
+
+
+SUMMARY = "\n".join(
+    [
+        "## Threat",
+        "A dropper beaconing to 203.0.113.42 was seen.",
+        "## Targets",
+        "Unknown.",
+        "## Indicators",
+        "203.0.113.42, evil.example",
+        "## Recommended actions",
+        "Block the address.",
+    ]
+)
+
+
+def test_summarization_use_case_writes_summary_files(data_dir, tmp_path, fake_llm) -> None:
+    fake_llm(SUMMARY)
+    results = tmp_path / "results"
+    args = [*_args(data_dir, results), "--use-case", "summarization"]
+    assert run_llm.main(args) == 0
+    result = json.loads((results / "a.summary.json").read_text())
+    assert set(result) == {"model", "prompt", "seconds", "summary", "words"}
+    assert result["summary"] == SUMMARY and result["words"] == len(SUMMARY.split())
+    assert "done=2/2 ok=2 fail=0" in (data_dir / "bench.log").read_text()
+    assert not list(results.glob("*.llm.json"))

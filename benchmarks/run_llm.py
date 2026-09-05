@@ -1,11 +1,14 @@
-"""Run the module's LLM extraction (use_case "extraction") over the sampled orkl reports.
+"""Run the module's LLM use-cases over the sampled orkl reports.
 
-    .venv/bin/python -m benchmarks.run_llm [--ids a,b] [--data-dir D] [--results-dir R] [--force]
+    .venv/bin/python -m benchmarks.run_llm [--use-case extraction|summarization] [--ids a,b]
+                                           [--data-dir D] [--results-dir R] [--force]
 
-Options: --log-file (default logs/benchmark-llm.log).
+Options: --log-file (default logs/benchmark-llm.log), --prompt (cluster uuid or value).
 
 Reads benchmarks/data/orkl/sample.json + <id>.json, calls expansion.generic_ai.dict_handler
-(the module as deployed) and writes benchmarks/results/<id>.llm.json per report. Resumable.
+(the module as deployed) and writes one result per report: <id>.llm.json for extraction,
+<id>.summary.json for summarization (kind "report"). Resumable. A second summarization pass
+into another --results-dir gives the determinism measurement for benchmarks.compare_summary.
 """
 
 import argparse
@@ -33,27 +36,30 @@ def indicators(event: dict) -> list[list[str]]:
     return sorted([a["type"], str(a["value"])] for a in attributes)
 
 
-def run_one(entry: dict, prompt: str = "") -> dict:
+SUFFIX = {"extraction": "llm", "summarization": "summary"}
+
+
+def run_one(entry: dict, prompt: str = "", use_case: str = "extraction") -> dict:
     """One report through the real module entry point; never raises on LLM/validation errors."""
     title = entry.get("title") or entry["id"]
     report = {"name": title, "content": entry.get("plain_text", "")}
     event = {"info": title, "EventReport": [report]}
-    request = {"module": "generic_ai", "event": {"Event": event}, "use_case": "extraction"}
+    request = {"module": "generic_ai", "event": {"Event": event}, "use_case": use_case}
     if prompt:  # prompt cluster uuid or value
-        request["prompt_extraction"] = prompt
+        request["prompt_extraction" if use_case == "extraction" else "prompt_summary_report"] = (
+            prompt
+        )
     start = time.perf_counter()
     response = generic_ai.dict_handler(request)
     seconds = round(time.perf_counter() - start, 3)
     if "error" in response:
         return {"error": response["error"], "seconds": seconds}
     meta = response["metadata"]
-    return {
-        "model": meta["model"],
-        "prompt": meta["prompt"],
-        "indicators": indicators(response["results"]["Event"]["Event"]),
-        "rejected": meta["rejected"],
-        "seconds": seconds,
-    }
+    result = {"model": meta["model"], "prompt": meta["prompt"], "seconds": seconds}
+    processed = response["results"]["Event"]["Event"]
+    if use_case == "extraction":
+        return result | {"indicators": indicators(processed), "rejected": meta["rejected"]}
+    return result | {"summary": processed["EventReport"][-1]["content"], "words": meta["words"]}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -64,6 +70,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--force", action="store_true", help="re-run ids with a result file")
     parser.add_argument("--log-file", type=Path, default=LOG_FILE)
     parser.add_argument("--prompt", default="", help="prompt cluster uuid or value (default v1)")
+    parser.add_argument("--use-case", choices=list(SUFFIX), default="extraction")
     args = parser.parse_args(argv)
 
     args.log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -83,14 +90,15 @@ def main(argv: list[str] | None = None) -> int:
     else:
         ids = json.loads((args.data_dir / "sample.json").read_text(encoding="utf-8"))["ids"]
     args.results_dir.mkdir(parents=True, exist_ok=True)
-    todo = [i for i in ids if args.force or not (args.results_dir / f"{i}.llm.json").exists()]
-    log.info("model=%s reports=%d todo=%d", settings.model, len(ids), len(todo))
+    suffix = SUFFIX[args.use_case]
+    todo = [i for i in ids if args.force or not (args.results_dir / f"{i}.{suffix}.json").exists()]
+    log.info("%s model=%s reports=%d todo=%d", args.use_case, settings.model, len(ids), len(todo))
     started, fail = time.perf_counter(), 0
     for done, uid in enumerate(todo, 1):
         entry = json.loads((args.data_dir / f"{uid}.json").read_text(encoding="utf-8"))
-        result = run_one(entry, args.prompt)
+        result = run_one(entry, args.prompt, args.use_case)
         fail += "error" in result
-        (args.results_dir / f"{uid}.llm.json").write_text(json.dumps(result, indent=2))
+        (args.results_dir / f"{uid}.{suffix}.json").write_text(json.dumps(result, indent=2))
         _progress(uid, result, (done, fail, len(todo)), time.perf_counter() - started)
     return 0
 
@@ -99,7 +107,10 @@ def _progress(uid: str, result: dict, counts: tuple[int, int, int], elapsed: flo
     done, fail, total = counts
     rate = done / elapsed if elapsed else 0.0
     eta = (total - done) / rate if rate else 0.0
-    outcome = result["error"][:80] if "error" in result else len(result["indicators"])
+    if "error" in result:
+        outcome = result["error"][:80]
+    else:
+        outcome = result["words"] if "summary" in result else len(result["indicators"])
     log.info(
         "%s done=%d/%d ok=%d fail=%d elapsed=%.0fs %.3f reports/s eta=%.0fs result=%s",
         uid,

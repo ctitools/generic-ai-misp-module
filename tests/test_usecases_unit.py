@@ -391,3 +391,12 @@ def test_check_summary_ignores_markdown_around_urls() -> None:
     url = "https://login-acme-bank.example/verify"
     summary += f"\nVictims visit `{url}`. Then ({url})."
     assert not [p for p in summarize.check_summary(summary, source, prompt) if "indicator" in p]
+
+
+def test_check_summary_refangs_before_comparing() -> None:
+    prompt = prompts.resolve_prompt("summary-report")
+    source = "Beacons to 203.0.113[.]42 and hxxps://evil[.]example/x were seen."
+    summary = "\n".join(f"## {h}" for h in prompt.headings)
+    summary += "\nBeacons to 203.0.113.42 and https://evil.example/x; also 198.51.100[.]9."
+    problems = summarize.check_summary(summary, source, prompt)
+    assert problems == ["indicator not in input: 198.51.100.9"]

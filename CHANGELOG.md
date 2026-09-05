@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-05 (summary benchmark)
+
+- `benchmarks/run_llm.py --use-case summarization` writes `<id>.summary.json` per report; new `benchmarks/compare_summary.py` → `docs/BENCHMARKS_summary.md` (gate pass rate and failing rules, length, headings, indicator coverage, timing, determinism against a second pass). Tests: `tests/test_compare_summary_unit.py`, runner test for the summary use-case.
+- `genai/summarize.py`: the structural check refangs the report and the summary before the foreign-indicator test (a summary of a defanged report was rejected for mentioning the refanged IP).
 ## 2026-09-05 (refang)
 
 - New `docs/INTEGRATION_PLAN.md`: how MISP actually invokes modules (UI selects by module name, no per-call parameters; whole-event expansion is not offered; `sendToLLM` hook and its contract; workflows and import modules) and the recommendation: several thin entry points around one engine, delegation instead of inheritance. Research only, nothing implemented.

@@ -46,6 +46,17 @@ What the numbers say:
 8. **Superset artefacts**: iocextract's IPv6 regex matched times (`23:00:15`), and its handling
    of bare defanged domains produced `http:host` strings; both are gone from the baseline.
 
+## Summarization benchmark
+
+`python -m benchmarks.run_llm --use-case summarization` writes one `<id>.summary.json` per
+sampled report (the module as deployed, `summary_kind=report`); a second pass into another
+directory measures determinism; `python -m benchmarks.compare_summary --second-dir …` writes
+[BENCHMARKS_summary.md](BENCHMARKS_summary.md). There is no reference summary to score
+against, so the report measures: the module's own structural gate (pass rate and the failing
+rule), length in words, headings present, coverage of the regex baseline's hashes/IPs/URLs
+(informational), timing, and determinism (byte-identical rate between two passes with the same
+seed, word-level similarity otherwise). Results are summarised in "Results" once run.
+
 ## Method
 
 - Sample: 100 random orkl.eu reports (seeded draw, `benchmarks/data/orkl/sample.json`).

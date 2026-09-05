@@ -3,7 +3,8 @@
 A PyMISP load -> to_json round trip is not byte-identical, so the round-trip quality gate
 compares meaning, not bytes. Tolerated on purpose (each rule is deliberate, see README):
 
-1. keys whose value is None, "", [] or {} are ignored on both sides;
+1. keys whose value is None, "", whitespace-only, [] or {} are ignored on both sides
+   (PyMISP serialises a whitespace-only EventReport content as "");
 2. numbers and numeric strings compare as strings ("1" == 1); booleans stay booleans;
 3. strings compare after whitespace collapsing;
 4. ISO-8601 date-time strings compare by value (+0000 == +00:00, .000000 dropped, naive = UTC);
@@ -31,9 +32,13 @@ ALLOWLIST = {
 }
 
 
+def _is_empty(value: Any) -> bool:
+    return value in _EMPTY or (isinstance(value, str) and not value.strip())
+
+
 def _normalise(value: Any) -> Any:  # pylint: disable=too-many-return-statements
     if isinstance(value, dict):
-        return {k: _normalise(v) for k, v in value.items() if v not in _EMPTY}
+        return {k: _normalise(v) for k, v in value.items() if not _is_empty(v)}
     if isinstance(value, list):
         return [_normalise(v) for v in value]
     if isinstance(value, bool):

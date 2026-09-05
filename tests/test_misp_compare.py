@@ -22,6 +22,10 @@ def test_empty_values_and_numeric_strings_and_whitespace_are_ignored() -> None:
         "comment": "",
     }
     assert misp_event_diff(BASE, processed) == []
+    # PyMISP turns a whitespace-only EventReport content into "" (seen live, event 244b2366)
+    original = {**BASE, "EventReport": [{"uuid": "r", "content": "\n      ", "deleted": True}]}
+    processed = {**BASE, "EventReport": [{"uuid": "r", "content": "", "deleted": True}]}
+    assert misp_event_diff(original, processed) == []
 
 
 def test_datetimes_compare_by_value() -> None:

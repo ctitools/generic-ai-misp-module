@@ -2,6 +2,7 @@
 
 ## 2026-09-05 (summary benchmark)
 
+- `tests/misp_compare.py`: whitespace-only strings count as empty (PyMISP serialises a whitespace-only EventReport content as ""; the round-trip gate flagged live event 244b2366 as "content missing after processing"). Rule 1 of the comparator documented accordingly.
 - `summary-report/qwen3.8-v2` is now the default summary-report cluster (galaxy version bumped; v1 kept, selectable by value/uuid); `tests/golden/summary-report.md` re-recorded with the v2 prompt and reviewed.
 - First summarization benchmark on the 100 orkl reports: v1 prompt passes the gate on 28 (35 truncated at 600 tokens, 36 over 200 words), the new `summary-report/qwen3.8-v2` on 96; both byte-deterministic across two passes. Reports `docs/BENCHMARKS_summary.md`, `docs/BENCHMARKS_summary-v2.md`; table and interpretation in `docs/BENCHMARKS.md`. v2 is not yet the default.
 - `benchmarks/run_llm.py --use-case summarization` writes `<id>.summary.json` per report; new `benchmarks/compare_summary.py` → `docs/BENCHMARKS_summary.md` (gate pass rate and failing rules, length, headings, indicator coverage, timing, determinism against a second pass). Tests: `tests/test_compare_summary_unit.py`, runner test for the summary use-case.

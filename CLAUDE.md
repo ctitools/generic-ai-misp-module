@@ -17,6 +17,7 @@ The `.venv` (Python 3.14) already exists at the repo root; never recreate it. Us
 uv pip install --python .venv/bin/python -e ".[dev,e2e]"   # deps + pytest/ruff/pylint + misp-modules
 .venv/bin/pytest -q                                          # whole suite (live tests skip without .env)
 MISP_VERIFY_SSL=false .venv/bin/pytest -q                    # include live tests (dev MISP has a self-signed cert)
+MISP_VERIFY_SSL=false .venv/bin/pytest -q --require-live     # pre-tag run: unavailable live systems FAIL instead of skip
 .venv/bin/pytest -q tests/test_generic_ai_unit.py -k report  # one file / one test by keyword
 MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtrip.py   # quality gate: 10 random live events
 E2E_SEED=42 MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtrip.py  # reproducible draw

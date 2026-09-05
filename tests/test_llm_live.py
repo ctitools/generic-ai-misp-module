@@ -10,7 +10,7 @@ import json
 import re
 
 import pytest
-from conftest import PROJECT_ROOT, load_fixture
+from conftest import PROJECT_ROOT, live_gate, load_fixture
 
 from expansion import generic_ai
 from genai import extract, llm, prompts, summarize
@@ -119,7 +119,11 @@ def test_summary_structural_gate_and_golden(llm_settings, dummy_event, kind, req
         pytest.skip(f"no golden yet: run with --update-goldens to record {golden.name}")
     recorded_header, _, recorded = golden.read_text(encoding="utf-8").partition("\n---\n")
     if json.loads(recorded_header) != header:
-        pytest.skip(f"golden header {recorded_header} does not match live {header}")
+        live_gate(
+            request.config,
+            f"golden-{kind}",
+            f"golden header {recorded_header} does not match live {header}; re-record and review",
+        )
     same_l2 = " ".join(recorded.split()).rstrip(".") == " ".join(summary.split()).rstrip(".")
     if not same_l2:  # documented: L2 drift is a warning, not a failure
         print(

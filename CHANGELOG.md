@@ -2,6 +2,7 @@
 
 ## 2026-09-05 (summary benchmark)
 
+- Tests: live gates are explicit. `tests/conftest.py` marks tests `live_llm`/`live_misp` from the fixtures they use, prints a "live gates" summary after every run, and `--require-live` fails (instead of skipping) when the LLM or MISP is unavailable, the API key is rejected or a golden header does not match; the message points to README "Live systems (MISP and LLM server)", a new section describing `.env`, Ollama and the reachability check.
 - CI: `.github/workflows/checks.yml` runs ruff (pinned 0.16.6), pylint (`--disable=fixme`), the offline pytest layers (`uv sync --extra dev --extra e2e`, live files deselected) and semgrep (`p/python`, `p/security-audit`) on every push and pull request; `benchmarks/orkl.py` refuses URLs outside its https base (semgrep audit finding); `.githooks/pre-commit` runs the same locally (`git config core.hooksPath .githooks`). CLAUDE.md and TESTING.md gap 1 updated.
 - `docs/TESTING.md` section 8: review of the test and benchmark strategy with 12 ranked gaps (no CI, silent live skips, the AGENTS.md write-path e2e loop not implemented, unmeasured correctness of LLM-only findings and summary content, no context-size guard, no adversarial inputs, no run history).
 - `tests/misp_compare.py`: whitespace-only strings count as empty (PyMISP serialises a whitespace-only EventReport content as ""; the round-trip gate flagged live event 244b2366 as "content missing after processing"). Rule 1 of the comparator documented accordingly.

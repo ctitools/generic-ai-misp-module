@@ -139,17 +139,45 @@ Expected: the input uuid echoed back and the first 120 characters of the report 
 ## Tests
 
 ```bash
-.venv/bin/pytest -q
+.venv/bin/pytest -q                                   # offline layers; live layers skip
+MISP_VERIFY_SSL=false .venv/bin/pytest -q --require-live   # the pre-tag run: live layers MUST run
 ```
 
-- unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; the two hooks
+Layers (details in [docs/TESTING.md](docs/TESTING.md)):
+
+- unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; both use-cases with a mocked LLM; refang, metrics, benchmark tooling
 - e2e, local: starts `misp-modules` on a free port and POSTs every fixture event to `/query`
-- use-cases offline: `tests/test_usecases_unit.py` mocks the LLM; live: `tests/test_llm_live.py` (skips when the endpoint in `.env` is down)
-- e2e, live: fetches the fixture uuids from `MISP_BASE_URL` with `MISP_API_KEY` (both from `.env`), runs them through the module and compares the report with the fixture. Skipped when `.env` is missing, the key is rejected, or an event is not on the instance. The dev instance has a self-signed certificate; run with `MISP_VERIFY_SSL=false` to accept it (tests only, never the module):
+- live LLM (`-m live_llm`): determinism, extraction precision gate, summary gate and goldens against the endpoint in `.env`
+- live MISP (`-m live_misp`): fetches the fixture uuids from `MISP_BASE_URL`, runs them through the module, and the round-trip quality gate on 10 random events
+
+Every run ends with a **live gates** summary (`llm: ran …` / `skipped: …` / `not requested`).
+Without `--require-live` an unavailable live system skips its layer, so a green run only proves
+the offline layers; with `--require-live` the same situation **fails** the run. Use it before
+every tag and whenever you claim "all tests pass".
+
+### Live systems (MISP and LLM server)
+
+Both are configured in `.env` at the repo root (gitignored; the last definition of a key wins):
+
+| key | used by | example |
+|---|---|---|
+| `MISP_BASE_URL`, `MISP_API_KEY` | live MISP tests, round-trip gate (read-only) | `https://misp-dev.example.org`, an API key of a user who can read events |
+| `MISP_VERIFY_SSL` | tests only | `false` for a self-signed dev certificate (never used by the module) |
+| `OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_KEY` | the module and the live LLM tests | `http://nanu:11434/v1`, `qwen3.8:latest`, empty for Ollama |
+
+LLM server: any OpenAI-compatible chat endpoint. The reference setup is Ollama on a GPU host
+with the model pulled once (`ollama pull qwen3.8`); the goldens and benchmarks are pinned to
+that model's digest and the Ollama version (`curl $OPENAI_BASE_URL/../api/version`). Ollama
+serialises requests: do not run the live tests while a benchmark is running, the tests would
+hit the module's 120 s timeout. Check reachability with:
 
 ```bash
-MISP_VERIFY_SSL=false .venv/bin/pytest -q
+.venv/bin/python -c "from genai import llm; s=llm.LLMSettings.from_env(); print(s, llm.is_reachable(s))"
 ```
+
+MISP: a reachable instance and an API key; the tests never write. Four of the eight fixture
+uuids no longer exist on the CIRCL dev instance and skip individually (a data problem, not a
+missing system; they stay skips even with `--require-live`).
 
 ### Round-trip quality gate
 
@@ -177,7 +205,7 @@ with its path.
 Lint before pushing:
 
 ```bash
-.venv/bin/ruff check . && .venv/bin/ruff format --check expansion tests && .venv/bin/pylint expansion tests
+.venv/bin/ruff check . && .venv/bin/ruff format --check expansion genai tests benchmarks && .venv/bin/pylint expansion genai tests benchmarks
 ```
 
 ## Development host

@@ -8,7 +8,6 @@ CLI: python -m genai.classic <textfile> [-o out.json]
 """
 
 import argparse
-import ipaddress
 import json
 from importlib.metadata import version
 from pathlib import Path
@@ -16,17 +15,10 @@ from urllib.parse import urlsplit
 
 import iocextract
 
+from genai.extract import _is_ip  # the same validity check the module uses
 from genai.refang import refang
 
 HASH_TYPES = {32: "md5", 40: "sha1", 64: "sha256", 128: "sha512"}
-
-
-def _is_ip(value: str) -> bool:
-    try:
-        ipaddress.ip_address(value)
-        return True
-    except ValueError:
-        return False
 
 
 def _domain(url: str) -> str | None:

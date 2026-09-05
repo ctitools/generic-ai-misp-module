@@ -4,43 +4,47 @@ The first benchmark measures the **CTI info extraction** use-case: the module's 
 against a classical regex extractor and against hand-labelled gold lists. The measured result is
 in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit by hand).
 
-## Results (2026-09-05, qwen3.8:latest digest 22130167c4c2, Ollama 0.33.2, seed 42)
+## Results (2026-09-05 after refanging, qwen3.8:latest digest 22130167c4c2, Ollama 0.33.2, seed 42)
 
 Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not
 edit by hand). Prompt cluster `cti-info-extraction/qwen3.8-v1` version 2, `max_tokens` 10000,
-`GENERIC_AI_REQUEST_TIMEOUT=900`.
+`GENERIC_AI_REQUEST_TIMEOUT=900`. Same sample and model as the previous run; the only change
+is the refang/re-type step in `genai/extract.py` (and the same refang in the classic baseline).
+
+| | before refang | after refang |
+|---|---|---|
+| reports succeeded | 95 / 100 | 95 / 100 |
+| LLM indicators stored | 1227 | 1498 (0 still defanged) |
+| `format` rejections | 220+ | 64 |
+| LLM vs classic: F1 / Jaccard / kappa (micro) | 0.43 / 0.28 / -0.55 | 0.56 / 0.38 / -0.41 |
+| recall of classic ip-dst / url / domain | 0.12 / 0.15 / 0.01 | 0.68 / 0.42 / 0.07 |
+| recall of classic md5 / sha1 / sha256 | 0.95 / 0.84 / 0.90 | 0.95 / 0.89 / 0.98 |
+| gold view (3 reports): precision / recall / F1 / kappa | 1.00 / 0.80 / 0.89 / 0.84 | 1.00 / 0.92 / 0.96 / 0.93 |
+| classic indicators (baseline) | 1878 | 1614 (264 `http:host` artefacts gone) |
 
 What the numbers say:
 
-1. **95 of 100 reports succeed; 5 overflow even 10000 answer tokens.** The first run with the
-   original 2000-token budget (a guess, never measured) failed on 35 reports; 8000 recovered
-   30 of them; 10000 recovers the same 30. The remaining 5 are genuinely indicator-dense: a
-   probe of one shows 79 distinct indicators in 18 KB of pretty-printed JSON, about 127 tokens
-   per indicator, because the answer is indented and the `quote` repeats the value. The module
-   returns an error for them, never partial results. Compact JSON and a shorter or absent
-   `quote` would roughly halve the cost (IMPROVEMENTS item 25).
-2. **Speed with the 10000 budget**: median 9 s per report, p90 34 s, max 62 s, none above the
-   module's default 120 s timeout; the full pass took 30 minutes. The earlier 8000-token re-run
-   of the hard reports had taken up to 194 s per report.
-3. **Against the three hand-labelled gold lists the LLM is precise**: precision 1.00,
-   recall 0.80, F1 0.89, kappa 0.84 (micro). Its misses are defanged values
-   (`131.226.2[.]6`) and a name (`emotet`), both rejected by the module's own filters. The
-   classic extractor on the same reports: precision 0.21, recall 0.49, kappa negative, because
-   it also returns the reporting vendor's links.
-4. **Against the classic superset (95 reports) agreement is low by construction**: F1 0.43,
-   Jaccard 0.28, kappa -0.55. The classic-only values are URLs and domains (802 of 888), a large
-   part of them reference links and vendor sites (109 flagged `reporter-domain`; the flag only
-   catches hosts named in the entry metadata, so it undercounts). On hashes the two agree:
-   recall of classic md5/sha1/sha256 is 0.84-0.95; on ip-dst 0.12, url 0.15, domain 0.01
-   (classic derives a domain from every URL; the LLM reports the URL, and matching is by value).
-5. **What only the LLM finds**: 644 values in types the regexes cannot see: filename (331),
-   threat-actor (100), malware-type (65), regkey (27), vulnerability, named pipe, pdb, mutex.
-   These are the module's added value and need a human-labelled set to be scored; on the 3 gold
-   lists every such value was literally in the text (precision 1.0).
-6. **Superset artefacts found on the way**: iocextract's IPv6 regex matched times such as
-   `23:00:15` (116 false IPs before `genai/classic.py` validated candidates with `ipaddress`),
-   and its e-mail regex swallows the preceding word. The comparison refangs values before
-   matching so a defanged LLM value equals its refanged classic twin.
+1. **Refanging was the largest single loss.** 48 of the 100 reports defang; before this round
+   the module rejected 220 correct indicators as malformed and stored 34 still defanged. Now
+   every stored value is a real value, the original spelling is in the attribute comment, and
+   recall of the regex baseline's IPs went from 0.12 to 0.68 and of URLs from 0.15 to 0.42.
+2. **The remaining URL gap is mostly type policy and reference links**: the LLM reports
+   scheme-less URLs (`c34718cbb4c6.ngrok-free.app/file.ps1`) which the `url` format check
+   rejects, and it leaves out the vendor's reference links that the regexes collect
+   (111 of the 469 classic-only values are flagged `reporter-domain`; the flag undercounts).
+3. **Domains**: classic derives a domain from every URL (216), the LLM reports the URL instead;
+   the LLM's 108 domain-only values are bare domains (`evil[.]com` refanged) that iocextract
+   has no extractor for. Matching is by value, so both show up as disagreement, not as errors.
+4. **Gold view**: precision stays 1.00 on all three hand-labelled reports; recall on the
+   defanged report 59ed4725 went from 0.68 to 0.89 (two misses left: the scheme-less ngrok URL
+   and one IP the model did not report), on the Emotet sample 0.94 (`emotet` as a name).
+5. **5 reports still overflow 10000 answer tokens**, unchanged (indicator-dense reports with
+   pretty-printed JSON and a quote per indicator; IMPROVEMENTS item 25).
+6. **What only the LLM finds** is unchanged in kind: filename (321), threat-actor (107),
+   malware-type (69), regkey (27), vulnerability, named pipe, pdb: types regexes cannot see.
+7. **Speed**: median 9 s per report, max 62 s; the pass took 30 minutes.
+8. **Superset artefacts**: iocextract's IPv6 regex matched times (`23:00:15`), and its handling
+   of bare defanged domains produced `http:host` strings; both are gone from the baseline.
 
 ## Method
 

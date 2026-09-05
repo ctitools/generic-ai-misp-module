@@ -8,15 +8,16 @@ import pytest
 
 from benchmarks import run_llm
 from genai import llm
+from genai.refang import is_defanged
 
-TEXT = "The dropper beacons to 203.0.113.42 and downloads from evil.example over HTTPS."
+TEXT = "The dropper beacons to 203.0.113[.]42 and downloads from evil.example over HTTPS."
 ANSWER = json.dumps(
     {
         "indicators": [
             {
                 "type": "ip-dst",
-                "value": "203.0.113.42",
-                "quote": "to 203.0.113.42",
+                "value": "203.0.113[.]42",
+                "quote": "to 203.0.113[.]42",
                 "confidence": 1,
             },
             {
@@ -133,3 +134,11 @@ def test_prompt_option_selects_the_cluster(data_dir, tmp_path, fake_llm) -> None
     assert run_llm.main(args) == 0
     result = json.loads((results / "a.llm.json").read_text())
     assert result["prompt"]["cluster"] == "cti-info-extraction/qwen3.8-v1"
+
+
+def test_stored_values_are_never_defanged(data_dir, tmp_path, fake_llm) -> None:
+    fake_llm(ANSWER)
+    results = tmp_path / "results"
+    assert run_llm.main(_args(data_dir, results)) == 0
+    for path in results.glob("*.llm.json"):
+        assert not any(is_defanged(v) for _, v in json.loads(path.read_text())["indicators"])

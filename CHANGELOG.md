@@ -2,6 +2,7 @@
 
 ## 2026-09-05 (refang)
 
+- Benchmark re-run after refanging (same sample, model and budget): LLM vs classic F1 0.43 → 0.56, recall of classic IPs 0.12 → 0.68, gold recall 0.80 → 0.92 at precision 1.00; `format` rejections 220 → 64. Before/after table in `docs/BENCHMARKS.md`.
 - New `genai/refang.py`: one refang function (`hxxp://`, `[.]`, `(.)`, `{.}`, `[dot]`, `[:]`, `[at]`, markdown-escaped dots in network tokens; paths and named pipes untouched) used by the extraction use-case, `genai/classic.py` and `benchmarks/metrics.py`. `extract.py` stores refanged values, keeps the original in the attribute comment (`defanged in source as …`), re-types hashes labelled with the wrong hash type by length (`typed … by the model`), reports `refanged`/`retyped` counts, and format-checks `ip-src|port`, `ip-dst|port`, `hostname|port`; rejections report the value as the model gave it. Gold list 59ed4725 refanged; live precision test compares refanged values. Docs: USE-CASES (step 0), requirements R5.3, PROMPTS, IMPROVEMENTS 26 resolved, BENCHMARKS method.
 
 ## 2026-09-04 (benchmark)

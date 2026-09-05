@@ -36,6 +36,10 @@ benchmarks and tests compare the LLM extraction against. It is deliberately not 
 
 ### Use-case hooks (contract in USE-CASES.md, tests in TESTING.md)
 
+How MISP will call these hooks from its UI (thin per-action entry points around one engine) is
+researched in INTEGRATION_PLAN.md; today the module is reachable through the misp-modules
+server only.
+
 ```text
 process_event(event, use_case, …)
    ├─ use_case == "extraction"     → extract_iocs(event)              → event + tagged Attributes/Objects

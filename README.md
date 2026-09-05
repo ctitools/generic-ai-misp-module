@@ -21,7 +21,8 @@ will later hold the real AI logic. Today both hooks are dummies.
 | [docs/TESTING.md](docs/TESTING.md) | test layers, per-use-case test plan, deterministic summaries |
 | [docs/requirements.md](docs/requirements.md) | EARS requirements with status |
 | [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md) | repository analysis and backlog |
-| [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | benchmark ideas |
+| [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | extraction benchmark: method, commands, results |
+| [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) | how MISP users will reach the module (research + recommendation, not started) |
 | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) | contributor and agent guidance |
 
 ## Data flow

@@ -109,3 +109,31 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     the original spelling is kept in the attribute comment. Hashes labelled with the wrong hash
     type are re-typed by length. `ip-src|port`, `ip-dst|port` and `hostname|port` gained format
     checks.
+
+## 6. Open TODOs from the test-strategy review (2026-09-05, Aaron: keep as backlog)
+
+Details and suggested fixes in docs/TESTING.md section 8; listed here so they are not lost.
+
+27. **Correctness of LLM-only findings is unmeasured.** The extraction benchmark scores
+    against a regex superset; hashes agree, but the values only the LLM finds (filenames,
+    threat actors, malware names) are checked to be in the text, not to be indicators.
+    TODO: a 20-report human-adjudicated review file, then a precision gate per type.
+28. **Summary quality beyond structure is unmeasured.** A fluent but wrong Threat section
+    passes every check; `summary_kind=event` is benchmarked only on the dummy event.
+    TODO: entity agreement check (names in the summary must appear in the report), a
+    10-report human review sheet per prompt version, benchmark `event` kind on the fixture
+    events with reports.
+29. **No context-size guard.** Nothing checks that report plus prompt fit the model's window;
+    Ollama truncates silently on small-context models. TODO: use the context length from
+    `llm.model_info` and fail (never fall back) when the prompt does not fit; unit test with a
+    fake `model_info`.
+30. **No adversarial inputs.** Prompt injection, empty or image-only reports, several reports,
+    non-UTF-8, RTL text have no fixture. The in-source filter protects extraction by
+    construction; the summary path can echo injected text. TODO: `tests/fixtures/adversarial/`
+    with offline tests for the filter path and one live test that the summary does not repeat
+    the injected sentence.
+31. **Benchmark statistics.** One seed, one model, English only, reports capped at 40k chars,
+    every run overwrites the previous numbers. TODO: `benchmarks/history.csv` appended by the
+    compare scripts (date, commit, tag, cluster, model digest, headline metrics), Wilson
+    intervals on pass rates, a second seed per release.
+

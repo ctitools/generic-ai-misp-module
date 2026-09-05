@@ -4,58 +4,77 @@ The first benchmark measures the **CTI info extraction** use-case: the module's 
 against a classical regex extractor and against hand-labelled gold lists. The measured result is
 in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit by hand).
 
-## Current results (v3 test run, 2026-09-05)
+## Current results (v4 run, 2026-09-05)
 
 Model `qwen3.8:latest` digest `22130167c4c2`, Ollama 0.33.2, seed 42 / temperature 0. Extraction
-prompt `cti-info-extraction/qwen3.8-v1` at schema version 3 (`actionable`, `first_seen`,
-`last_seen`, `published`), `max_tokens` 10000, `GENERIC_AI_REQUEST_TIMEOUT=900`. Summary clusters
-`summary-report/qwen3.8-v2` and `summary-event/qwen3.8-v2` (hard 150-word budget, copy-exact
-indicators, capped lists). Generated reports, never edited by hand:
+prompt `cti-info-extraction/qwen3.8-v1` at schema version 3, `max_tokens` 10000,
+`GENERIC_AI_REQUEST_TIMEOUT=900`. Summary clusters `summary-report/qwen3.8-v2` and
+`summary-event/qwen3.8-v2`. Tag suggestion: misp-tag-suggest on nanu, BGE-base
+`a5beb1e3e68b`, index of 2026-09-05 (60,301 train events). One command, `sh benchmarks/run_v4.sh`,
+1 h 10 min on nanu; generated reports, never edited by hand:
 [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md),
 [BENCHMARKS_summary.md](BENCHMARKS_summary.md) (report kind, 100 orkl.eu reports),
 [BENCHMARKS_summary-event.md](BENCHMARKS_summary-event.md) (event kind, 100 dev-MISP events).
+v4 is a re-run of the v3 state plus tag suggestion: the differences to v3 are run-to-run
+noise of the same model (extraction 1379 → 1411 indicators, one more summary rejected, two
+event summaries not byte-identical), no code path of the three LLM use-cases changed.
 
 ### Extraction, 100 orkl.eu reports
 
-| | value |
+| | value (v3 in brackets where different) |
 |---|---|
 | reports succeeded | 95 / 100 (5 overflow the 10000-token answer budget, IMPROVEMENTS item 25) |
-| indicators stored | 1379, none defanged |
+| indicators stored | 1411 (1379), none defanged |
 | gold view (3 hand-labelled reports): precision / recall / F1 / kappa | 1.00 / 0.92 / 0.96 / 0.93 |
 | vs the regex superset: F1 / Jaccard / kappa (micro) | 0.56 / 0.39 / -0.42 |
-| recall of classic md5 / sha1 / sha256 / ip-dst / url | 0.95 / 0.89 / 0.98 / 0.68 / 0.42 |
-| indicators with a date stated in the text | 36 |
+| recall of classic md5 / sha1 / sha256 / ip-dst / url | 0.95 / 0.84 / 0.98 / 0.62 / 0.41 (0.95 / 0.89 / 0.98 / 0.68 / 0.42) |
+| indicators with a date stated in the text | 39 (36) |
 | `to_ids` lowered (not actionable per the model) | 35, listed for review |
-| rejections: format / confidence / not-in-source / free-text-type / duplicate | 56 / 39 / 33 / 23 / 9 |
-| seconds per report: median / max; whole pass | 9 / 62; 34 min |
-
-How to read it: the classic extractor is a deliberate superset, so an LLM "false positive"
-against it is a value the regexes missed and an LLM "false negative" is often a correct
-omission (reference links, vendor sites); the hashes agree, URLs and domains are where the two
-differ. What only the LLM finds (filenames, threat actors, malware names, registry keys,
-CVEs) is checked to be in the text, not yet to be correct: IMPROVEMENTS items 27 and 32.
+| rejections: format / confidence / free-text-type / not-in-source / duplicate / quote | 56 / 26 / 23 / 17 / 11 / 1 |
+| seconds per report: median / max; whole pass | 9 / 67; 27 min (34) |
 
 ### Summarization, report kind, 100 orkl.eu reports
 
 | | value |
 |---|---|
-| summaries passing the gate | 96 / 100 (2 correct rejections of CVE ids not in the text, 1 over length, 1 line-broken GUID since fixed) |
-| words: median / p90 / max | 124 / 165 / 187 |
-| all four headings present | 96 / 96 |
-| coverage of the regex baseline's hashes/IPs/URLs (mean) | 0.31 (at most five indicators are listed, by design) |
-| seconds per report: median / max | 4.7 / 9.3 |
-| byte-identical in a second pass | 96 / 96 |
+| summaries passing the gate | 98 / 100 (1 indicator not in the text, 1 over length) (96) |
+| words: median / p90 / max | 123 / 165 / 187 |
+| all four headings present | 98 / 98 |
+| coverage of the regex baseline's hashes/IPs/URLs (mean) | 0.32 |
+| seconds per report: median / max | 4.7 / 9.2 |
+| byte-identical in a second pass | 98 / 98 |
 
 ### Summarization, event kind, 100 real events with 5-300 attributes
 
 | | value |
 |---|---|
 | summaries passing the gate | 99 / 100 (1 answer over the 1000-token budget) |
-| words: median / p90 / max | 95 / 147 / 179 |
+| words: median / p90 / max | 93 / 147 / 182 |
 | all four headings present | 99 / 99 |
 | coverage of the event's own hashes/IPs/URLs (mean) | 0.54 |
-| seconds per event: median / max | 5.3 / 14.2 |
-| byte-identical in a second pass | 99 / 99 |
+| seconds per event: median / max | 5.1 / 13.4 |
+| byte-identical in a second pass | 97 / 99 (99 / 99); the two differ in wording only, word similarity 0.84 and 0.54 (`361b5b3e` Formbook, `dc0f8ebf` OilRig): seed + temperature 0 is not a guarantee, TESTING.md 4.3 |
+
+### Tag suggestion, the same 100 real events (first round)
+
+`benchmarks/run_suggest.py`: the event's own tags are the gold set, the event is sent without
+them, k = 5. Result file `benchmarks/results-suggest/20260905T215633Z.json`.
+
+| | value |
+|---|---|
+| precision / recall / hit@1, all 100 events, all namespaced gold tags | 0.25 / 0.12 / 0.32 |
+| events without any suggestion | 42 / 100 |
+| events whose gold has a content tag (not `tlp`, `PAP`, `source`, `type`, `admiralty-scale`, `osint`) | 62 |
+| on those 62: precision (when something was suggested) / recall | 0.59 / 0.30 |
+| suggested although the gold has content tags only of excluded kinds | 15; no suggestion and no content gold | 23 |
+| seconds per event: median | 0.44 (GPU) |
+
+How to read it: the gold set contains what analysts tagged, including handling markings the
+service never learns (`tlp:*` alone is 116 of the 400 gold tags), and events nobody tagged
+count every suggestion as wrong. The service's own held-out validation is precision@3 0.45 /
+recall@3 0.73. Making this benchmark measure the model rather than the label policy is the
+plan in misp-tag-suggest `docs/IMPROVEMENTS.md` (admissible-gold sampling, held-out dates,
+per-family metrics), then per-family thresholds and LLM re-ranking of the candidates.
 
 ### History of the rounds (tags on `with_full_event`)
 
@@ -66,6 +85,7 @@ CVEs) is checked to be in the text, not yet to be correct: IMPROVEMENTS items 27
 | `benchmark-2026-09-05-summary` | summary prompts with a hard word budget (report kind) | gate 28 → 96 of 100 |
 | `benchmark-2026-09-05-event` | event kind benchmarked on real events, capped related-events list | gate 29 → 99 of 100 |
 | `benchmark-2026-09-05-dates` | schema v3: dates from the text, `to_ids` lowered, free-text types rejected | gates unchanged, 36 dated, 35 lowered |
+| v4 (this commit) | re-run of v3 plus tag suggestion (misp-tag-suggest), whole round scripted (`benchmarks/run_v4.sh`), gold view reproducible (`benchmarks/gold.py`) | extraction gold 1.00 / 0.92 unchanged; summaries 98 and 99 of 100; tag suggestion 0.25 / 0.12 (0.59 / 0.30 on events with content tags) |
 
 Details of each round are in the CHANGELOG and in the commits under each tag; the superseded
 generated reports were removed with the v3 clean-up.
@@ -91,8 +111,9 @@ own structural gate (pass rate and the failing rule), length, headings, coverage
 - LLM: the module's extraction use-case (`benchmarks/run_llm.py`), one result file per report
   with model digest, prompt sha256 and timing, so every number is traceable.
 - Gold: three hand-labelled lists in `fixtures/gold/*.iocs.json` (two MISP EventReports from
-  `fixtures/output/`, one ORKL sample). The coordinator places the classic and LLM results for
-  them under `benchmarks/results/gold/`.
+  `fixtures/output/`, one ORKL sample). `benchmarks/gold.py` runs them as report-only events
+  (an event's existing attributes would count as output) and writes the LLM results next to
+  the classic files under `<results-dir>/gold/`.
 - Comparison: `benchmarks/compare.py` matches by normalised **value only** (refanged with
   `genai/refang.py`, the same function the module and the classic baseline use; lower-case,
   whitespace collapsed, trailing `/` and `.` stripped); indicator types are ignored on purpose.

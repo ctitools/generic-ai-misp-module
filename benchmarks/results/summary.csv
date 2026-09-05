@@ -1,101 +1,101 @@
 id,title,status,words,coverage,seconds,identical,similarity
-00414a04,SoumniBot: the new Android banker’s uniq,ok,132,0.8,4.542,True,1.0
-014c75a7,US aerospace services provider breached ,error,0,,2.703,,
-0173351d,Chafer: Latest Attacks Reveal Heightened,ok,184,0.25,5.084,True,1.0
-03e9e845,ErrorFather's Cerberus: Amplifying Cyber,ok,91,0.03333333333333333,5.074,True,1.0
-07e04656,2022-03-11 - New Wiper Malware Attacking,ok,126,0.25,4.784,True,1.0
-082d3389,"Cutting Edge, Part 3: Investigating Ivan",ok,169,0.3125,8.382,True,1.0
-09ce4b89,2017-10-05 - FreeMilk- A Highly Targeted,ok,127,0.05555555555555555,5.18,True,1.0
-0d759389,2017-10-13 - FIN7 Dissected- Hackers Acc,ok,148,,3.32,True,1.0
-0e1ee8a9,2017-11-15 - New EMOTET Hijacks a Window,ok,136,0.45454545454545453,5.24,True,1.0
-10524cc8,2020-03-21 - On the Royal Road,ok,86,0.16666666666666666,7.61,True,1.0
-114744a5,2020-05-04 - ATM malware targets Wincor ,ok,101,0.6666666666666666,3.5,True,1.0
-11def925,CryptoClippy is Evolving to Pilfer Even ,ok,166,0.08888888888888889,7.198,True,1.0
-12b3fde8,SonicALERT: CVE 2014-0322 Malware - Saku,ok,121,0.0,3.289,True,1.0
-13edb894,2009-08-05 - PC Users Threatened by Conf,ok,124,,3.524,True,1.0
-1405a5dc,Authorities confirm RagnarLocker ransomw,ok,130,0.0,3.661,True,1.0
-198f65d2,DanaBot: A New Banking Trojan Targeting ,ok,127,0.2777777777777778,6.267,True,1.0
-20649884,North Korean hackers are skimming US and,ok,182,0.25,5.183,True,1.0
-226d6c53,2014-05-13 - Cat Scratch Fever- CrowdStr,ok,114,,3.385,True,1.0
-283b3f32,Cloud Security - Palo Alto Networks Blog,ok,58,0.0,3.097,True,1.0
-2dd4dea5,2020-11-18 - Business as usual- Criminal,ok,95,0.625,5.784,True,1.0
-2ddc0184,Latest Cyber Threat Intelligence & Secur,ok,143,0.0,5.895,True,1.0
-36f4a46a,2020-09-17 - Complex obfuscation- Meh… (,ok,117,0.46153846153846156,4.903,True,1.0
-37cabd68,Rorschach – A New Sophisticated and Fast,ok,122,0.75,6.652,True,1.0
-3b452297,2022-04-14 - Orion Threat Alert- Flight ,ok,141,0.3333333333333333,6.38,True,1.0
-3e098fcf,,ok,62,0.125,4.238,True,1.0
-40301ca4,2018-11-27 - Meet CrowdStrike’s Adversar,ok,136,,3.503,True,1.0
-405f54ff,MMD-0064-2019 - Linux/AirDropBot,ok,156,0.1724137931034483,8.2,True,1.0
-428fd94c,Threat Analysis: Active C2 Discovery Usi,ok,140,0.75,4.274,True,1.0
-43cd6667,,ok,125,,3.098,True,1.0
-45f70928,2010-03-07 - March 2010 Opachki Trojan u,ok,41,1.0,3.856,True,1.0
-4c375f8c,2021-11-18 - Two Iranian Nationals Charg,ok,173,,4.37,True,1.0
-4e697d2e,"Adobe To Announce Source Code, Customer ",ok,131,1.0,3.298,True,1.0
-52cbaed5,2020-04-08 - How Cyber Adversaries are A,ok,161,,4.355,True,1.0
-536e5094,Gamaredon group grows its game,ok,167,0.5,6.727,True,1.0
-53d99aad,CAPEC-163: Spear Phishing (Version 3.9),ok,144,1.0,4.094,True,1.0
-53ecd031,2022-11-15 - New RapperBot Campaign – We,ok,141,0.20833333333333334,6.536,True,1.0
-540efc3c,2020-05-21 - No “Game over” for the Winn,ok,133,0.058823529411764705,6.475,True,1.0
-59058517,2021-06-17 - New TA402 Molerats Malware ,ok,140,0.42857142857142855,6.697,True,1.0
-5b6dbdb5,2016-11-08 - Analysis of iOSGuiInject Ad,ok,119,0.10416666666666667,5.022,True,1.0
-5f36e25e,Web skimmers found on the websites of In,ok,70,0.0,2.47,True,1.0
-5ffd1c8b,2021-10-21 - Cobalt Strike- Using Known ,ok,117,,3.063,True,1.0
-64b77888,2020-12-15 - Removing Coordinated Inauth,ok,164,,4.678,True,1.0
-662a629b,IssueMakersLab - Cyber Warfare Research ,ok,152,0.45454545454545453,4.267,True,1.0
-68303cde,"1,400 Pegasus spyware infections detaile",ok,123,0.0,3.74,True,1.0
-6970d678,Yokogawa announcement warns of counterfe,ok,119,0.0,3.096,True,1.0
-69b2b5d5,2020-12-02 - ‘Shadow Academy’ Targets 20,ok,125,,3.444,True,1.0
-69b95dce,,ok,118,0.02197802197802198,9.264,True,1.0
-6cc03d12,New Apple Mac Trojan Called OSX/Crisis D,ok,149,0.5,3.781,True,1.0
-6eeb84e3,2020-01-23 - German language malspam pus,ok,80,0.3125,4.529,True,1.0
-712ff0fc,Hagga of SectorH01 continues abusing Bit,ok,165,0.13636363636363635,6.755,True,1.0
-731ff89d,New “CleverSoar” Installer Targets Chine,ok,140,0.4,4.735,True,1.0
-78d08d87,ZINC weaponizing open-source software | ,ok,134,0.26666666666666666,5.667,True,1.0
-79a42502,Some notes on IoCs,ok,105,0.0,2.937,True,1.0
-7a32ec7f,,ok,166,0.0,7.312,True,1.0
-7d02b3fa,"New threat actor, UAT-9921, leverages Vo",ok,154,0.0,4.524,True,1.0
-7d044e79,2022-01-21 - A deeper UEFI dive into Moo,error,0,,3.611,,
-7d04b6ff,Rancor: Cyber Espionage Group Uses New C,ok,77,0.1875,5.144,True,1.0
-80f461c7,Unwrapping Ursnifs Gifts - The DFIR Repo,ok,114,0.008403361344537815,7.596,True,1.0
-881ef0cf,2021-04-12 - A chat with DarkSide,error,0,,5.826,,
-88425055,Equinix data center giant hit by Netwalk,ok,131,0.5,3.258,True,1.0
-8cb9ac5c,Operation Bleeding Bear,ok,109,0.7142857142857143,5.811,True,1.0
-8e804b2b,With Upgrades in Delivery and Support In,ok,111,0.0,3.526,True,1.0
-93f7b554,"2020-10-11 - Chimera, APT19 under the ra",ok,74,0.6,4.38,True,1.0
-94486493,"Research, News, and Perspectives",ok,137,0.0,3.499,True,1.0
-97271a6a,"Probable Iranian Cyber Actors, Static Ki",ok,112,0.047619047619047616,4.711,True,1.0
-9a7625d2,2021-04-14 - An Update- The COVID-19 Vac,ok,122,0.09090909090909091,5.789,True,1.0
-9d745433,,ok,122,0.5,5.17,True,1.0
-9fcc0e30,Parrot TDS takes over web servers and th,ok,187,0.2,5.555,True,1.0
-a5d54f81,2019-05-02 - Detricking TrickBot Loader,ok,97,0.21739130434782608,5.22,True,1.0
-a9b8e5c7,Important Detection and Remediation Acti,ok,112,1.0,2.907,True,1.0
-b131f886,IcedID Campaign Spotted Being Spiced Wit,ok,100,0.20833333333333334,5.652,True,1.0
-b376f09a,"Advisories are published, but are enough",ok,122,0.0,3.19,True,1.0
-bd43481b,"LAPSUS$: Recent techniques, tactics and ",ok,162,1.0,4.341,True,1.0
-be97537d,2023-01-26 - Welcome to Goot Camp- Track,ok,112,0.11363636363636363,6.827,True,1.0
-c143dbde,HP_Bromium_Threat_Insights_Report_Q4_202,ok,153,0.0,4.841,True,1.0
-c191576a,,error,0,,7.188,,
-c266b9cf,"Daxin Backdoor: In-Depth Analysis, Part ",ok,119,0.6666666666666666,5.488,True,1.0
-c58b4df0,FBI seize BreachForums hacking forum use,ok,126,0.0,3.733,True,1.0
-c91d14a0,"ZIP files, make it bigger to avoid EDR d",ok,90,0.5,2.888,True,1.0
-c9acfc88,2021-11-02 - Underminer Exploit Kit- The,ok,116,0.2727272727272727,4.992,True,1.0
-ca2af944,"Waterbear Returns, Uses API Hooking to E",ok,107,0.25,6.534,True,1.0
-cc13367a,Enterprise Scale Threat Hunting: C2 Beac,ok,79,0.0,2.428,True,1.0
-cc825515,2022-08-25 - New Golang Ransomware Agend,ok,77,1.0,6.995,True,1.0
-d0d69f14,VERMIN: Quasar RAT and Custom Malware Us,ok,126,0.07692307692307693,6.952,True,1.0
-d1d74b29,Nobelium Returns to the Political World ,ok,119,1.0,5.201,True,1.0
-d256214e,"2017-07-24 - Real News, Fake Flash- Mac ",ok,135,0.3333333333333333,4.693,True,1.0
-d27118be,A Pretty Dope Story About Bears: Early I,ok,118,1.0,3.303,True,1.0
-d43f68c1,CVE-2022-23812 | RIAEvangelist/node-ipc ,ok,126,0.7777777777777778,5.654,True,1.0
-d72a26f9,2023-01-24 - DragonSpark - Attacks Evade,ok,138,0.23529411764705882,5.499,True,1.0
-d740af4f,Enabling or disabling Lockdown mode on a,ok,111,0.0,3.197,True,1.0
-e0234eb8,Passive Income of Cyber Criminals: Disse,ok,116,0.6666666666666666,4.702,True,1.0
-e0f1ad2e,Blackhole Ramnit - samples and analysis,ok,170,0.1724137931034483,6.612,True,1.0
-e4fec4d0,"2020-12-22 - Leftover Lunch- Finding, Hu",ok,126,0.06666666666666667,6.373,True,1.0
+00414a04,SoumniBot: the new Android banker’s uniq,ok,132,0.8,4.591,True,1.0
+014c75a7,US aerospace services provider breached ,ok,105,0.0,2.913,True,1.0
+0173351d,Chafer: Latest Attacks Reveal Heightened,ok,184,0.25,5.149,True,1.0
+03e9e845,ErrorFather's Cerberus: Amplifying Cyber,ok,91,0.03333333333333333,4.824,True,1.0
+07e04656,2022-03-11 - New Wiper Malware Attacking,ok,126,0.25,4.755,True,1.0
+082d3389,"Cutting Edge, Part 3: Investigating Ivan",ok,169,0.3125,8.199,True,1.0
+09ce4b89,2017-10-05 - FreeMilk- A Highly Targeted,ok,127,0.05555555555555555,5.15,True,1.0
+0d759389,2017-10-13 - FIN7 Dissected- Hackers Acc,ok,148,,3.283,True,1.0
+0e1ee8a9,2017-11-15 - New EMOTET Hijacks a Window,ok,136,0.45454545454545453,5.259,True,1.0
+10524cc8,2020-03-21 - On the Royal Road,ok,86,0.16666666666666666,7.748,True,1.0
+114744a5,2020-05-04 - ATM malware targets Wincor ,ok,101,0.6666666666666666,3.59,True,1.0
+11def925,CryptoClippy is Evolving to Pilfer Even ,ok,166,0.08888888888888889,7.182,True,1.0
+12b3fde8,SonicALERT: CVE 2014-0322 Malware - Saku,ok,121,0.0,3.216,True,1.0
+13edb894,2009-08-05 - PC Users Threatened by Conf,ok,124,,3.53,True,1.0
+1405a5dc,Authorities confirm RagnarLocker ransomw,ok,130,0.0,3.715,True,1.0
+198f65d2,DanaBot: A New Banking Trojan Targeting ,ok,127,0.2777777777777778,6.352,True,1.0
+20649884,North Korean hackers are skimming US and,ok,182,0.25,5.052,True,1.0
+226d6c53,2014-05-13 - Cat Scratch Fever- CrowdStr,ok,114,,3.221,True,1.0
+283b3f32,Cloud Security - Palo Alto Networks Blog,ok,58,0.0,3.344,True,1.0
+2dd4dea5,2020-11-18 - Business as usual- Criminal,ok,95,0.625,5.82,True,1.0
+2ddc0184,Latest Cyber Threat Intelligence & Secur,ok,143,0.0,5.841,True,1.0
+36f4a46a,2020-09-17 - Complex obfuscation- Meh… (,ok,117,0.46153846153846156,4.761,True,1.0
+37cabd68,Rorschach – A New Sophisticated and Fast,ok,122,0.75,6.494,True,1.0
+3b452297,2022-04-14 - Orion Threat Alert- Flight ,ok,141,0.3333333333333333,6.442,True,1.0
+3e098fcf,,ok,62,0.125,4.188,True,1.0
+40301ca4,2018-11-27 - Meet CrowdStrike’s Adversar,ok,136,,3.28,True,1.0
+405f54ff,MMD-0064-2019 - Linux/AirDropBot,ok,156,0.1724137931034483,8.326,True,1.0
+428fd94c,Threat Analysis: Active C2 Discovery Usi,ok,140,0.75,4.203,True,1.0
+43cd6667,,ok,125,,2.875,True,1.0
+45f70928,2010-03-07 - March 2010 Opachki Trojan u,ok,41,1.0,3.911,True,1.0
+4c375f8c,2021-11-18 - Two Iranian Nationals Charg,ok,173,,4.196,True,1.0
+4e697d2e,"Adobe To Announce Source Code, Customer ",ok,131,1.0,3.316,True,1.0
+52cbaed5,2020-04-08 - How Cyber Adversaries are A,ok,161,,4.399,True,1.0
+536e5094,Gamaredon group grows its game,ok,167,0.5,6.518,True,1.0
+53d99aad,CAPEC-163: Spear Phishing (Version 3.9),ok,144,1.0,4.141,True,1.0
+53ecd031,2022-11-15 - New RapperBot Campaign – We,ok,141,0.20833333333333334,6.414,True,1.0
+540efc3c,2020-05-21 - No “Game over” for the Winn,ok,133,0.058823529411764705,6.213,True,1.0
+59058517,2021-06-17 - New TA402 Molerats Malware ,ok,140,0.42857142857142855,6.718,True,1.0
+5b6dbdb5,2016-11-08 - Analysis of iOSGuiInject Ad,ok,119,0.10416666666666667,5.068,True,1.0
+5f36e25e,Web skimmers found on the websites of In,ok,70,0.0,2.254,True,1.0
+5ffd1c8b,2021-10-21 - Cobalt Strike- Using Known ,ok,117,,2.946,True,1.0
+64b77888,2020-12-15 - Removing Coordinated Inauth,ok,164,,4.691,True,1.0
+662a629b,IssueMakersLab - Cyber Warfare Research ,ok,152,0.45454545454545453,4.263,True,1.0
+68303cde,"1,400 Pegasus spyware infections detaile",ok,123,0.0,3.862,True,1.0
+6970d678,Yokogawa announcement warns of counterfe,ok,119,0.0,3.077,True,1.0
+69b2b5d5,2020-12-02 - ‘Shadow Academy’ Targets 20,ok,125,,3.277,True,1.0
+69b95dce,,ok,118,0.02197802197802198,9.183,True,1.0
+6cc03d12,New Apple Mac Trojan Called OSX/Crisis D,ok,149,0.5,3.941,True,1.0
+6eeb84e3,2020-01-23 - German language malspam pus,ok,80,0.3125,4.47,True,1.0
+712ff0fc,Hagga of SectorH01 continues abusing Bit,ok,165,0.13636363636363635,6.5,True,1.0
+731ff89d,New “CleverSoar” Installer Targets Chine,ok,140,0.4,4.652,True,1.0
+78d08d87,ZINC weaponizing open-source software | ,ok,134,0.26666666666666666,5.885,True,1.0
+79a42502,Some notes on IoCs,ok,105,0.0,2.882,True,1.0
+7a32ec7f,,ok,166,0.0,7.19,True,1.0
+7d02b3fa,"New threat actor, UAT-9921, leverages Vo",ok,154,0.0,4.59,True,1.0
+7d044e79,2022-01-21 - A deeper UEFI dive into Moo,ok,108,1.0,3.675,True,1.0
+7d04b6ff,Rancor: Cyber Espionage Group Uses New C,ok,77,0.1875,5.032,True,1.0
+80f461c7,Unwrapping Ursnifs Gifts - The DFIR Repo,ok,114,0.008403361344537815,7.545,True,1.0
+881ef0cf,2021-04-12 - A chat with DarkSide,error,0,,5.72,,
+88425055,Equinix data center giant hit by Netwalk,ok,131,0.5,3.203,True,1.0
+8cb9ac5c,Operation Bleeding Bear,ok,109,0.7142857142857143,5.779,True,1.0
+8e804b2b,With Upgrades in Delivery and Support In,ok,111,0.0,3.211,True,1.0
+93f7b554,"2020-10-11 - Chimera, APT19 under the ra",ok,74,0.6,4.379,True,1.0
+94486493,"Research, News, and Perspectives",ok,137,0.0,3.228,True,1.0
+97271a6a,"Probable Iranian Cyber Actors, Static Ki",ok,112,0.047619047619047616,4.605,True,1.0
+9a7625d2,2021-04-14 - An Update- The COVID-19 Vac,ok,122,0.09090909090909091,5.749,True,1.0
+9d745433,,ok,122,0.5,5.207,True,1.0
+9fcc0e30,Parrot TDS takes over web servers and th,ok,187,0.2,5.523,True,1.0
+a5d54f81,2019-05-02 - Detricking TrickBot Loader,ok,97,0.21739130434782608,5.351,True,1.0
+a9b8e5c7,Important Detection and Remediation Acti,ok,112,1.0,2.82,True,1.0
+b131f886,IcedID Campaign Spotted Being Spiced Wit,ok,100,0.20833333333333334,5.577,True,1.0
+b376f09a,"Advisories are published, but are enough",ok,122,0.0,3.132,True,1.0
+bd43481b,"LAPSUS$: Recent techniques, tactics and ",ok,162,1.0,4.312,True,1.0
+be97537d,2023-01-26 - Welcome to Goot Camp- Track,ok,112,0.11363636363636363,6.963,True,1.0
+c143dbde,HP_Bromium_Threat_Insights_Report_Q4_202,ok,153,0.0,4.669,True,1.0
+c191576a,,error,0,,7.085,,
+c266b9cf,"Daxin Backdoor: In-Depth Analysis, Part ",ok,119,0.6666666666666666,5.349,True,1.0
+c58b4df0,FBI seize BreachForums hacking forum use,ok,126,0.0,3.723,True,1.0
+c91d14a0,"ZIP files, make it bigger to avoid EDR d",ok,90,0.5,2.881,True,1.0
+c9acfc88,2021-11-02 - Underminer Exploit Kit- The,ok,116,0.2727272727272727,5.1,True,1.0
+ca2af944,"Waterbear Returns, Uses API Hooking to E",ok,107,0.25,6.322,True,1.0
+cc13367a,Enterprise Scale Threat Hunting: C2 Beac,ok,79,0.0,2.488,True,1.0
+cc825515,2022-08-25 - New Golang Ransomware Agend,ok,77,1.0,7.003,True,1.0
+d0d69f14,VERMIN: Quasar RAT and Custom Malware Us,ok,126,0.07692307692307693,6.812,True,1.0
+d1d74b29,Nobelium Returns to the Political World ,ok,119,1.0,5.032,True,1.0
+d256214e,"2017-07-24 - Real News, Fake Flash- Mac ",ok,135,0.3333333333333333,4.492,True,1.0
+d27118be,A Pretty Dope Story About Bears: Early I,ok,118,1.0,3.237,True,1.0
+d43f68c1,CVE-2022-23812 | RIAEvangelist/node-ipc ,ok,126,0.7777777777777778,5.577,True,1.0
+d72a26f9,2023-01-24 - DragonSpark - Attacks Evade,ok,138,0.23529411764705882,5.286,True,1.0
+d740af4f,Enabling or disabling Lockdown mode on a,ok,111,0.0,3.351,True,1.0
+e0234eb8,Passive Income of Cyber Criminals: Disse,ok,116,0.6666666666666666,4.662,True,1.0
+e0f1ad2e,Blackhole Ramnit - samples and analysis,ok,170,0.1724137931034483,6.699,True,1.0
+e4fec4d0,"2020-12-22 - Leftover Lunch- Finding, Hu",ok,126,0.06666666666666667,6.416,True,1.0
 e60bcd10,2022-12-20 - Lazarus APT’s Operation Int,ok,113,1.0,3.255,True,1.0
-ea50871d,COVID-19 and New Year greetings: an inve,ok,97,0.06451612903225806,5.503,True,1.0
-eda4d990,Windows PWDUMP tools,ok,29,0.0,1.864,True,1.0
-f22ca523,Secure Communications Blog,ok,29,0.0,2.029,True,1.0
-f9158c72,Medre.A - AutoCAD worm samples,ok,66,0.3125,4.745,True,1.0
-fbb37538,Censys Blog | Cybersecurity Insights & T,ok,29,0.0,1.572,True,1.0
-fdb2627c,Treasury Sanctions China-based Hacker In,ok,165,0.0,3.806,True,1.0
+ea50871d,COVID-19 and New Year greetings: an inve,ok,97,0.06451612903225806,5.701,True,1.0
+eda4d990,Windows PWDUMP tools,ok,29,0.0,1.885,True,1.0
+f22ca523,Secure Communications Blog,ok,29,0.0,1.754,True,1.0
+f9158c72,Medre.A - AutoCAD worm samples,ok,66,0.3125,4.715,True,1.0
+fbb37538,Censys Blog | Cybersecurity Insights & T,ok,29,0.0,1.408,True,1.0
+fdb2627c,Treasury Sanctions China-based Hacker In,ok,165,0.0,3.692,True,1.0

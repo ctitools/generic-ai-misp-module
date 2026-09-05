@@ -109,11 +109,11 @@ def main(argv: list[str] | None = None) -> int:
     settings = suggest.SuggestSettings.from_env()
     if not suggest.is_reachable(settings):
         raise SystemExit(f"misp-tag-suggest at {settings.base_url} is not reachable or not indexed")
-    ids = misp_sample.sample(
+    ids = misp_sample.sample(  # same knobs as the summary benchmark: the pre-seeded draw is reused
         misp_sample.client(),
         args.n,
         args.seed,
-        min_attributes=1,
+        min_attributes=5,
         max_attributes=300,
         data_dir=args.data_dir,
     )

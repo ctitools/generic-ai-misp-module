@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-05 (v4 run)
+
+- Benchmark round v4 on the pre-seeded samples (100 orkl.eu reports, 100 dev-MISP events), one command `benchmarks/run_v4.sh` (~1 h 10 min): extraction 95/100, gold view 1.00 / 0.92 / F1 0.96 unchanged; report summaries 98/100 and byte-identical; event summaries 99/100, 97/99 byte-identical (two wording differences recorded); tag suggestion on the same 100 events 0.25 / 0.12 / hit@1 0.32, 0.59 / 0.30 on the 62 events with content tags. `docs/BENCHMARKS.md` "Current results (v4 run)" and a history row; generated reports and csv regenerated.
+- `benchmarks/gold.py` (+ `tests/test_gold_unit.py`): the gold-view LLM results are reproducible, the three gold sources run as report-only events; `benchmarks/run_suggest.py` samples with the same knobs as the summary benchmark (5-300 attributes) so the pre-seeded draw is reused instead of overwritten.
+- Test runs recorded in TESTING.md section 7: offline 174 passed; `--require-live` 196 passed, 4 skipped, all three live gates ran.
+- Docs consistency pass: GETTING_STARTED has the real clone URL, the tag-suggest `.env` lines, and an extraction example that actually adds attributes (an orkl report as the only EventReport; the dummy event has nothing left to extract); every command in it was executed against a local misp-modules server. README documentation table lists DEPLOY_TAG_SUGGEST.md; benchmarks README documents the round script.
+
 ## 2026-09-05 (v3 clean-up)
 
 - Only the current state is documented as results: `docs/BENCHMARKS.md` has one "Current results (v3 test run)" section for extraction and both summary kinds plus a one-line-per-round history table; the superseded generated reports (`BENCHMARKS_summary-v2.md`, `BENCHMARKS_summary-event-v1.md`) and their csv files are removed, `BENCHMARKS_summary.md` is regenerated from the current default cluster's passes. PROMPTS.md marks superseded clusters, TESTING.md records the v3 test run (193 passed, 4 skipped with live systems required) and the current goldens.

@@ -197,22 +197,23 @@ current default clusters (`summary-report/qwen3.8-v2`, `summary-event/qwen3.8-v2
 digest `22130167c4c2`, Ollama 0.33.2) and reviewed: every indicator and uuid they mention is in
 the dummy event, all four headings are present, both under 150 words.
 
-## 7. The v3 test run (2026-09-05)
+## 7. The v4 test run (2026-09-05)
 
-Reference run after the v3 clean-up (extraction schema version 3, summary clusters v2 as
-defaults, tag `benchmark-2026-09-05-dates`), with live systems required:
+Reference run with the tag-suggestion use-case in (extraction schema version 3, summary
+clusters v2 as defaults, misp-tag-suggest on nanu), with all three live systems required:
 
 ```
 MISP_VERIFY_SSL=false .venv/bin/pytest -q --require-live
 llm: ran (qwen3.8:latest at http://nanu:11434/v1)
 misp: ran (https://misp-dev.lo-res.org) (4 tests skipped)
-193 passed, 4 skipped in 133 s
+suggest: ran (http://nanu:8000)
+196 passed, 4 skipped in 181 s
 ```
 
 The 4 skips are the fixture uuids that no longer exist on the dev instance (a data problem,
-counted but never a failure). The tag-suggestion use-case being added in parallel brings its
-own live gate (`suggest`) and errors until `MISP_TAG_SUGGEST_URL` is set; it is not part of this
-run's scope. Benchmarks of the same state: docs/BENCHMARKS.md "Current results".
+counted but never a failure). Offline only (`-m "not live_llm and not live_misp and not
+live_suggest"`): 174 passed. Previous reference: the v3 run, 193 passed, 4 skipped, before the
+`suggest` gate existed. Benchmarks of the same state: docs/BENCHMARKS.md "Current results".
 
 ## 8. Where tests run
 

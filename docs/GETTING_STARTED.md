@@ -16,7 +16,7 @@ The module itself has one third-party dependency, `pymisp`.
 ## 2. Install
 
 ```bash
-git clone <this repository> && cd generic-ai-misp-module
+git clone https://github.com/ctitools/generic-ai-misp-module.git && cd generic-ai-misp-module
 uv venv --python 3.14 .venv
 uv pip install --python .venv/bin/python -e ".[dev,e2e]"
 ```
@@ -40,6 +40,10 @@ OPENAI_API_KEY=
 MISP_BASE_URL=https://misp.example.org
 MISP_API_KEY=
 MISP_VERIFY_SSL=true
+
+# --- tag suggestion (optional: the misp-tag-suggest service, section 9) ---
+MISP_TAG_SUGGEST_URL=
+MISP_TAG_SUGGEST_API_KEY=
 ENV
 ```
 
@@ -87,13 +91,20 @@ jq -c '{module: "generic_ai", use_case: "summarization", summary_kind: "report",
   | jq '{summary: .results.Event.Event.EventReport[-1].content, tags: [.results.Event.Event.Tag[].name], meta: .metadata}'
 ```
 
-**c) CTI info extraction** — high-confidence attributes read out of the report:
+**c) CTI info extraction** — high-confidence attributes read out of the report. The dummy
+event already carries every indicator its report mentions (the module would reject all of them
+as duplicates), so build an event from one of the orkl.eu reports in `tests/fixtures/orkl/`:
 
 ```bash
-jq -c '{module: "generic_ai", use_case: "extraction", event: .}' fixtures/summary/dummy-event.json \
+jq -n --rawfile r tests/fixtures/orkl/40301ca4-fed9-4b59-95ba-b668eb8eb7aa.txt \
+  '{module: "generic_ai", use_case: "extraction", event: {Event: {info: "extraction walkthrough", EventReport: [{name: "report", content: $r}]}}}' \
   | curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- \
-  | jq '{attributes: [.results.Event.Event.Attribute[] | {type, value, comment}], meta: .metadata}'
+  | jq '{attributes: [.results.Event.Event.Attribute[] | {type, value, comment}], added: .metadata.added, rejected: [.metadata.rejected[] | .reason]}'
 ```
+
+Expected: a handful of attributes (threat actors, malware names, hashes, domains from the
+text), each with `comment: "extracted by generic_ai from EventReport …"` and the two AI tags;
+`rejected` lists what the filters dropped and why.
 
 **d) Tag suggestion** — taxonomy/galaxy tags proposed by the
 [misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest) service (no LLM; needs

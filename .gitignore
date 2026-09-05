@@ -28,3 +28,7 @@ benchmarks/results-v2-pass2/
 benchmarks/results-event-v2/
 benchmarks/results-event-v2-pass2/
 benchmarks/results-suggest/
+benchmarks/results-v4/*.json
+benchmarks/results-v4-pass2/
+benchmarks/results-event-v4/
+benchmarks/results-event-v4-pass2/

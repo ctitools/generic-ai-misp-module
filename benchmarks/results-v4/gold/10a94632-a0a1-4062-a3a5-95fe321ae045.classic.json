@@ -1,0 +1,21 @@
+{
+  "tool": "iocextract 1.16.1",
+  "indicators": [
+    [
+      "domain",
+      "lookyloo.circl.lu"
+    ],
+    [
+      "domain",
+      "misppriv.circl.lu"
+    ],
+    [
+      "url",
+      "https://lookyloo.circl.lu/capture](https://lookyloo.circl.lu/capture"
+    ],
+    [
+      "url",
+      "https://misppriv.circl.lu/events/view/10a94632-a0a1-4062-a3a5-95fe321ae045](https://misppriv.circl.lu/events/view/10a94632-a0a1-4062-a3a5-95fe321ae045"
+    ]
+  ]
+}

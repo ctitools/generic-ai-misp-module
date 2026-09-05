@@ -69,15 +69,16 @@ how to run the module locally, and the test and quality gates.
 
 | document | content |
 |---|---|
-| [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) | install, configure, first summary and extraction |
+| [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) | install, configure, first summary, extraction and tag suggestion |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | data flow, schema provenance, planned hooks |
 | [docs/USE-CASES.md](docs/USE-CASES.md) | the three use-cases (CTI info extraction, summarization, tag suggestion) and their configuration |
 | [docs/PROMPTS.md](docs/PROMPTS.md) | prompts shipped as a MISP galaxy, v1 prompt texts |
 | [docs/TESTING.md](docs/TESTING.md) | test layers, per-use-case test plan, deterministic summaries |
 | [docs/requirements.md](docs/requirements.md) | EARS requirements with status |
 | [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md) | repository analysis and backlog |
-| [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | extraction benchmark: method, commands, results |
+| [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | benchmarks: extraction, both summary kinds, tag suggestion; current results and history |
 | [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) | how MISP users will reach the module (research + recommendation, not started) |
+| [docs/DEPLOY_TAG_SUGGEST.md](docs/DEPLOY_TAG_SUGGEST.md) | misp-tag-suggest on the developer host (GPU) and the connection, step by step |
 | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) | contributor and agent guidance |
 
 ### Data flow

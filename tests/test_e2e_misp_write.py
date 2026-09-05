@@ -8,6 +8,7 @@ set E2E_KEEP=1 to leave the events on the instance for inspection.
 
 # llm_settings is used as a gate only; pylint: disable=redefined-outer-name,unused-argument
 
+import copy
 import os
 import time
 import warnings
@@ -71,13 +72,13 @@ def _run_and_push(
     assert "error" not in response, response.get("error")
     if metadata is not None:
         metadata.update(response["metadata"])
+    produced = copy.deepcopy(response["results"]["Event"]["Event"])  # load() mutates its input
     processed = MISPEvent()
     processed.load(response["results"]["Event"])
     processed.distribution = YOUR_ORG_ONLY
     processed.published = False
     result = misp_write.update_event(processed, pythonify=False)
     assert not result.get("errors"), result
-    produced = response["results"]["Event"]["Event"]
     return produced, misp_write.get_event(uuid, pythonify=False)["Event"]
 
 
@@ -94,12 +95,12 @@ def test_extraction_lands_in_misp(misp_write, llm_settings, created_event) -> No
     for attribute in added:
         assert AI_TAGS <= _tags(attribute), (attribute["type"], attribute["value"])
     sent = {
-        a["uuid"]: a
-        for a in produced["Attribute"]
-        + [x for o in produced.get("Object", []) for x in o["Attribute"]]
+        (a["type"], str(a["value"])): a
+        for a in produced.get("Attribute", [])
+        + [x for o in produced.get("Object", []) for x in o.get("Attribute", [])]
     }
     for attribute in added:  # to_ids and dates arrive in MISP exactly as the module set them
-        expected = sent[attribute["uuid"]]
+        expected = sent[(attribute["type"], str(attribute["value"]))]
         assert attribute["to_ids"] == expected["to_ids"], attribute["value"]
         for field in ("first_seen", "last_seen"):
             assert (attribute.get(field) or "")[:10] == (expected.get(field) or "")[:10], field

@@ -46,6 +46,44 @@ What the numbers say:
 8. **Superset artefacts**: iocextract's IPv6 regex matched times (`23:00:15`), and its handling
    of bare defanged domains produced `http:host` strings; both are gone from the baseline.
 
+### Results after the v3 schema (2026-09-05): dates and `to_ids`
+
+Same sample, model and budget; the extraction prompt is at meta.version 3 (per indicator:
+`actionable`, `first_seen`, `last_seen`; top level: `published`). Generated report:
+[BENCHMARKS_extraction.md](BENCHMARKS_extraction.md).
+
+| | v2 schema (refang round) | v3 schema |
+|---|---|---|
+| reports succeeded | 95 / 100 | 95 / 100 (same 5 overflow) |
+| indicators stored | 1498 | 1379 |
+| LLM vs classic F1 / kappa (micro) | 0.56 / -0.41 | 0.56 / -0.42 |
+| gold view: precision / recall / F1 / kappa | 1.00 / 0.92 / 0.96 / 0.93 | 1.00 / 0.92 / 0.96 / 0.93 |
+| indicators with a date stated in the text | not asked | 36 of 1379 |
+| `to_ids` lowered (not actionable per the model) | not asked | 35 |
+| `free-text-type` rejections (new filter) | – | 23 |
+| seconds per report, whole pass | 30 min | 34 min |
+
+What the numbers say:
+
+1. **The schema change cost nothing on the gates**: precision, recall and the classic
+   comparison are unchanged; the same five reports overflow the answer budget.
+2. **Dates are rare in the text, and the module only takes what is stated**: 36 indicators
+   carry a `first_seen`/`last_seen`; the model set none on the two gold reports with a labelled
+   date (the sentence "as early as July 7, 2025 … CVE-2025-49706" was not turned into a date),
+   so date recall is low and stays informational. The first live run also showed why the
+   publication date must not be applied to indicators: the model took the date of a blog the
+   report *cites* as the report's own date, which would have stamped every indicator with it.
+   `published` is metadata only.
+3. **`to_ids` lowered on 35 indicators**, listed in the report's "Not actionable" table for
+   review: reference links (fox-it, wikipedia, capec.mitre.org), `www.paypal.com` in a phishing
+   write-up, a vendor support address, and a long list of security-product process names
+   (`MsMpEng.exe`, `SAVAdminService.exe` …) from a report on process-killing. Those are exactly
+   the values that should not be exported as detection patterns; the attributes stay on the
+   event with the literal name and the comment `not actionable per report`.
+4. **`other`/`text`/`comment` are rejected** (23 candidates), e.g. a regex-like path fragment
+   `\1[5-6]\TEMPLATE\LAYOUTS\debug_dev.js` the model typed as `other`: free-text types carry no
+   indicator semantics and would have lowered precision on the gold view.
+
 ## Summarization benchmark
 
 Two kinds. `report` summarises the EventReport of the 100 orkl reports. `event` (the

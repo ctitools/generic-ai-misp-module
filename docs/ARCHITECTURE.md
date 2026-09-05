@@ -26,8 +26,8 @@ caller / MISP ──POST /query──▶ misp-modules ──handler(json)──�
               {"results": {"Event": {...}, "ReportEvent": {...}}, "event_report": "..."}
 ```
 
-`process_event()` dispatches on `use_case` (`none` = pass-through, `extraction`, `summarization`)
-to `genai/extract.py` / `genai/summarize.py`; `process_eventReport()` is still a dummy. Code lives
+`process_event()` dispatches on `use_case` (`none` = pass-through, `extraction`, `summarization`,
+`tag_suggestion`) to `genai/extract.py` / `genai/summarize.py` / `genai/suggest.py`; `process_eventReport()` is still a dummy. Code lives
 in the `genai/` package because misp-modules loads every `.py` in `expansion/` as a module, so
 helpers cannot sit next to `generic_ai.py`; the module adds the repo root to `sys.path` on import.
 `genai/classic.py` is the odd one out: a regex baseline over `iocextract` (refang on) that
@@ -43,16 +43,23 @@ server only.
 ```text
 process_event(event, use_case, …)
    ├─ use_case == "extraction"     → extract_iocs(event)              → event + tagged Attributes/Objects
-   └─ use_case == "summarization"  → summarize(event, kind)           → event + tagged EventReport + event tags
-                                       kind == "report": input = event_report
-                                       kind == "event":  input = render_event(event)  (sorted, deterministic)
-both:  prompt cluster (galaxy) ──┐
+   ├─ use_case == "summarization"  → summarize(event, kind)           → event + tagged EventReport + event tags
+   │                                   kind == "report": input = event_report
+   │                                   kind == "event":  input = render_event(event)  (sorted, deterministic)
+   └─ use_case == "tag_suggestion" → suggest_tags(event)              → event + suggested tags + AI tags
+                                       POST event to misp-tag-suggest /suggest (no LLM, HTTP only)
+UC1/UC2:  prompt cluster (galaxy) ──┐
        input text ───────────────┼─▶ llm_chat(messages, params)  ──▶ post-filters / structural checks ──▶ tag ──▶ event
        sampling params ──────────┘        (one function, OpenAI-compatible chat, JSON mode for UC1)
 ```
 
-- **LLM boundary**: exactly one function talks to the network (`genai.llm.llm_chat`); tests
-  mock it. Endpoint and key come from `.env` only; timeout → error, no fallback. Thinking is
+- **Network boundary**: one stdlib function does HTTP (`genai.llm.http_json`), used by
+  `llm_chat` and by `genai/suggest.py`; tests fake either. The tag-suggestion service
+  ([misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest)) is a separate process
+  because it needs torch, faiss and sentence-transformers, which this repo (pymisp only,
+  running inside misp-modules) does not take on; its URL and key come from `.env`
+  (`MISP_TAG_SUGGEST_URL`, `MISP_TAG_SUGGEST_API_KEY`). Both repos share lint rules, CI and
+  `.env` key names (its `AGENTS.md`). Endpoint and key come from `.env` only; timeout → error, no fallback. Thinking is
   disabled via `reasoning_effort: none` (Ollama ignores `think: false` on the OpenAI route).
 - **Prompt resolution**: `prompt_*` config → galaxy cluster (uuid or value) → inline text →
   bundled default; the cluster also fixes temperature/seed/top_p/max_tokens/think (PROMPTS.md).

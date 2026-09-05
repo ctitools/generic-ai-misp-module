@@ -3,7 +3,7 @@
 ## Introduction
 
 The **Generic AI MISP module** is a `misp-modules` expansion module that takes a full MISP
-Event, validates it, and returns MISP Events. Two use-cases fill its hooks: **CTI info
+Event, validates it, and returns MISP Events. Three use-cases fill its hooks (the third, tag suggestion, calls the misp-tag-suggest service instead of an LLM): **CTI info
 extraction** (indicators from the event's EventReport) and **summarization** (of the report or
 of the event). Prompts and sampling parameters are shipped as a MISP galaxy.
 
@@ -55,7 +55,8 @@ Requirement style: EARS (`WHEN/WHERE/IF … THE module SHALL …`). Status tags:
 1. THE module SHALL read `use_case` from the request body, then module config, then `GENERIC_AI_USE_CASE` in `.env`, default `none` (pass-through).
 2. WHEN `use_case` is `extraction`, THE module SHALL call `extract_iocs(event)`.
 3. WHEN `use_case` is `summarization`, THE module SHALL call `summarize(event, kind)` with `kind` from `summary_kind` (request), then `default_summary_kind` (config), default `report`.
-4. IF `use_case` or `kind` is unknown, THEN THE module SHALL return an error listing the allowed values.
+4. WHEN `use_case` is `tag_suggestion`, THE module SHALL call `suggest_tags(event, settings, suggest_limit, suggest_min_score)` against `MISP_TAG_SUGGEST_URL` from `.env` (never from the request), add only tags with `score >= suggest_min_score` that are not on the event, tag the event `ai-computer-assisted` when at least one tag was added, and treat abstention as success with empty output.
+5. IF `use_case` or `kind` is unknown, THEN THE module SHALL return an error listing the allowed values.
 
 ## R5 CTI info extraction — *implemented*
 

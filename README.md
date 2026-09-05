@@ -71,7 +71,7 @@ how to run the module locally, and the test and quality gates.
 |---|---|
 | [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) | install, configure, first summary and extraction |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | data flow, schema provenance, planned hooks |
-| [docs/USE-CASES.md](docs/USE-CASES.md) | the two use-cases (CTI info extraction, summarization) and their configuration |
+| [docs/USE-CASES.md](docs/USE-CASES.md) | the three use-cases (CTI info extraction, summarization, tag suggestion) and their configuration |
 | [docs/PROMPTS.md](docs/PROMPTS.md) | prompts shipped as a MISP galaxy, v1 prompt texts |
 | [docs/TESTING.md](docs/TESTING.md) | test layers, per-use-case test plan, deterministic summaries |
 | [docs/requirements.md](docs/requirements.md) | EARS requirements with status |
@@ -142,7 +142,7 @@ carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 ```text
 .
 ├── expansion/generic_ai.py        the module (misp-modules contract, validation, dispatch)
-├── genai/                         llm.py (client), prompts.py (galaxy + tags), extract.py, summarize.py
+├── genai/                         llm.py (HTTP + LLM client), prompts.py (galaxy + tags), extract.py, summarize.py, suggest.py (misp-tag-suggest client)
 ├── galaxies/ · clusters/          the generic-ai-prompts MISP galaxy
 ├── fixtures/summary/dummy-event.json  hand-written event for deterministic summary tests
 ├── fixtures/gold/*.iocs.json      hand-checked indicator lists for the extraction precision gate
@@ -154,6 +154,7 @@ carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 ├── tests/test_generic_ai_e2e.py   real misp-modules server + live MISP instance + use-cases
 ├── tests/test_usecases_unit.py    use-cases with a mocked LLM
 ├── tests/test_llm_live.py         determinism, extraction precision, summary gate + goldens
+├── tests/test_suggest_live.py     tag suggestion against the running misp-tag-suggest service
 ├── tests/test_e2e_roundtrip.py    round-trip quality gate on 10 random live events
 ├── tests/misp_compare.py          semantic MISP-event comparison used by the gate
 ├── tests/e2etests/                events written by process_event(..., e2etest=True)
@@ -200,11 +201,12 @@ MISP_VERIFY_SSL=false .venv/bin/pytest -q --require-live   # the pre-tag run: li
 
 Layers (details in [docs/TESTING.md](docs/TESTING.md)):
 
-- unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; both use-cases with a mocked LLM; refang, metrics, benchmark tooling
+- unit tests: every fixture event validates and round-trips; input shapes; report extraction; error cases; extraction and summarization with a mocked LLM, tag suggestion with a fake service; refang, metrics, benchmark tooling
 - e2e, local: starts `misp-modules` on a free port and POSTs every fixture event to `/query`
 - live LLM (`-m live_llm`): determinism, extraction precision gate, summary gate and goldens against the endpoint in `.env`
+- live tag suggestion (`-m live_suggest`, `tests/test_suggest_live.py`): one fixture event through the misp-tag-suggest service; every suggested tag must exist on the dev MISP and the event carries the AI tags (or the service abstained and nothing changed)
 - live MISP (`-m live_misp`): fetches the fixture uuids from `MISP_BASE_URL`, runs them through the module, and the round-trip quality gate on 10 random events
-- live write path (`tests/test_e2e_misp_write.py`, needs both): creates an event on the dev MISP with an orkl.eu report (`tests/fixtures/orkl/`) as EventReport, runs extraction and summarization through the module, pushes the result back with PyMISP, verifies the attributes, the new report and the `ai-computer-assisted` tags on the instance, then deletes the event. Every such event is distribution "your organisation only" and never published; `E2E_KEEP=1` keeps it for inspection.
+- live write path (`tests/test_e2e_misp_write.py`, needs both): creates an event on the dev MISP with an orkl.eu report (`tests/fixtures/orkl/`) as EventReport, runs extraction, summarization and tag suggestion through the module, pushes the result back with PyMISP, verifies the attributes, the new report, the suggested tags and the `ai-computer-assisted` tags on the instance, then deletes the event. Every such event is distribution "your organisation only" and never published; `E2E_KEEP=1` keeps it for inspection.
 
 Every run ends with a **live gates** summary (`llm: ran …` / `skipped: …` / `not requested`).
 Without `--require-live` an unavailable live system skips its layer, so a green run only proves
@@ -220,6 +222,7 @@ Both are configured in `.env` at the repo root (gitignored; the last definition 
 | `MISP_BASE_URL`, `MISP_API_KEY` | live MISP tests, round-trip gate (read-only) | `https://misp-dev.example.org`, an API key of a user who can read events |
 | `MISP_VERIFY_SSL` | tests only | `false` for a self-signed dev certificate (never used by the module) |
 | `OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_KEY` | the module and the live LLM tests | `http://nanu:11434/v1`, `qwen3.8:latest`, empty for Ollama |
+| `MISP_TAG_SUGGEST_URL`, `MISP_TAG_SUGGEST_API_KEY` | the `tag_suggestion` use-case and its live tests | `http://127.0.0.1:8000`, the service's `SUGGEST_API_KEY` (empty when unset) |
 
 LLM server: any OpenAI-compatible chat endpoint. The reference setup is Ollama on a GPU host
 with the model pulled once (`ollama pull qwen3.8`); the goldens and benchmarks are pinned to
@@ -229,6 +232,17 @@ hit the module's 120 s timeout. Check reachability with:
 
 ```bash
 .venv/bin/python -c "from genai import llm; s=llm.LLMSettings.from_env(); print(s, llm.is_reachable(s))"
+```
+
+Tag-suggestion service: [misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest),
+a read-only FastAPI service with a BGE nearest-event index built from the same MISP. It runs as
+its own process (it needs torch and faiss; this repo allows only pymisp) next to the
+misp-modules server, one worker, loopback. Its README covers export, index build and start
+(`MODEL_DEVICE=cpu uv run uvicorn app:app --port 8000`); the nanu deployment with GPU is
+written up in [docs/DEPLOY_TAG_SUGGEST.md](docs/DEPLOY_TAG_SUGGEST.md). Check reachability with:
+
+```bash
+.venv/bin/python -c "from genai import suggest; s=suggest.SuggestSettings.from_env(); print(s, suggest.is_reachable(s))"
 ```
 
 MISP: a reachable instance and an API key. The read-only layers only fetch; the write-path

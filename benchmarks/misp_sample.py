@@ -27,6 +27,17 @@ LOG_FILE = REPO_ROOT / "logs" / "benchmark-misp-sample.log"
 log = logging.getLogger("benchmark.misp_sample")
 
 
+def setup_logging(log_file: Path) -> None:
+    """Progress to stderr and to logs/ (AGENTS.md: long tasks log successes, failures, rows/s)."""
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        handlers=[logging.FileHandler(log_file), logging.StreamHandler(sys.stderr)],
+        force=True,
+    )
+
+
 def client() -> PyMISP:
     env = llm.env()
     verify = env.get("MISP_VERIFY_SSL", "true").lower() not in {"0", "false", "no"}
@@ -89,13 +100,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-attributes", type=int, default=300)
     parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
     args = parser.parse_args(argv)
-    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(message)s",
-        handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler(sys.stderr)],
-        force=True,
-    )
+    setup_logging(LOG_FILE)
     ids = sample(
         client(),
         args.n,

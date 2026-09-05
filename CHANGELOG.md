@@ -9,6 +9,8 @@
 - `genai/llm.py`: the HTTP call is now `http_json(url, payload, headers=, timeout=)`, shared by the LLM client and the suggest client; error texts of the LLM path unchanged apart from the prefix.
 - Tests: `tests/test_suggest_unit.py` (fake HTTP: filters, abstention, malformed answers, errors, handler dispatch), `tests/test_suggest_live.py` (marker `live_suggest`, gate `suggest` in the live-gates summary, `MispApi.tag_exists`), `tests/test_e2e_misp_write.py` pushes a tag-suggested event back to the dev MISP.
 - Benchmark `benchmarks/run_suggest.py` (+ `tests/test_run_suggest_unit.py`): precision@k / recall@k / hit@1 of the suggestions against the analysts' tags on sampled live events, abstention rate, events/s in `logs/`.
+- `docs/GETTING_STARTED.md`: call 5 d) tag suggestion, the two knobs, section 9 "Connect the tag-suggestion service" (clone, build, start, `.env`, check) with the GitHub link.
+- Deployed on nanu (`DEVELOPER_HOST_DIRECTORY_TAG_SUGGEST`): export of 82k dev-MISP events, taxonomy snapshot, dataset, CUDA index (validation P@3 0.45 / R@3 0.73), service on port 8000 with `SUGGEST_API_KEY`; the module checkout on nanu and the laptop `.env` point at it; live tests and the first benchmark ran. Runbook: `docs/DEPLOY_TAG_SUGGEST.md`. `tests/conftest.py` `MispApi.tag_exists` uses `/tags/index` (the search route misses tags).
 - misp-tag-suggest itself (formerly misp-suggest) was harmonized in the same pass: Python 3.14, same ruff/pylint/semgrep rules and CI, same `.env` key names, `AGENTS.md`/`CLAUDE.md`/`CHANGELOG.md`; see its changelog.
 
 ## 2026-09-05 (dates and to_ids)

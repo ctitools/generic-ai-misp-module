@@ -36,7 +36,14 @@ MISP_VERIFY_SSL=false $V/python -m benchmarks.misp_sample --n 100 --seed 42   # 
 GENERIC_AI_REQUEST_TIMEOUT=900 $V/python -m benchmarks.run_llm --use-case summarization --kind event --data-dir benchmarks/data/misp   # 9. event ("story-telling") summaries
 $V/python -m benchmarks.compare_summary --kind event --data-dir benchmarks/data/misp --second-dir <pass 2 dir> --out docs/BENCHMARKS_summary-event.md --csv benchmarks/results/summary-event.csv
 $V/pytest -q tests/test_orkl_unit.py                  # verification of step 1 (offline, fake API)
+MISP_VERIFY_SSL=false $V/python -m benchmarks.run_suggest --n 20 --k 5   # 10. tag suggestion vs the analysts' tags (needs MISP_TAG_SUGGEST_URL)
 ```
+
+`benchmarks.run_suggest`: draws `--n` tagged events with `misp_sample` (any attribute count),
+strips the tags, asks misp-tag-suggest for `--k` tags and scores precision@k, recall@k and
+hit@1 against the stripped tags (namespaced ones only) plus the abstention rate. Output
+`benchmarks/results-suggest/<timestamp>.json` (gitignored), progress and events/s in
+`logs/benchmark-suggest.log`. Re-run after every index rebuild of the service; `tests/test_run_suggest_unit.py` covers the scoring offline.
 
 `benchmarks.orkl` options: `--n --seed --min-chars 2000 --max-chars 40000 --language en --data-dir`.
 It draws offsets in `[0, library_entries)` with `random.Random(seed)` (no replacement), fetches one
@@ -57,6 +64,7 @@ Progress (kept/skipped, entries/s) goes to stderr and `logs/benchmark-orkl.log`.
 | `benchmarks/results/<id>.summary-event.json` | same contract as `.summary.json`, `summary_kind=event` |
 | `benchmarks/results/<id>.summary.json` | `{"model", "prompt", "summary", "words", "seconds"}` or `{"error", "seconds"}` |
 | `benchmarks/results/<id>.llm.json` | `{"model": {...}, "prompt": {...}, "indicators": [[type, value], ...], "rejected": [...], "seconds": float}` |
+| `benchmarks/results-suggest/<timestamp>.json` | `{"k", "service", "model_version", "summary": {precision, recall, hit_at_1, abstained, events, events_with_gold}, "failures", "events": [...]}` |
 | `benchmarks/results/extraction.csv` | per-report metrics (committed) |
 | `docs/BENCHMARKS_extraction.md` | the written-up comparison (committed) |
 

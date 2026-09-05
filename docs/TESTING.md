@@ -13,6 +13,7 @@ API key).
 | unit | `tests/test_generic_ai_unit.py`, `tests/test_misp_compare.py` | nothing | handler contract, input shapes, report extraction, 8 rejection cases, comparator rules |
 | local e2e | `tests/test_generic_ai_e2e.py` (first half) | `misp-modules` installed | the real server lists the module and round-trips every fixture through `/query` |
 | live e2e | `tests/test_generic_ai_e2e.py` (second half) | `.env` + MISP instance | the fixture uuids fetched live still validate and yield the same report |
+| live suggest | `tests/test_suggest_live.py` | `.env` + misp-tag-suggest service | suggested tags exist on the dev MISP, the event is AI-tagged, abstention leaves it unchanged |
 | **round-trip gate** | `tests/test_e2e_roundtrip.py` | `.env` + MISP instance | 10 random live events survive `validate_event` → `process_event(e2etest=True)` semantically unchanged |
 
 ```bash
@@ -182,6 +183,7 @@ mentioned is in the dummy event, and that nothing is invented. Only then is the 
 | UC1 extraction | ✔ | ✔ | – | precision gate, determinism |
 | UC2 summary `report` | ✔ | ✔ | – | L3 gate, determinism, golden |
 | UC2 summary `event` | ✔ | ✔ | – | L3 gate, determinism, golden |
+| UC3 tag suggestion (`tests/test_suggest_unit.py`, fake HTTP) | ✔ | – | ✔ (tags exist) | service: `-m live_suggest` |
 | tagging rule | ✔ | ✔ | – | ✔ (asserted on live output) |
 
 Gates that must be green before merging: unit, local e2e, round-trip gate, UC1 precision gate,

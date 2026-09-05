@@ -101,6 +101,7 @@ as the parameterised entry for scripts, tests and the benchmark.
 | summary of a report as new EventReport | event-report page "Send to LLM" button, or workflow `event-report-after-save` | `genai/adapter.py`: a small HTTP service speaking the contract MISP's `sendToLLM` expects | one instance setting (`Plugin.CTIInfoExtractor_url` in MISP's naming); the button exists already |
 | indicators from a report, reviewed before saving | Event → Populate from… → import module | `import_mod/generic_ai_extract.py` (`inputSource: ["paste", "file"]`, `userConfig`: `min_confidence`, `prompt`) | picks the module and fills the small form |
 | summary of the whole event / extraction on an existing report, automated | workflow action on `event-publish` / `event-report-after-save` | `action_mod/generic_ai.py` (`expect_misp_core_format: true`, `params`: `action` select = summary-report \| summary-event \| extraction, `misp_url`, `misp_key`) writes the result back with PyMISP | picks the action in the node's dropdown |
+| taxonomy tags for an event, automated | workflow action on `event-after-save` / `event-publish` | `action_mod/generic_ai.py` with `action=tag_suggestion` (UC3, `genai/suggest.py` → misp-tag-suggest service) | same node dropdown |
 | scripted / API use, tests, benchmark | misp-modules server `POST /query` | `expansion/generic_ai.py` as today (module-type stays `["expansion"]`, no hover) | body parameters as today |
 
 Why not one module with a setting: `Plugin.Enrichment_generic_ai_use_case` would make the

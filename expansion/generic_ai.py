@@ -4,7 +4,8 @@ Data flow (see README.md / docs/ARCHITECTURE.md):
 
     request -> _extract_event -> validate_event -> event (MISPEvent)
         -> get_event_report(event) -> event_report (markdown string)
-        -> process_event(event, settings)    -> MISPEvent  (use_case none|extraction|summarization)
+        -> process_event(event, settings)    -> MISPEvent
+           (use_case none|extraction|summarization|tag_suggestion)
         -> process_eventReport(event_report) -> MISPEvent
         -> response {"results": {"Event": ..., "ReportEvent": ...}, "event_report", "metadata"}
 """
@@ -25,6 +26,7 @@ from genai import (  # noqa: E402  # pylint: disable=wrong-import-position
     extract,
     llm,
     prompts,
+    suggest,
     summarize,
 )
 
@@ -41,8 +43,9 @@ moduleinfo = {
     "features": (
         "Accepts a full MISP Event (MISP core format), validates it with PyMISP and runs a "
         "use-case on it: CTI info extraction (high-confidence attributes from the EventReport) "
-        "or summarization (of the EventReport or of the event). Prompts and sampling parameters "
-        "come from the generic-ai-prompts galaxy; all LLM output is ai-computer-assisted tagged."
+        "or summarization (of the EventReport or of the event), or tag suggestion through the "
+        "misp-tag-suggest service. Prompts and sampling parameters come from the "
+        "generic-ai-prompts galaxy; all AI output is ai-computer-assisted tagged."
     ),
     "references": ["https://www.misp-standard.org/rfc/misp-standard-core.html"],
     "input": 'A full MISP Event under "event" ({"Event": {...}} or bare) or under "data": [...].',
@@ -58,11 +61,13 @@ DEFAULTS: dict[str, Any] = {
     "prompt_summary_event": "",
     "model_id": "",
     "min_confidence": 0.9,
+    "suggest_limit": 5,
+    "suggest_min_score": 0.0,
     "request_timeout": llm.DEFAULT_TIMEOUT,
 }
 moduleconfig = list(DEFAULTS)
 REQUEST_KEYS = frozenset(moduleconfig) - {"request_timeout"}
-USE_CASES = ("none", "extraction", "summarization")
+USE_CASES = ("none", "extraction", "summarization", "tag_suggestion")
 
 # process_event(..., e2etest=True) writes the processed event here as <uuid>.json
 E2E_DIR = REPO_ROOT / "tests" / "e2etests"
@@ -139,6 +144,16 @@ def get_event_report(event: MISPEvent) -> str:
 
 
 def _run_use_case(event: MISPEvent, settings: dict[str, Any]) -> dict[str, Any]:
+    if settings["use_case"] == "tag_suggestion":  # no LLM: the misp-tag-suggest service
+        suggest_settings = suggest.SuggestSettings.from_env(settings["request_timeout"])
+        result = suggest.suggest_tags(
+            event,
+            suggest_settings,
+            int(settings["suggest_limit"]),
+            float(settings["suggest_min_score"]),
+        )
+        result["model"] = {"name": result["model_version"], "server": suggest_settings.base_url}
+        return result
     llm_settings = llm.LLMSettings.from_env(
         settings["model_id"] or None, settings["request_timeout"]
     )
@@ -207,7 +222,7 @@ def dict_handler(request: dict[str, Any]) -> dict[str, Any]:
     metadata: dict[str, Any] = {}
     try:
         processed = process_event(event, settings=resolve_settings(request), metadata=metadata)
-    except (ValueError, llm.LLMError, PyMISPError) as error:
+    except (ValueError, llm.LLMError, suggest.SuggestError, PyMISPError) as error:
         # PyMISPError: an accepted candidate PyMISP still refuses (e.g. an unparsable datetime)
         return {"error": str(error)}
     return {

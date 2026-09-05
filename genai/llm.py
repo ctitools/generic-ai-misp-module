@@ -56,31 +56,38 @@ class LLMSettings:
         )
 
 
-def _request(url: str, settings: LLMSettings, payload: dict | None = None) -> Any:
+def http_json(
+    url: str, payload: dict | None = None, *, headers: dict[str, str] | None = None, timeout: int
+) -> Any:
+    """One JSON request (POST with payload, else GET), http(s) only. Shared by the LLM client and
+    genai/suggest.py; raises LLMError on HTTP, network, timeout or non-JSON answers."""
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-        raise LLMError(f"Only http(s) LLM endpoints are allowed, got {url!r}")
-    headers = {"Content-Type": "application/json"}
-    if settings.api_key:
-        headers["Authorization"] = f"Bearer {settings.api_key}"
+        raise LLMError(f"Only http(s) endpoints are allowed, got {url!r}")
     request = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8") if payload is not None else None,
-        headers=headers,
+        headers={"Content-Type": "application/json", **(headers or {})},
         method="POST" if payload is not None else "GET",
     )
     try:
-        with urllib.request.urlopen(request, timeout=settings.timeout) as response:  # nosemgrep
+        with urllib.request.urlopen(request, timeout=timeout) as response:  # nosemgrep
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
         body = error.read().decode("utf-8", errors="replace")[:300]
-        raise LLMError(f"LLM endpoint returned HTTP {error.code}: {body}") from error
+        raise LLMError(f"endpoint returned HTTP {error.code}: {body}") from error
     except (urllib.error.URLError, TimeoutError) as error:
-        raise LLMError(
-            f"LLM endpoint unreachable or timed out ({settings.timeout}s): {error}"
-        ) from error
+        raise LLMError(f"endpoint unreachable or timed out ({timeout}s): {error}") from error
     except json.JSONDecodeError as error:
-        raise LLMError("LLM endpoint returned invalid JSON") from error
+        raise LLMError("endpoint returned invalid JSON") from error
+
+
+def _request(url: str, settings: LLMSettings, payload: dict | None = None) -> Any:
+    headers = {"Authorization": f"Bearer {settings.api_key}"} if settings.api_key else {}
+    try:
+        return http_json(url, payload, headers=headers, timeout=settings.timeout)
+    except LLMError as error:
+        raise LLMError(f"LLM {error}") from error
 
 
 def llm_chat(

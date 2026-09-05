@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_DIR = PROJECT_ROOT / "fixtures" / "output"
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from genai import llm  # noqa: E402  # pylint: disable=wrong-import-position
+from genai import llm, suggest  # noqa: E402  # pylint: disable=wrong-import-position
 
 # Real MISP events exported from the MISP instance in .env (see fixtures/output/hashes.csv).
 FIXTURE_FILES = sorted(p for p in FIXTURE_DIR.glob("*.json") if p.name != "manifest.json")
@@ -57,13 +57,18 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     config.addinivalue_line("markers", "live_llm: needs the LLM endpoint from .env")
     config.addinivalue_line("markers", "live_misp: needs the MISP instance from .env")
+    config.addinivalue_line("markers", "live_suggest: needs the misp-tag-suggest service from .env")
     config.live_gates = {}  # gate name -> "ran" | "skipped: reason" | "FAILED: reason"
 
 
 def pytest_collection_modifyitems(items):
     """Mark every test by the live fixture it uses, so `-m 'not live_llm'` and the summary work."""
     for item in items:
-        for fixture, marker in (("llm_settings", "live_llm"), ("misp_api", "live_misp")):
+        for fixture, marker in (
+            ("llm_settings", "live_llm"),
+            ("misp_api", "live_misp"),
+            ("suggest_settings", "live_suggest"),
+        ):
             if fixture in getattr(item, "fixturenames", ()):
                 item.add_marker(getattr(pytest.mark, marker))
 
@@ -79,7 +84,7 @@ def live_gate(config, gate: str, reason: str) -> None:
 
 def pytest_terminal_summary(terminalreporter, config):
     gates = dict(config.live_gates)
-    for marker in ("live_llm", "live_misp"):
+    for marker in ("live_llm", "live_misp", "live_suggest"):
         skipped = sum(
             1
             for report in terminalreporter.stats.get("skipped", [])
@@ -111,6 +116,23 @@ def llm_settings(request) -> llm.LLMSettings:
     return settings
 
 
+@pytest.fixture(scope="session")
+def suggest_settings(request) -> suggest.SuggestSettings:
+    """misp-tag-suggest service from .env; skips (or fails with --require-live) when not ready."""
+    try:
+        settings = suggest.SuggestSettings.from_env()
+    except suggest.SuggestError as exc:
+        live_gate(request.config, "suggest", str(exc))
+    if not suggest.is_reachable(settings):
+        live_gate(
+            request.config,
+            "suggest",
+            f"misp-tag-suggest at {settings.base_url} unreachable or its index is not built",
+        )
+    request.config.live_gates["suggest"] = f"ran ({settings.base_url})"
+    return settings
+
+
 @pytest.fixture
 def dummy_event() -> dict:
     return json.loads((PROJECT_ROOT / "fixtures" / "summary" / "dummy-event.json").read_text())
@@ -128,6 +150,7 @@ class MispApi:
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
+        self._tag_names: set[str] | None = None
         self.context = ssl.create_default_context()
         if not verify_ssl:  # tests only: the dev instance has a self-signed certificate
             self.context.check_hostname = False
@@ -165,6 +188,19 @@ class MispApi:
     def index(self, limit: int = 500) -> list[dict]:
         """POST /events/index -> [{"id", "uuid", "timestamp", "published", "orgc_uuid"}, ...]"""
         return self._call("/events/index", {"limit": limit, "page": 1, "minimal": 1})
+
+    def tag_names(self) -> set[str]:
+        """All tag names, from GET /tags/index once per session (~1 min for 27k tags on the dev
+        instance). /tags/search/<word> is a LIKE search that misses tags the index lists
+        (checked 2026-09-05), so it is not used."""
+        if self._tag_names is None:
+            data = self._call("/tags/index")
+            tags = data["Tag"] if isinstance(data, dict) else [t["Tag"] for t in data]
+            self._tag_names = {t["name"] for t in tags}
+        return self._tag_names
+
+    def tag_exists(self, name: str) -> bool:
+        return name in self.tag_names()
 
 
 @pytest.fixture(scope="session")

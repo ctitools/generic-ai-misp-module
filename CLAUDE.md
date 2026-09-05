@@ -24,7 +24,9 @@ E2E_SEED=42 MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtri
 .venv/bin/python -m misp_modules -c . -l 127.0.0.1 -p 6666  # run the module in a real misp-modules server
 ```
 
-Lint must be clean (pylint 10/10, ruff) before a commit; `ruff format expansion tests` fixes formatting.
+Lint must be clean (pylint 10/10, ruff) before a commit; `ruff format expansion genai tests benchmarks` fixes formatting.
+ruff runs in CI (`.github/workflows/lint.yml`) and as a pre-commit hook after a one-time
+`git config core.hooksPath .githooks`.
 
 ## Architecture
 

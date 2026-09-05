@@ -9,7 +9,7 @@
   "source": "https://github.com/ctitools/generic-ai-misp-module",
   "type": "generic-ai-prompts",
   "uuid": "d555596c-4db5-4af6-a66d-748f74f65ab8",
-  "version": 2,
+  "version": 3,
   "values": [
     {
       "value": "cti-info-extraction/qwen3.8-v1",
@@ -27,69 +27,7 @@
           "temperature": 0,
           "seed": 42,
           "top_p": 1,
-          "max_tokens": 2000,
-          "think": false
-        },
-        "prompt": "You extract indicators of compromise from a cyber threat intelligence report for MISP.\nOnly return indicators that appear LITERALLY in the report text. Never infer, complete or\nnormalise a value. If unsure, leave it out: precision matters more than recall. Benign\nreferences (the reporting organisation's own website, documentation links) are not indicators.\n\nAllowed \"type\" values are MISP attribute types, e.g. ip-src, ip-dst, domain, hostname, url,\nmd5, sha1, sha256, filename, email-src, email-dst, vulnerability, regkey, mutex, user-agent,\nja3-fingerprint-md5, AS, btc, threat-actor, malware-type. The complete list follows:\n{{misp_types}}\n\nReturn ONLY a JSON object, no prose, following this schema:\n{\"indicators\": [{\"type\": \"<misp type>\", \"category\": \"<misp category>\", \"value\": \"<exact text>\",\n  \"confidence\": <0..1>, \"quote\": \"<the sentence fragment containing the value>\"}]}\nSet confidence below 0.9 for anything you are not certain about.\n\nReport:\n{{input}}",
-        "version": 1,
-        "prompt_sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757",
-        "language": "en",
-        "output_schema": {
-          "type": "object",
-          "properties": {
-            "indicators": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": [
-                  "type",
-                  "value",
-                  "confidence",
-                  "quote"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  },
-                  "category": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  },
-                  "confidence": {
-                    "type": "number"
-                  },
-                  "quote": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          },
-          "required": [
-            "indicators"
-          ]
-        }
-      }
-    },
-    {
-      "value": "cti-info-extraction/qwen3.8-v2",
-      "uuid": "e1f0a6a2-6b7c-4d3e-9f10-2a3b4c5d6e7f",
-      "description": "Extract high-confidence MISP attributes from an EventReport (same prompt as v1, answer budget 8000 tokens for indicator-rich reports)",
-      "meta": {
-        "use_case": "cti-info-extraction",
-        "model": {
-          "name": "qwen3.8:latest",
-          "digest": "22130167c4c2",
-          "quantization": "Q4_K_M",
-          "server": "ollama 0.33.2"
-        },
-        "model_parameters": {
-          "temperature": 0,
-          "seed": 42,
-          "top_p": 1,
-          "max_tokens": 8000,
+          "max_tokens": 10000,
           "think": false
         },
         "prompt": "You extract indicators of compromise from a cyber threat intelligence report for MISP.\nOnly return indicators that appear LITERALLY in the report text. Never infer, complete or\nnormalise a value. If unsure, leave it out: precision matters more than recall. Benign\nreferences (the reporting organisation's own website, documentation links) are not indicators.\n\nAllowed \"type\" values are MISP attribute types, e.g. ip-src, ip-dst, domain, hostname, url,\nmd5, sha1, sha256, filename, email-src, email-dst, vulnerability, regkey, mutex, user-agent,\nja3-fingerprint-md5, AS, btc, threat-actor, malware-type. The complete list follows:\n{{misp_types}}\n\nReturn ONLY a JSON object, no prose, following this schema:\n{\"indicators\": [{\"type\": \"<misp type>\", \"category\": \"<misp category>\", \"value\": \"<exact text>\",\n  \"confidence\": <0..1>, \"quote\": \"<the sentence fragment containing the value>\"}]}\nSet confidence below 0.9 for anything you are not certain about.\n\nReport:\n{{input}}",

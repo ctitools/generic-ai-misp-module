@@ -87,12 +87,12 @@ Report:
 ```
 
 `{{misp_types}}` is filled from `describeTypes.json` at call time (so the list is never stale).
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 2000, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 10000, think false`.
 
-`cti-info-extraction/qwen3.8-v2` (uuid `e1f0a6a2-6b7c-4d3e-9f10-2a3b4c5d6e7f`) is the same prompt
-text with `max_tokens 8000`: the first orkl benchmark run truncated the JSON answer on about a
-third of the reports at 2000 tokens (one `quote` per indicator is expensive). Select it with
-`prompt_extraction: cti-info-extraction/qwen3.8-v2`; v1 stays the default.
+`max_tokens` was 2000 until 2026-09-05 (a guess, never measured); the first orkl benchmark run
+truncated the JSON answer on 35 of 100 reports and 5 still overflowed 8000, so the budget is now
+10000 (cluster `meta.version` 2). Answers of that size take up to a few minutes on `nanu`, above
+the module's default `request_timeout` of 120 s: raise `GENERIC_AI_REQUEST_TIMEOUT` accordingly.
 
 ### `summary-report/qwen3.8-v1`
 

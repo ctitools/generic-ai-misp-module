@@ -9,7 +9,8 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (module as
 deployed, prompt cluster v1, 2000-token answers) and
 [BENCHMARKS_extraction-v2.md](BENCHMARKS_extraction-v2.md) (same prompt, 8000-token answers,
-15-minute request timeout). Both are generated; do not edit them by hand.
+15-minute request timeout; that interim cluster is gone, the default cluster now has 10000 tokens).
+Both are generated; do not edit them by hand.
 
 What the numbers say:
 
@@ -60,8 +61,7 @@ What the numbers say:
 
 python -m benchmarks.orkl --n 100 --seed 42          # draw the sample -> benchmarks/data/orkl/
 python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # classic extractor (skips sample.json's empty text)
-python -m benchmarks.run_llm                         # LLM extraction -> benchmarks/results/<id>.llm.json
-GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --prompt cti-info-extraction/qwen3.8-v2 --results-dir benchmarks/results-v2  # 8000-token variant
+GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm   # LLM extraction -> benchmarks/results/<id>.llm.json
 python -m benchmarks.compare --results-dir benchmarks/results-v2 --out docs/BENCHMARKS_extraction-v2.md --csv benchmarks/results/extraction-v2.csv
 python -m benchmarks.compare                         # -> docs/BENCHMARKS_extraction.md + results/extraction.csv
 .venv/bin/pytest -q tests/test_compare_unit.py       # offline check of the comparison on synthetic data

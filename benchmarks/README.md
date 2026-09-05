@@ -27,8 +27,7 @@ benchmarks/results/<id>.classic.json   benchmarks/results/<id>.llm.json
 V=.venv/bin
 $V/python -m benchmarks.orkl --n 100 --seed 42        # 1. sample 100 English reports
 $V/python -m genai.classic benchmarks/data/orkl/*.json -o benchmarks/results   # 2. classical extractor
-$V/python -m benchmarks.run_llm                       # 3. LLM extraction (needs OPENAI_* in .env)
-$V/python -m benchmarks.run_llm --prompt cti-info-extraction/qwen3.8-v2 --results-dir benchmarks/results-v2   # 3b. variant
+GENERIC_AI_REQUEST_TIMEOUT=900 $V/python -m benchmarks.run_llm   # 3. LLM extraction (needs OPENAI_* in .env)
 $V/python -m benchmarks.compare                       # 4. metrics -> docs + csv
 $V/pytest -q tests/test_orkl_unit.py                  # verification of step 1 (offline, fake API)
 ```

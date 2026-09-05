@@ -39,7 +39,7 @@ def run_one(entry: dict, prompt: str = "") -> dict:
     report = {"name": title, "content": entry.get("plain_text", "")}
     event = {"info": title, "EventReport": [report]}
     request = {"module": "generic_ai", "event": {"Event": event}, "use_case": "extraction"}
-    if prompt:  # prompt cluster uuid or value, e.g. cti-info-extraction/qwen3.8-v2
+    if prompt:  # prompt cluster uuid or value
         request["prompt_extraction"] = prompt
     start = time.perf_counter()
     response = generic_ai.dict_handler(request)

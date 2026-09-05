@@ -2,7 +2,7 @@
 
 ## 2026-09-05 (summary benchmark)
 
-- CI: `.github/workflows/lint.yml` runs ruff (check + format check, pinned 0.16.6) on every push and pull request; `.githooks/pre-commit` runs the same locally (`git config core.hooksPath .githooks`). CLAUDE.md and TESTING.md gap 1 updated.
+- CI: `.github/workflows/checks.yml` runs ruff (pinned 0.16.6), pylint (`--disable=fixme`), the offline pytest layers (`uv sync --extra dev --extra e2e`, live files deselected) and semgrep (`p/python`, `p/security-audit`) on every push and pull request; `benchmarks/orkl.py` refuses URLs outside its https base (semgrep audit finding); `.githooks/pre-commit` runs the same locally (`git config core.hooksPath .githooks`). CLAUDE.md and TESTING.md gap 1 updated.
 - `docs/TESTING.md` section 8: review of the test and benchmark strategy with 12 ranked gaps (no CI, silent live skips, the AGENTS.md write-path e2e loop not implemented, unmeasured correctness of LLM-only findings and summary content, no context-size guard, no adversarial inputs, no run history).
 - `tests/misp_compare.py`: whitespace-only strings count as empty (PyMISP serialises a whitespace-only EventReport content as ""; the round-trip gate flagged live event 244b2366 as "content missing after processing"). Rule 1 of the comparator documented accordingly.
 - `summary-report/qwen3.8-v2` is now the default summary-report cluster (galaxy version bumped; v1 kept, selectable by value/uuid); `tests/golden/summary-report.md` re-recorded with the v2 prompt and reviewed.

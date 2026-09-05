@@ -20,8 +20,11 @@ log = logging.getLogger("benchmark.orkl")
 
 
 def _get(url: str) -> dict:
+    if not url.startswith(BASE + "/"):  # every url is built here from the constant https base
+        raise ValueError(f"refusing to fetch {url!r}: not under {BASE}")
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=60) as resp:  # nosec: fixed https base URL
+    # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+    with urllib.request.urlopen(req, timeout=60) as resp:
         return json.load(resp)
 
 

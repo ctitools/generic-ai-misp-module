@@ -1,0 +1,49 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+env:
+  RUFF: "0.16.6"
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: ruff (same commands as CLAUDE.md)
+        run: |
+          uvx ruff@${RUFF} check .
+          uvx ruff@${RUFF} format --check expansion genai tests benchmarks
+
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+      - run: uv sync --extra dev
+      # fixme notes are allowed to live in the tree; every other message fails the job
+      - run: uv run pylint --disable=fixme expansion genai tests benchmarks
+
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+      - run: uv sync --extra dev --extra e2e
+      # offline layers only: unit tests and the local misp-modules server e2e.
+      # Live MISP / LLM layers need .env and the GPU host; they run locally (docs/TESTING.md).
+      - run: uv run pytest -q --deselect tests/test_llm_live.py --deselect tests/test_e2e_roundtrip.py
+
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uvx semgrep scan --config p/python --config p/security-audit --error expansion genai benchmarks tests

@@ -25,7 +25,7 @@ E2E_SEED=42 MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtri
 ```
 
 Lint must be clean (pylint 10/10, ruff) before a commit; `ruff format expansion genai tests benchmarks` fixes formatting.
-ruff runs in CI (`.github/workflows/lint.yml`) and as a pre-commit hook after a one-time
+ruff, pylint, the offline pytest layers and semgrep run in CI (`.github/workflows/checks.yml`); ruff also runs and as a pre-commit hook after a one-time
 `git config core.hooksPath .githooks`.
 
 ## Architecture

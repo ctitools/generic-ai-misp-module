@@ -174,7 +174,19 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     (`ip-dst` true, `filename` true …), so a vendor's own domain or `mshta.exe` becomes
     actionable. TODO: an `actionable` boolean from the model, applied only to lower the
     default, recorded in the comment; plus ObjectReference links (exploits, connects-to,
-    drops) between candidates the model already groups, and galaxy clusters instead of
-    free-text `threat-actor` / `malware-type` attributes (event-level, AI-tagged). From the
-    RFC field review of 2026-09-05.
+    drops) between candidates the model already groups. From the RFC field review of
+    2026-09-05.
+36. **Galaxy clusters instead of free-text `threat-actor` / `malware-type` attributes — open
+    TODO (Aaron, 2026-09-05).** The module emits `threat-actor: "APT28"` and
+    `malware-type: "Emotet"` as text attributes (100 and 65 of them on the orkl sample). MISP
+    practice is the cluster tag on the event, `misp-galaxy:threat-actor="APT28"` /
+    `misp-galaxy:malware="Emotet"`, which correlates across instances and carries the
+    galaxy's synonyms and references. TODO: resolve the model's name against the bundled
+    misp-galaxy clusters (PyMISP ships them; exact value or synonym match only, no fuzzy
+    matching), attach the cluster tag to the event and keep the literal name in the comment;
+    a name with no cluster stays a text attribute as today. Event-level content, so the
+    event gets both `ai-computer-assisted` tags. Overlaps with INTEGRATION_PLAN.md: MISP's
+    `sendToLLM` contract expects `AI_ThreatActor` and tags the event with exactly this
+    galaxy. Needs a labelled check that the resolved cluster is the one the report means
+    (item 27's review file can carry it).
 

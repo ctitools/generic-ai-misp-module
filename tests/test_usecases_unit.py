@@ -91,7 +91,7 @@ def test_extraction_adds_tagged_attributes(event, fake_llm) -> None:
         (_candidate("ip-dst", "198.51.100.9"), "not-in-source"),
         (_candidate("ip-dst", "203.0.113.42", quote="something else"), "quote-mismatch"),
         (_candidate("ipv4", "203.0.113.42"), "unknown-type"),
-        (_candidate("sha256", "d41d8cd98f00b204e9800998ecf8427e"), "format"),
+        (_candidate("sha256", "d41d8cd98f00b204e9800998ecf8427"), "format"),  # 31 hex chars
         (_candidate("ip-dst", "203.0.113.42"), "duplicate"),
         (_candidate("domain", "acme-bank-secure.example", confidence=0.5), "confidence"),
     ],
@@ -102,6 +102,62 @@ def test_extraction_filters(event, fake_llm, candidate, reason) -> None:
     generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
     assert metadata["added"] == 0
     assert metadata["rejected"][0]["reason"] == reason
+
+
+DEFANGED_REPORT = (
+    "C2 at 198.51.100[.]7, listening on 198.51.100[.]7:443 and 198.51.100[.]7:x, "
+    "download from hxxps://evil[.]example/p, pipe \\\\.\\pipe\\ntsvcs, "
+    "MD5 2615f7aa2141cc1cb5d0c687bc3396981c2c68dc"
+)
+
+
+def _defanged_event() -> MISPEvent:
+    return generic_ai.validate_event(
+        {"info": "defanged", "EventReport": [{"name": "r", "content": DEFANGED_REPORT}]}
+    )
+
+
+def test_extraction_refangs_and_records_the_original(fake_llm) -> None:
+    fake_llm(
+        json.dumps(
+            {
+                "indicators": [
+                    _candidate("ip-dst", "198.51.100[.]7"),
+                    _candidate("url", "hxxps://evil[.]example/p"),
+                    _candidate("ip-dst|port", "198.51.100[.]7:443"),
+                    _candidate("ip-dst|port", "198.51.100[.]7:x"),
+                    _candidate("named pipe", "\\\\.\\pipe\\ntsvcs"),
+                    _candidate("ip-dst", "10.0.0[.]1"),
+                ]
+            }
+        )
+    )
+    event = _defanged_event()
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    stored = {a.type: (a.value, a.comment) for a in event.attributes}
+    assert stored["ip-dst"][0] == "198.51.100.7"
+    assert stored["ip-dst"][1].endswith("; defanged in source as 198.51.100[.]7")
+    assert stored["url"][0] == "https://evil.example/p"
+    assert stored["ip-dst|port"][0] == "198.51.100.7:443"
+    assert stored["named pipe"] == ("\\\\.\\pipe\\ntsvcs", stored["named pipe"][1])
+    assert "defanged" not in stored["named pipe"][1]
+    assert [(r["value"], r["reason"]) for r in metadata["rejected"]] == [
+        ("198.51.100[.]7:x", "format"),
+        ("10.0.0[.]1", "not-in-source"),
+    ]
+    assert metadata["refanged"] == 3 and metadata["retyped"] == 0
+
+
+def test_extraction_retypes_hashes_by_length(fake_llm) -> None:
+    digest = "2615f7aa2141cc1cb5d0c687bc3396981c2c68dc"  # the report calls it MD5; 40 hex = sha1
+    fake_llm(json.dumps({"indicators": [_candidate("md5", digest)]}))
+    event = _defanged_event()
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    (attribute,) = event.attributes
+    assert attribute.type == "sha1" and attribute.comment.endswith("; typed md5 by the model")
+    assert metadata["retyped"] == 1 and metadata["added"] == 1
 
 
 def test_extraction_rejects_non_json(event, fake_llm) -> None:

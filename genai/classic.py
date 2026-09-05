@@ -16,6 +16,8 @@ from urllib.parse import urlsplit
 
 import iocextract
 
+from genai.refang import refang
+
 HASH_TYPES = {32: "md5", 40: "sha1", 64: "sha256", 128: "sha512"}
 
 
@@ -33,7 +35,8 @@ def _domain(url: str) -> str | None:
 
 
 def extract_classic(text: str) -> list[tuple[str, str]]:
-    """Sorted, de-duplicated (misp_type, value) pairs found by iocextract with refang=True."""
+    """Sorted, de-duplicated (misp_type, value) pairs found by iocextract on the refanged text."""
+    text = refang(text)  # the module's own refang first; iocextract's refang=True as a second net
     found: set[tuple[str, str]] = set()
     for ip in (*iocextract.extract_ipv4s(text, refang=True), *iocextract.extract_ipv6s(text)):
         if _is_ip(ip):  # iocextract's IPv6 regex also matches times such as 23:00:15

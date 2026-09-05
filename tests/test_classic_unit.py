@@ -59,3 +59,9 @@ def test_request_path_never_imports_classic():
 def test_times_are_not_ipv6():
     pairs = extract_classic("seen at 23:00:15 and 21:37:23 from 2001:db8::1")
     assert pairs == [("ip-dst", "2001:db8::1")]
+
+
+def test_dot_words_and_markdown_escapes_are_refanged():
+    got = extract_classic("see hxxp://evil[dot]example/x and https://pastebin\\.com/raw/q81X")
+    assert ("domain", "evil.example") in got
+    assert ("url", "https://pastebin.com/raw/q81X") in got

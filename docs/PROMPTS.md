@@ -89,6 +89,9 @@ Report:
 `{{misp_types}}` is filled from `describeTypes.json` at call time (so the list is never stale).
 Parameters: `temperature 0, seed 42, top_p 1, max_tokens 10000, think false`.
 
+"Never normalise a value" is addressed to the model: the module wants the literal spelling back
+(defanged if the report defangs) and refangs it itself, so the in-source check stays exact.
+
 `max_tokens` was 2000 until 2026-09-05 (a guess, never measured); the first orkl benchmark run
 truncated the JSON answer on 35 of 100 reports and 5 still overflowed 8000, so the budget is now
 10000 (cluster `meta.version` 2). Answers of that size take up to a few minutes on `nanu`, above

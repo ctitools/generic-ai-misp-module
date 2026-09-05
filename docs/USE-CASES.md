@@ -42,15 +42,26 @@ The LLM is asked for structured JSON, one entry per indicator:
   "confidence": 0.98, "quote": "C2 at 91.200.14.10 and update.example-cdn.net"}]
 ```
 
-Then five deterministic post-filters run, no LLM involved. An indicator is added only if it
-passes all of them; every rejection is recorded in the response metadata:
+Then deterministic post-filters run, no LLM involved. Two **normalisations** come first and are
+the only ones the module performs; both are recorded in the attribute comment and counted in
+the response metadata (`refanged`, `retyped`):
 
-1. `value` is a substring of the source report (case-insensitive, whitespace-normalised) — the
-   hallucination guard; `quote` must contain `value` too.
+0. **Refang**: `hxxp://evil[.]com`, `1.2.3[.]4`, `bad[at]evil[.]com`, markdown-escaped
+   `pastebin\.com` become the real value (`genai/refang.py`). MISP stores real values and
+   defangs on display; the original spelling is kept as `defanged in source as <raw>`.
+   Windows paths and named pipes (`\\.\pipe\x`) are left alone.
+   **Hash re-typing**: a hash labelled with the wrong hash type is re-typed by its hex length
+   (32 md5, 40 sha1, 64 sha256, 128 sha512), noted as `typed <old> by the model`.
+
+An indicator is added only if it passes all of the following; every rejection is recorded in
+the response metadata:
+
+1. `value` (refanged) is a substring of the refanged source report (case-insensitive,
+   whitespace-normalised) — the hallucination guard; `quote` must contain `value` too.
 2. `type` exists in `describeTypes.json`; an invalid or missing `category` is replaced by the type's default category.
 3. PyMISP `MISPAttribute(type, value)` accepts it (PyMISP's own per-type validation).
 4. A per-type format check for the common types (IPv4/IPv6, domain/hostname, md5/sha1/sha256,
-   url, email, CVE id). Types without a check rely on 1–3.
+   url, email, CVE id, `ip-src|port`/`ip-dst|port`/`hostname|port`). Types without a check rely on 1–3.
 5. Not already on the event (same type + value, including inside objects).
 
 `confidence` is only a gate (`>= min_confidence`, default 0.9); it is not stored.
@@ -123,9 +134,9 @@ Collected during hackathon 2026; kept as one-liners so they are not lost.
 
 ## Known limits (from the first live runs, 2026-09-04)
 
-- Defanged values (`131.226.2[.]6`, `hxxp://…`) are rejected by the format check because the
-  policy forbids normalising values. Refanging as an explicit, documented step is a candidate
-  for the next round; until then recall on defanged reports is low by design.
+- Defanged values were rejected by the format check until 2026-09-05 (220 of the candidates on
+  the 100-report orkl benchmark); the module now refangs (step 0 above), and the benchmark
+  refangs with the same function on all sides.
 - Precision on the fixture reports was 1.0 once the gold lists were complete; every extra
   indicator the model found (filenames, threat-actor names) was literally in the text.
 - A classical, deterministic baseline exists for benchmarks: `genai/classic.py` wraps

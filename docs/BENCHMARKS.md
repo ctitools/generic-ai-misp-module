@@ -52,7 +52,8 @@ What the numbers say:
 - Gold: three hand-labelled lists in `fixtures/gold/*.iocs.json` (two MISP EventReports from
   `fixtures/output/`, one ORKL sample). The coordinator places the classic and LLM results for
   them under `benchmarks/results/gold/`.
-- Comparison: `benchmarks/compare.py` matches by normalised **value only** (lower-case,
+- Comparison: `benchmarks/compare.py` matches by normalised **value only** (refanged with
+  `genai/refang.py`, the same function the module and the classic baseline use; lower-case,
   whitespace collapsed, trailing `/` and `.` stripped); indicator types are ignored on purpose.
 
 ## Commands

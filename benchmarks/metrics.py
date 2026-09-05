@@ -11,6 +11,8 @@ from collections.abc import Iterable
 from dataclasses import astuple, dataclass
 from statistics import mean
 
+from genai.refang import refang
+
 
 @dataclass(frozen=True)
 class Confusion:
@@ -23,15 +25,9 @@ class Confusion:
         return Confusion(*(a + b for a, b in zip(astuple(self), astuple(other), strict=True)))
 
 
-_REFANG = (("hxxp", "http"), ("[.]", "."), ("(.)", "."), ("[:]", ":"), ("[at]", "@"), ("[@]", "@"))
-
-
 def normalise_value(value: str) -> str:
     """Lower-case, whitespace-collapsed, refanged, trailing `/` and `.` stripped."""
-    value = " ".join(value.lower().split())
-    for defanged, plain in _REFANG:
-        value = value.replace(defanged, plain)
-    return value.rstrip("/.")
+    return " ".join(refang(value).lower().split()).rstrip("/.")
 
 
 def values(indicators: Iterable[tuple[str, str]]) -> set[str]:

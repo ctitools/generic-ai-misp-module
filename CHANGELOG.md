@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-05 (refang)
+
+- New `genai/refang.py`: one refang function (`hxxp://`, `[.]`, `(.)`, `{.}`, `[dot]`, `[:]`, `[at]`, markdown-escaped dots in network tokens; paths and named pipes untouched) used by the extraction use-case, `genai/classic.py` and `benchmarks/metrics.py`. `extract.py` stores refanged values, keeps the original in the attribute comment (`defanged in source as …`), re-types hashes labelled with the wrong hash type by length (`typed … by the model`), reports `refanged`/`retyped` counts, and format-checks `ip-src|port`, `ip-dst|port`, `hostname|port`; rejections report the value as the model gave it. Gold list 59ed4725 refanged; live precision test compares refanged values. Docs: USE-CASES (step 0), requirements R5.3, PROMPTS, IMPROVEMENTS 26 resolved, BENCHMARKS method.
+
 ## 2026-09-04 (benchmark)
 
 - Benchmark re-run with the 10000-token budget: 95/100 reports succeed (5 overflow at any budget), median 9 s per report; `docs/BENCHMARKS.md` Results rewritten, interim `BENCHMARKS_extraction-v2.md` removed.

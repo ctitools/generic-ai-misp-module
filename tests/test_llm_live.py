@@ -14,6 +14,7 @@ from conftest import PROJECT_ROOT, load_fixture
 
 from expansion import generic_ai
 from genai import extract, llm, prompts, summarize
+from genai.refang import refang
 
 GOLD_DIR = PROJECT_ROOT / "fixtures" / "gold"
 GOLDEN_DIR = PROJECT_ROOT / "tests" / "golden"
@@ -39,12 +40,12 @@ def _precision(event, report, gold, llm_settings):
     prompt = prompts.resolve_prompt("cti-info-extraction")
     metadata = extract.extract_iocs(event, report, llm_settings, prompt)
     got = {(a.type, a.value.lower()) for a in event.attributes} | {
-        (a.type, a.value.lower())
+        (a.type, a.value.lower())  # values are stored refanged
         for o in event.objects
         for a in o.attributes
         if getattr(o, "comment", "")
     }
-    gold_set = {(t, v.lower()) for t, v in gold["indicators"]}
+    gold_set = {(t, refang(v).lower()) for t, v in gold["indicators"]}
     gold_values = {v for _, v in gold_set}
     true_positive = {g for g in got if g in gold_set or g[1] in gold_values}
     precision = len(true_positive) / len(got) if got else 1.0

@@ -12,10 +12,12 @@ from typing import Any
 from pymisp import MISPAttribute, MISPEvent, MISPObject
 
 from genai import llm, prompts
+from genai.refang import is_defanged, refang
 
 DESCRIBE_TYPES = MISPAttribute().describe_types
 MISP_TYPES: frozenset[str] = frozenset(DESCRIBE_TYPES["types"])
 HASH_TYPES = ("md5", "sha1", "sha256")
+HASH_BY_LENGTH = {32: "md5", 40: "sha1", 64: "sha256", 128: "sha512"}
 _DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$", re.I
 )
@@ -51,6 +53,21 @@ FORMAT_CHECKS = {
 }
 
 
+def _ip_port(value: str) -> bool:
+    host, sep, port = value.rpartition(":")
+    return bool(sep) and port.isdigit() and _is_ip(host.strip("[]"))
+
+
+FORMAT_CHECKS |= {
+    "ip-src|port": _ip_port,
+    "ip-dst|port": _ip_port,
+    "hostname|port": lambda value: (
+        _DOMAIN_RE.match(value.rpartition(":")[0]) is not None
+        and value.rpartition(":")[2].isdigit()
+    ),
+}
+
+
 def normalise(text: str) -> str:
     return " ".join(text.split()).lower()
 
@@ -74,15 +91,28 @@ def parse_candidates(answer: str) -> list[dict[str, Any]]:
 def reject_reason(  # one return per filter; pylint: disable=too-many-return-statements
     candidate: dict[str, Any], source: str, existing: set[tuple[str, str]], min_confidence: float
 ) -> str | None:
-    """The first filter the candidate fails, or None if it may be added."""
-    value = str(candidate.get("value", "")).strip()
+    """The first filter the candidate fails, or None if it may be added.
+
+    Two normalisations happen here and are recorded on the candidate (`_provenance`): defanged
+    values are refanged (`1.2.3[.]4` -> `1.2.3.4`) and a hash labelled with the wrong hash type
+    is re-typed by its length. Everything else is compared literally against the report.
+    """
+    raw = str(candidate.get("value", "")).strip()
+    value = refang(raw)
     kind = str(candidate.get("type", ""))
     if not value or normalise(value) not in source:
         return "not-in-source"
-    if normalise(value) not in normalise(str(candidate.get("quote", ""))):
+    if normalise(value) not in normalise(refang(str(candidate.get("quote", "")))):
         return "quote-mismatch"
     if kind not in MISP_TYPES:
         return "unknown-type"
+    if kind in HASH_BY_LENGTH.values() and re.fullmatch(r"[a-f0-9]+", value, re.I):
+        if (retyped := HASH_BY_LENGTH.get(len(value))) and retyped != kind:
+            candidate["_provenance"] = f"typed {kind} by the model"
+            kind = candidate["type"] = retyped
+    if is_defanged(raw):
+        candidate["_provenance"] = f"defanged in source as {raw}"
+    candidate["value"] = value
     check = FORMAT_CHECKS.get(kind)
     if check and not check(value):
         return "format"
@@ -110,6 +140,10 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
     """Add accepted candidates: CVEs as vulnerability objects, filename+hash pairs sharing a
     quote as file objects, everything else as plain attributes. Returns the object count."""
     objects = 0
+
+    def note(candidate: dict[str, Any]) -> str:
+        return comment + (f"; {candidate['_provenance']}" if "_provenance" in candidate else "")
+
     by_quote: dict[str, list[dict[str, Any]]] = {}
     for candidate in accepted:
         by_quote.setdefault(normalise(str(candidate.get("quote", ""))), []).append(candidate)
@@ -121,7 +155,7 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
             for candidate in group:
                 if candidate["type"] in ("filename", *HASH_TYPES):
                     attribute = misp_object.add_attribute(
-                        candidate["type"], value=candidate["value"]
+                        candidate["type"], value=candidate["value"], comment=note(candidate)
                     )
                     prompts.tag_ai_generated(attribute)
             event.add_object(misp_object)
@@ -131,7 +165,9 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
             if candidate["type"] == "vulnerability":
                 misp_object = MISPObject("vulnerability")
                 misp_object.comment = comment
-                attribute = misp_object.add_attribute("id", value=candidate["value"])
+                attribute = misp_object.add_attribute(
+                    "id", value=candidate["value"], comment=note(candidate)
+                )
                 prompts.tag_ai_generated(attribute)
                 event.add_object(misp_object)
                 objects += 1
@@ -140,13 +176,17 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
                     candidate["type"],
                     candidate["value"],
                     category=_category(candidate),
-                    comment=comment,
+                    comment=note(candidate),
                 )
                 prompts.tag_ai_generated(attribute)
     return objects
 
 
-def extract_iocs(
+def _count(accepted: list[dict[str, Any]], prefix: str) -> int:
+    return sum(c.get("_provenance", "").startswith(prefix) for c in accepted)
+
+
+def extract_iocs(  # filters, counts and provenance in one pass; pylint: disable=too-many-locals
     event: MISPEvent,
     report: str,
     settings: llm.LLMSettings,
@@ -156,37 +196,29 @@ def extract_iocs(
     """Add high-confidence indicators found in `report` to `event`; returns metadata."""
     if not report.strip():
         raise ValueError("the event has no EventReport to extract from")
-    messages = [
-        {
-            "role": "user",
-            "content": prompt.render(misp_types=", ".join(sorted(MISP_TYPES)), input=report),
-        }
-    ]
-    answer = llm.llm_chat(messages, prompt.params, settings, json_mode=True)
-    source = normalise(report)
+    content = prompt.render(misp_types=", ".join(sorted(MISP_TYPES)), input=report)
+    answer = llm.llm_chat([{"role": "user", "content": content}], prompt.params, settings, True)
+    source = normalise(refang(report))
     existing = existing_values(event)
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     for candidate in parse_candidates(answer):
-        reason = reject_reason(candidate, source, existing, min_confidence)
-        if reason:
-            rejected.append(
-                {"type": candidate.get("type"), "value": candidate.get("value"), "reason": reason}
-            )
+        given = {"type": candidate.get("type"), "value": candidate.get("value")}  # model's words
+        if reason := reject_reason(candidate, source, existing, min_confidence):
+            rejected.append(given | {"reason": reason})
             continue
-        candidate["value"] = str(candidate["value"]).strip()
         existing.add((candidate["type"], normalise(candidate["value"])))
         accepted.append(candidate)
     report_uuids = ", ".join(
         r.uuid for r in event.event_reports if not getattr(r, "deleted", False)
     )
-    objects = _add(
-        event, accepted, comment=f"extracted by generic_ai from EventReport {report_uuids}"
-    )
+    objects = _add(event, accepted, f"extracted by generic_ai from EventReport {report_uuids}")
     return {
         "use_case": "extraction",
         "added": len(accepted),
         "objects": objects,
         "rejected": rejected,
+        "refanged": _count(accepted, "defanged"),
+        "retyped": _count(accepted, "typed"),
         "prompt": prompt.describe(),
     }

@@ -104,7 +104,8 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     JSON (no indentation), drop or cap `quote` (the in-source filter already guards against
     hallucination; the quote is only used to group filename+hashes into file objects), or
     chunk long reports. Decide before deploying on indicator-rich reports.
-26. **Defanged values pass the LLM path unevenly.** `url` and `ip-dst|port` have no strict
-    format check, so `http://169.197.142[.]162/vt.zip` is stored defanged while `ip-dst`
-    `131.226.2[.]6` is rejected. Either refang as an explicit step or reject consistently.
-
+26. **Defanged values passed the LLM path unevenly — done (2026-09-05).** `genai/refang.py` is
+    the single refang function for the module, the classic baseline and the benchmark metrics;
+    the original spelling is kept in the attribute comment. Hashes labelled with the wrong hash
+    type are re-typed by length. `ip-src|port`, `ip-dst|port` and `hostname|port` gained format
+    checks.

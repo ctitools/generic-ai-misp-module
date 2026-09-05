@@ -1,5 +1,5 @@
 {
-  "note": "VMware Emotet part 2 blog (tests/fixtures/orkl-sample.txt)",
+  "note": "VMware Emotet part 2 blog (tests/fixtures/orkl-sample.txt); url added 2026-09-05 after refanging (defanged hxxp://185.7.214[.]7.cc.html in the text)",
   "indicators": [
     [
       "md5",
@@ -68,6 +68,10 @@
     [
       "malware",
       "Emotet"
+    ],
+    [
+      "url",
+      "http://185.7.214.7.cc.html"
     ]
   ]
 }

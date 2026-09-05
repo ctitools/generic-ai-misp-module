@@ -136,4 +136,13 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     every run overwrites the previous numbers. TODO: `benchmarks/history.csv` appended by the
     compare scripts (date, commit, tag, cluster, model digest, headline metrics), Wilson
     intervals on pass rates, a second seed per release.
+32. **The gold data set is far too small.** Three hand-labelled reports (two MISP fixtures,
+    one Emotet sample; 38 indicators in total) carry every precision and recall number the
+    module is judged by; one wrong label moves precision by 3 %. TODO: grow
+    `fixtures/gold/` to a few dozen reports with a few hundred labelled indicators, drawn
+    from the orkl sample (`benchmarks/data/orkl/`) so the same reports feed the benchmark and
+    the gate; label every indicator type the module emits, not only hashes/IPs/URLs; record
+    who labelled and when in the file; keep the precision gate at ≥ 0.95 and add a recall
+    floor once the set is large enough to make one meaningful. Overlaps with item 27 (the
+    adjudication of LLM-only values is the same labelling work).
 

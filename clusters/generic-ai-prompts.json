@@ -9,7 +9,7 @@
   "source": "https://github.com/ctitools/generic-ai-misp-module",
   "type": "generic-ai-prompts",
   "uuid": "d555596c-4db5-4af6-a66d-748f74f65ab8",
-  "version": 8,
+  "version": 9,
   "values": [
     {
       "value": "cti-info-extraction/qwen3.8-v1",
@@ -30,9 +30,9 @@
           "max_tokens": 10000,
           "think": false
         },
-        "prompt": "You extract indicators of compromise from a cyber threat intelligence report for MISP.\nOnly return indicators that appear LITERALLY in the report text. Never infer, complete or\nnormalise a value. If unsure, leave it out: precision matters more than recall. Benign\nreferences (the reporting organisation's own website, documentation links) are not indicators.\n\nAllowed \"type\" values are MISP attribute types, e.g. ip-src, ip-dst, domain, hostname, url,\nmd5, sha1, sha256, filename, email-src, email-dst, vulnerability, regkey, mutex, user-agent,\nja3-fingerprint-md5, AS, btc, threat-actor, malware-type. The complete list follows:\n{{misp_types}}\n\nReturn ONLY a JSON object, no prose, following this schema:\n{\"indicators\": [{\"type\": \"<misp type>\", \"category\": \"<misp category>\", \"value\": \"<exact text>\",\n  \"confidence\": <0..1>, \"quote\": \"<the sentence fragment containing the value>\"}]}\nSet confidence below 0.9 for anything you are not certain about.\n\nReport:\n{{input}}",
-        "version": 2,
-        "prompt_sha256": "9adaea95ee9ed16546dc141da3317b8aec6907dd983d682e92da6be9d1ab0757",
+        "prompt": "You extract indicators of compromise from a cyber threat intelligence report for MISP.\nOnly return indicators that appear LITERALLY in the report text. Never infer, complete or\nnormalise a value. If unsure, leave it out: precision matters more than recall. Benign\nreferences (the reporting organisation's own website, documentation links) are not indicators.\n\nAllowed \"type\" values are MISP attribute types, e.g. ip-src, ip-dst, domain, hostname, url,\nmd5, sha1, sha256, filename, email-src, email-dst, vulnerability, regkey, mutex, user-agent,\nja3-fingerprint-md5, AS, btc, threat-actor, malware-type. The complete list follows:\n{{misp_types}}\n\nReturn ONLY a JSON object, no prose, following this schema:\n{\"published\": \"<the report's publication date exactly as written, or null>\",\n \"indicators\": [{\"type\": \"<misp type>\", \"category\": \"<misp category>\", \"value\": \"<exact text>\",\n  \"confidence\": <0..1>, \"quote\": \"<the sentence fragment containing the value>\",\n  \"actionable\": <true|false>,\n  \"first_seen\": \"<a date exactly as written in the report for this indicator, or null>\",\n  \"last_seen\": \"<a date exactly as written in the report for this indicator, or null>\"}]}\nSet confidence below 0.9 for anything you are not certain about.\n\"actionable\" is false for the reporting organisation's own infrastructure, legitimate tools and\nbenign filenames mentioned only as context; true for indicators a defender should detect on.\nDates: copy the spelling from the report character for character (\"12 March 2026\",\n\"2026-03-12\"); use null when the report does not state a date for that indicator. Never\ncompute or guess a date.\n\nReport:\n{{input}}",
+        "version": 3,
+        "prompt_sha256": "f25563e3df2eb6cf00ff93202af01fa5a344515236d866d553eff64348c98da2",
         "language": "en",
         "output_schema": {
           "type": "object",
@@ -62,9 +62,30 @@
                   },
                   "quote": {
                     "type": "string"
+                  },
+                  "actionable": {
+                    "type": "boolean"
+                  },
+                  "first_seen": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "last_seen": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   }
                 }
               }
+            },
+            "published": {
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [

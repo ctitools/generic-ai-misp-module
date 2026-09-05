@@ -30,12 +30,25 @@ LOG_FILE = REPO_ROOT / "logs" / "benchmark-llm.log"
 log = logging.getLogger("benchmark-llm")
 
 
-def indicators(event: dict) -> list[list[str]]:
-    """Sorted (type, value) pairs of all event and object attributes."""
+def _attributes(event: dict) -> list[dict]:
     attributes = list(event.get("Attribute", []))
     for obj in event.get("Object", []):
         attributes.extend(obj.get("Attribute", []))
-    return sorted([a["type"], str(a["value"])] for a in attributes)
+    return attributes
+
+
+def indicators(event: dict) -> list[list[str]]:
+    """Sorted (type, value) pairs of all event and object attributes."""
+    return sorted([a["type"], str(a["value"])] for a in _attributes(event))
+
+
+def not_actionable(event: dict) -> list[list[str]]:
+    """(type, value) of attributes the model marked not actionable (to_ids lowered)."""
+    return sorted(
+        [a["type"], str(a["value"])]
+        for a in _attributes(event)
+        if "not actionable per report" in a.get("comment", "")
+    )
 
 
 SUFFIX = {"extraction": "llm", "summarization": "summary"}
@@ -76,7 +89,13 @@ def run_one(
     result = {"model": meta["model"], "prompt": meta["prompt"], "seconds": seconds}
     processed = response["results"]["Event"]["Event"]
     if use_case == "extraction":
-        return result | {"indicators": indicators(processed), "rejected": meta["rejected"]}
+        return result | {
+            "indicators": indicators(processed),
+            "rejected": meta["rejected"],
+            "not_actionable": not_actionable(processed),
+            "dated": meta.get("dated", 0),
+            "published": meta.get("published"),
+        }
     return result | {"summary": processed["EventReport"][-1]["content"], "words": meta["words"]}
 
 

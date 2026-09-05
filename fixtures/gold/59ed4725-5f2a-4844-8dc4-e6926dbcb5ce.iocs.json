@@ -93,5 +93,10 @@
       "url",
       "c34718cbb4c6.ngrok-free.app/file.ps1"
     ]
-  ]
+  ],
+  "dates": {
+    "CVE-2025-49706": "2025-07-07",
+    "CVE-2025-49704": "2025-07-07"
+  },
+  "dates_note": "first_seen: 'As early as July 7, 2025, ... attempting to exploit CVE-2025-49706 and CVE-2025-49704' (labelled 2026-09-05)"
 }

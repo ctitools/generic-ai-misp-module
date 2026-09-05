@@ -1,13 +1,13 @@
 # Use-cases
 
-Two use-cases are in focus. Both keep the module contract **MISP Event in → MISP Event out**
+Two LLM use-cases are in focus, plus tag suggestion (UC3) which uses no LLM. All keep the module contract **MISP Event in → MISP Event out**
 ([ARCHITECTURE.md](ARCHITECTURE.md)) and both send *a prompt plus the event's content* to the
 LLM configured in `.env` (`OPENAI_BASE_URL`, `OPENAI_MODEL`, `OPENAI_API_KEY`; any
 OpenAI-compatible chat endpoint, today Ollama on `nanu`). Prompts and sampling parameters are
 configurable and shipped as a MISP galaxy ([PROMPTS.md](PROMPTS.md)). Tests for both are
 specified in [TESTING.md](TESTING.md); formal requirements in [requirements.md](requirements.md).
 
-Status: **implemented** in `genai/extract.py` and `genai/summarize.py`, dispatched by
+Status: **implemented** in `genai/extract.py`, `genai/summarize.py` and `genai/suggest.py`, dispatched by
 `process_event()` in `expansion/generic_ai.py`. The default `use_case` is `none` (pass-through,
 no LLM call), so the round-trip gate and plain validation never touch the LLM.
 
@@ -19,12 +19,12 @@ from a pinned list:
 | what the LLM suggested | tags go on | tags |
 |---|---|---|
 | attributes / objects (UC1) | each new attribute (and object) | `ai-computer-assisted:assistance-level="ai-generated"`, `ai-computer-assisted:review-level="unreviewed"` |
-| event-level content: a summary EventReport (UC2), tags (future) | the event | same two tags |
+| event-level content: a summary EventReport (UC2), suggested tags (UC3) | the event | same two tags |
 
 Nothing the module adds may leave without these tags. Existing content of the event is never
-modified or re-tagged. Content tags (`tlp:*`, kill chain, confidence taxonomy) and dates
-(`first_seen`/`last_seen`) may only ever be suggested when the report states them literally;
-nothing is inferred (IMPROVEMENTS.md item 34, not implemented yet).
+modified or re-tagged. Content tags (`tlp:*`, kill chain, confidence taxonomy) may only ever be suggested when the
+report states them literally; nothing is inferred (IMPROVEMENTS.md item 34, not implemented
+yet). Dates follow the same rule and are implemented (step 0 below).
 
 ## UC1 — CTI info extraction
 
@@ -54,13 +54,24 @@ the response metadata (`refanged`, `retyped`):
    Windows paths and named pipes (`\\.\pipe\x`) are left alone.
    **Hash re-typing**: a hash labelled with the wrong hash type is re-typed by its hex length
    (32 md5, 40 sha1, 64 sha256, 128 sha512), noted as `typed <old> by the model`.
+   **Dates**: `first_seen` / `last_seen` are set only from a date the report states for that
+   indicator, copied by the model character for character, checked to be in the text, and
+   parsed by `genai/dates.py` (unambiguous spellings only: `2026-03-12`, `12 March 2026`,
+   `March 12, 2026`; `03/04/2026` is dropped, never guessed). A publication date the report
+   states is reported in the metadata only, never applied to indicators (on a live report the
+   model took a referenced blog's date for it). Noted as `first_seen from "…"`.
+   **`to_ids`**: PyMISP's per-type default, lowered to false when the model marks the
+   indicator as not actionable (the reporting organisation's own infrastructure, legitimate
+   tools, benign filenames named as context); never raised. Noted as `not actionable per report`.
 
 An indicator is added only if it passes all of the following; every rejection is recorded in
 the response metadata:
 
 1. `value` (refanged) is a substring of the refanged source report (case-insensitive,
    whitespace-normalised) — the hallucination guard; `quote` must contain `value` too.
-2. `type` exists in `describeTypes.json`; an invalid or missing `category` is replaced by the type's default category.
+2. `type` exists in `describeTypes.json` and is not a free-text type (`other`, `text`,
+   `comment` carry no indicator semantics and are rejected as `free-text-type`); an invalid or
+   missing `category` is replaced by the type's default category.
 3. PyMISP `MISPAttribute(type, value)` accepts it (PyMISP's own per-type validation).
 4. A per-type format check for the common types (IPv4/IPv6, domain/hostname, md5/sha1/sha256,
    url, email, CVE id, `ip-src|port`/`ip-dst|port`/`hostname|port`). Types without a check rely on 1–3.
@@ -101,6 +112,35 @@ Deterministic rendering for `kind=event` matters for testing: attributes sorted 
 `(type, value)`, objects by `(name, uuid)`, tags by name, no timestamps, so identical events
 produce identical prompts. See TESTING.md "Deterministic summaries".
 
+## UC3 — Tag suggestion
+
+`suggest_tags(event: MISPEvent, settings, limit=5, min_score=0.0) -> metadata`
+
+Not an LLM: the [misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest) service
+(BGE nearest-event retrieval over an index of previously tagged events of the same MISP)
+proposes taxonomy/galaxy tags by similarity-weighted voting, and abstains when the nearest
+indexed event is not similar enough.
+
+| | |
+|---|---|
+| input | the whole event, serialised with PyMISP and POSTed to `MISP_TAG_SUGGEST_URL/suggest` with `limit` (1..10). The service strips existing tags from its model input itself. |
+| output | the same event with the suggested tags added (`event.add_tag`), plus the two AI tags on the event when at least one tag was added |
+| filters | `score >= suggest_min_score`; tags already on the event are skipped (recorded as `skipped_existing`) |
+| abstention | not an error: no tag, no AI tag, metadata `abstained: true` |
+| errors | service unreachable, HTTP error, malformed answer → `{"error": "misp-tag-suggest: …"}`, nothing added |
+| metadata | `added` (tag + score), `skipped_existing`, `below_min_score`, `abstained`, `model_version`, `dataset_manifest_sha256`, `model.server` |
+
+Only tags that exist on the target MISP come back: the service's index is built from a
+taxonomy snapshot of that instance. Why HTTP and not `import`: the service needs torch,
+faiss and sentence-transformers; this repo allows only pymisp and runs inside the
+misp-modules server (ARCHITECTURE.md). The call goes through the same stdlib HTTP function as
+the LLM (`genai.llm.http_json`); tests fake it.
+
+```json
+{"module": "generic_ai", "event": {"Event": {...}},
+ "use_case": "tag_suggestion", "suggest_limit": 5, "suggest_min_score": 0.3}
+```
+
 ## Configuration
 
 All keys are `moduleconfig` entries (settable in MISP's module settings), overridable per
@@ -109,14 +149,15 @@ the request body ([IMPROVEMENTS.md](IMPROVEMENTS.md) item 3).
 
 | key | default | request | meaning |
 |---|---|---|---|
-| `use_case` | `none` | yes | `none` (pass-through), `extraction` or `summarization` |
+| `use_case` | `none` | yes | `none` (pass-through), `extraction`, `summarization` or `tag_suggestion` |
 | `summary_kind` | `report` | yes | `report` or `event` |
 | `prompt_extraction`, `prompt_summary_report`, `prompt_summary_event` | bundled galaxy cluster | yes | galaxy cluster uuid or `value`, or inline prompt text |
 | `model_id` | `OPENAI_MODEL` from `.env` | yes | must exist on the endpoint |
 | sampling (`temperature`, `seed`, `top_p`, `max_tokens`, `think`) | from the prompt cluster (`0` / `42` / `1` / per use-case / `false`) | via the cluster | select another cluster to change them |
 | `min_confidence` | `0.9` | yes | UC1 gate |
-| `request_timeout` | `120` s | no | LLM call bound; timeout → error, no fallback |
-| `api_base`, `api_key` | `.env` | **no** | endpoint |
+| `suggest_limit`, `suggest_min_score` | `5`, `0.0` | yes | UC3: tags requested (1..10), minimum vote score |
+| `request_timeout` | `120` s | no | LLM / service call bound; timeout → error, no fallback |
+| `api_base`, `api_key`, `MISP_TAG_SUGGEST_URL`, `MISP_TAG_SUGGEST_API_KEY` | `.env` | **no** | endpoints |
 
 Precedence: request body (allowed keys only) > module config > `.env` > built-in default.
 
@@ -124,7 +165,7 @@ Precedence: request body (allowed keys only) > module config > `.env` > built-in
 
 Collected during hackathon 2026; kept as one-liners so they are not lost.
 
-- **Tag proposal**: propose the best matching taxonomy/galaxy tags for an event (would reuse UC2's event rendering; tags go on the event, AI-tagged).
+- **Tag proposal by LLM**: UC3 does this by retrieval; an LLM variant (UC2's event rendering + the taxonomy list as prompt) could be compared against it with `benchmarks/run_suggest.py`.
 - **ML checker**: pre-publish best-current-practice check with a community-overridable prompt.
 - **Chatbot "Marty McFly"**: Mattermost bot with MISP search tools (FastMCP).
 - **Threat-actor clustering**: propose canonical TA names from T-codes and attributes; MISP galaxy synonyms as seed.

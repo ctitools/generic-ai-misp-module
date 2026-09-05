@@ -60,18 +60,25 @@ def created_event(misp_write: PyMISP, request):
             misp_write.delete_event(created.uuid)
 
 
-def _run_and_push(misp_write: PyMISP, uuid: str, settings: dict) -> dict:
-    """Fetch the event from MISP, run the module on it, push the processed event back."""
+def _run_and_push(
+    misp_write: PyMISP, uuid: str, settings: dict, metadata: dict | None = None
+) -> tuple[dict, dict]:
+    """Fetch the event from MISP, run the module on it, push the processed event back.
+
+    Returns (the event as the module produced it, the event as MISP stores it afterwards)."""
     live = misp_write.get_event(uuid, pythonify=False)
     response = generic_ai.dict_handler({"module": "generic_ai", "event": live, **settings})
     assert "error" not in response, response.get("error")
+    if metadata is not None:
+        metadata.update(response["metadata"])
     processed = MISPEvent()
     processed.load(response["results"]["Event"])
     processed.distribution = YOUR_ORG_ONLY
     processed.published = False
     result = misp_write.update_event(processed, pythonify=False)
     assert not result.get("errors"), result
-    return misp_write.get_event(uuid, pythonify=False)["Event"]
+    produced = response["results"]["Event"]["Event"]
+    return produced, misp_write.get_event(uuid, pythonify=False)["Event"]
 
 
 def _tags(element: dict) -> set[str]:
@@ -80,12 +87,22 @@ def _tags(element: dict) -> set[str]:
 
 @pytest.mark.parametrize("created_event", REPORTS, indirect=True, ids=[p.stem[:8] for p in REPORTS])
 def test_extraction_lands_in_misp(misp_write, llm_settings, created_event) -> None:
-    after = _run_and_push(misp_write, created_event, {"use_case": "extraction"})
+    produced, after = _run_and_push(misp_write, created_event, {"use_case": "extraction"})
     attributes = list(after["Attribute"]) + [a for o in after["Object"] for a in o["Attribute"]]
     added = [a for a in attributes if a.get("comment", "").startswith("extracted by generic_ai")]
     assert added, "the module added no attribute to the event"
     for attribute in added:
         assert AI_TAGS <= _tags(attribute), (attribute["type"], attribute["value"])
+    sent = {
+        a["uuid"]: a
+        for a in produced["Attribute"]
+        + [x for o in produced.get("Object", []) for x in o["Attribute"]]
+    }
+    for attribute in added:  # to_ids and dates arrive in MISP exactly as the module set them
+        expected = sent[attribute["uuid"]]
+        assert attribute["to_ids"] == expected["to_ids"], attribute["value"]
+        for field in ("first_seen", "last_seen"):
+            assert (attribute.get(field) or "")[:10] == (expected.get(field) or "")[:10], field
     assert not _tags(after) & AI_TAGS  # attributes were suggested, the event stays untagged
     assert after["distribution"] == str(YOUR_ORG_ONLY) and after["published"] is False
     (report,) = [r for r in after["EventReport"] if not r["deleted"]]  # source report untouched
@@ -94,7 +111,7 @@ def test_extraction_lands_in_misp(misp_write, llm_settings, created_event) -> No
 
 @pytest.mark.parametrize("created_event", REPORTS[:1], indirect=True, ids=[REPORTS[0].stem[:8]])
 def test_summary_lands_in_misp(misp_write, llm_settings, created_event) -> None:
-    after = _run_and_push(misp_write, created_event, {"use_case": "summarization"})
+    _, after = _run_and_push(misp_write, created_event, {"use_case": "summarization"})
     reports = {r["name"]: r["content"] for r in after["EventReport"] if not r["deleted"]}
     summaries = [n for n in reports if n.startswith("AI summary of ")]
     assert len(summaries) == 1 and reports[summaries[0]].startswith("## Threat")
@@ -106,7 +123,7 @@ def test_summary_lands_in_misp(misp_write, llm_settings, created_event) -> None:
 @pytest.mark.parametrize("created_event", REPORTS[1:2], indirect=True, ids=[REPORTS[1].stem[:8]])
 def test_event_summary_lands_in_misp(misp_write, llm_settings, created_event) -> None:
     settings = {"use_case": "summarization", "summary_kind": "event"}
-    after = _run_and_push(misp_write, created_event, settings)
+    _, after = _run_and_push(misp_write, created_event, settings)
     reports = {r["name"]: r["content"] for r in after["EventReport"] if not r["deleted"]}
     summaries = [n for n in reports if n == f"AI summary of event {after['uuid']}"]
     assert len(summaries) == 1 and reports[summaries[0]].startswith("## What happened")
@@ -114,4 +131,17 @@ def test_event_summary_lands_in_misp(misp_write, llm_settings, created_event) ->
     assert AI_TAGS <= _tags(after)
     seeded = {a["value"] for a in after["Attribute"] if a.get("comment") == "e2e seed attribute"}
     assert seeded == {v for _, v in SEED_ATTRIBUTES}  # nothing added or lost on the event
+    assert after["distribution"] == str(YOUR_ORG_ONLY) and after["published"] is False
+
+
+@pytest.mark.parametrize("created_event", REPORTS[:1], indirect=True, ids=[REPORTS[0].stem[:8]])
+def test_tag_suggestion_lands_in_misp(misp_write, suggest_settings, created_event) -> None:
+    metadata: dict = {}
+    _, after = _run_and_push(misp_write, created_event, {"use_case": "tag_suggestion"}, metadata)
+    added = {s["tag"] for s in metadata["added"]}
+    if added:
+        assert added <= _tags(after) and AI_TAGS <= _tags(after)
+    else:  # the service abstained or only returned tags the event already had
+        assert metadata["abstained"] or metadata["skipped_existing"]
+        assert not _tags(after) & AI_TAGS
     assert after["distribution"] == str(YOUR_ORG_ONLY) and after["published"] is False

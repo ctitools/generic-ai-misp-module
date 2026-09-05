@@ -11,13 +11,14 @@ from typing import Any
 
 from pymisp import MISPAttribute, MISPEvent, MISPObject
 
-from genai import llm, prompts
+from genai import dates, llm, prompts
 from genai.refang import is_defanged, refang
 
 DESCRIBE_TYPES = MISPAttribute().describe_types
 MISP_TYPES: frozenset[str] = frozenset(DESCRIBE_TYPES["types"])
 HASH_TYPES = ("md5", "sha1", "sha256")
 HASH_BY_LENGTH = {32: "md5", 40: "sha1", 64: "sha256", 128: "sha512"}
+FREE_TEXT_TYPES = frozenset({"other", "text", "comment"})  # carry no indicator semantics
 _DOMAIN_RE = re.compile(
     r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$", re.I
 )
@@ -77,7 +78,8 @@ def existing_values(event: MISPEvent) -> set[tuple[str, str]]:
     return {(a.type, normalise(str(a.value))) for a in attributes}
 
 
-def parse_candidates(answer: str) -> list[dict[str, Any]]:
+def parse_candidates(answer: str) -> tuple[list[dict[str, Any]], str]:
+    """(candidates, published date spelling or "") from the model's JSON."""
     try:
         data = json.loads(answer)
     except json.JSONDecodeError as error:
@@ -85,7 +87,40 @@ def parse_candidates(answer: str) -> list[dict[str, Any]]:
     candidates = data.get("indicators") if isinstance(data, dict) else data
     if not isinstance(candidates, list) or not all(isinstance(c, dict) for c in candidates):
         raise llm.LLMError('extraction answer must be {"indicators": [...]}')
-    return candidates
+    published = data.get("published") if isinstance(data, dict) else None
+    return candidates, str(published or "").strip()
+
+
+def _note(candidate: dict[str, Any], text: str) -> None:
+    candidate["_provenance"] = "; ".join(filter(None, (candidate.get("_provenance"), text)))
+
+
+def normalise_dates(candidate: dict[str, Any], source: str) -> int:
+    """Turn the model's first_seen/last_seen spellings into ISO dates when they are literally in
+    the report. Returns the number of spellings that were in the text but could not be parsed
+    (dropped, never guessed). A publication date is never applied to indicators: on a live
+    report the model took the date of a referenced blog for it, which would have stamped every
+    indicator with a wrong last_seen."""
+    unparsed = 0
+    for field in ("first_seen", "last_seen"):
+        spelling = str(candidate.pop(field, None) or "").strip()
+        if not spelling or normalise(spelling) not in source:
+            continue
+        if iso := dates.to_iso(spelling):
+            candidate[field] = iso
+            _note(candidate, f'{field} from "{spelling}"')
+        else:
+            unparsed += 1
+    return unparsed
+
+
+def to_ids(candidate: dict[str, Any]) -> bool:
+    """PyMISP's per-type default, lowered (never raised) when the model says not actionable."""
+    default = bool(DESCRIBE_TYPES["sane_defaults"][candidate["type"]]["to_ids"])
+    if default and candidate.get("actionable") is False:
+        _note(candidate, "not actionable per report")
+        return False
+    return default
 
 
 def reject_reason(  # one return per filter; pylint: disable=too-many-return-statements
@@ -106,12 +141,14 @@ def reject_reason(  # one return per filter; pylint: disable=too-many-return-sta
         return "quote-mismatch"
     if kind not in MISP_TYPES:
         return "unknown-type"
+    if kind in FREE_TEXT_TYPES:
+        return "free-text-type"
     if kind in HASH_BY_LENGTH.values() and re.fullmatch(r"[a-f0-9]+", value, re.I):
         if (retyped := HASH_BY_LENGTH.get(len(value))) and retyped != kind:
-            candidate["_provenance"] = f"typed {kind} by the model"
+            _note(candidate, f"typed {kind} by the model")
             kind = candidate["type"] = retyped
     if is_defanged(raw):
-        candidate["_provenance"] = f"defanged in source as {raw}"
+        _note(candidate, f"defanged in source as {raw}")
     candidate["value"] = value
     check = FORMAT_CHECKS.get(kind)
     if check and not check(value):
@@ -144,6 +181,11 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
     def note(candidate: dict[str, Any]) -> str:
         return comment + (f"; {candidate['_provenance']}" if "_provenance" in candidate else "")
 
+    def fields(candidate: dict[str, Any]) -> dict[str, Any]:
+        actionable = to_ids(candidate)  # may add a provenance note, so before the comment
+        extra = {k: candidate[k] for k in ("first_seen", "last_seen") if k in candidate}
+        return {"comment": note(candidate), "to_ids": actionable, **extra}
+
     by_quote: dict[str, list[dict[str, Any]]] = {}
     for candidate in accepted:
         by_quote.setdefault(normalise(str(candidate.get("quote", ""))), []).append(candidate)
@@ -155,7 +197,7 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
             for candidate in group:
                 if candidate["type"] in ("filename", *HASH_TYPES):
                     attribute = misp_object.add_attribute(
-                        candidate["type"], value=candidate["value"], comment=note(candidate)
+                        candidate["type"], value=candidate["value"], **fields(candidate)
                     )
                     prompts.tag_ai_generated(attribute)
             event.add_object(misp_object)
@@ -166,7 +208,7 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
                 misp_object = MISPObject("vulnerability")
                 misp_object.comment = comment
                 attribute = misp_object.add_attribute(
-                    "id", value=candidate["value"], comment=note(candidate)
+                    "id", value=candidate["value"], **fields(candidate)
                 )
                 prompts.tag_ai_generated(attribute)
                 event.add_object(misp_object)
@@ -176,14 +218,14 @@ def _add(event: MISPEvent, accepted: list[dict[str, Any]], comment: str) -> int:
                     candidate["type"],
                     candidate["value"],
                     category=_category(candidate),
-                    comment=note(candidate),
+                    **fields(candidate),
                 )
                 prompts.tag_ai_generated(attribute)
     return objects
 
 
-def _count(accepted: list[dict[str, Any]], prefix: str) -> int:
-    return sum(c.get("_provenance", "").startswith(prefix) for c in accepted)
+def _count(accepted: list[dict[str, Any]], needle: str) -> int:
+    return sum(needle in c.get("_provenance", "") for c in accepted)
 
 
 def extract_iocs(  # filters, counts and provenance in one pass; pylint: disable=too-many-locals
@@ -202,11 +244,14 @@ def extract_iocs(  # filters, counts and provenance in one pass; pylint: disable
     existing = existing_values(event)
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
-    for candidate in parse_candidates(answer):
+    candidates, published = parse_candidates(answer)
+    dates_unparsed = 0
+    for candidate in candidates:
         given = {"type": candidate.get("type"), "value": candidate.get("value")}  # model's words
         if reason := reject_reason(candidate, source, existing, min_confidence):
             rejected.append(given | {"reason": reason})
             continue
+        dates_unparsed += normalise_dates(candidate, source)
         existing.add((candidate["type"], normalise(candidate["value"])))
         accepted.append(candidate)
     report_uuids = ", ".join(
@@ -218,7 +263,13 @@ def extract_iocs(  # filters, counts and provenance in one pass; pylint: disable
         "added": len(accepted),
         "objects": objects,
         "rejected": rejected,
-        "refanged": _count(accepted, "defanged"),
-        "retyped": _count(accepted, "typed"),
+        "refanged": _count(accepted, "defanged in source"),
+        "retyped": _count(accepted, "typed "),
+        "dated": sum("first_seen" in c or "last_seen" in c for c in accepted),
+        "dates_unparsed": dates_unparsed,
+        "not_actionable": sum(c.get("actionable") is False for c in accepted),
+        "published": dates.to_iso(published)
+        if published and normalise(published) in source
+        else None,
         "prompt": prompt.describe(),
     }

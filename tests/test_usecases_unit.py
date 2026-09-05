@@ -91,6 +91,7 @@ def test_extraction_adds_tagged_attributes(event, fake_llm) -> None:
         (_candidate("ip-dst", "198.51.100.9"), "not-in-source"),
         (_candidate("ip-dst", "203.0.113.42", quote="something else"), "quote-mismatch"),
         (_candidate("ipv4", "203.0.113.42"), "unknown-type"),
+        (_candidate("other", "203.0.113.42"), "free-text-type"),
         (_candidate("sha256", "d41d8cd98f00b204e9800998ecf8427"), "format"),  # 31 hex chars
         (_candidate("ip-dst", "203.0.113.42"), "duplicate"),
         (_candidate("domain", "acme-bank-secure.example", confidence=0.5), "confidence"),
@@ -423,3 +424,73 @@ def test_summary_event_v2_cluster_is_selectable() -> None:
     v2 = prompts.resolve_prompt("summary-event", "summary-event/qwen3.8-v2")
     assert v2.version == 2 and v2.params["max_tokens"] == 1000 and "150 words" in v2.text
     assert v2.headings == prompts.resolve_prompt("summary-event").headings
+
+
+DATED_REPORT = (
+    "Published 2 September 2026. The loader beaconed to 198.51.100.7 from 12 March 2026 until "
+    "April 3, 2026. The staging host 198.51.100.8 was first seen on 03/04/2026. Our blog at "
+    "https://vendor.example/post lists the samples; the tool psexec.exe was used legitimately."
+)
+
+
+def _dated_event() -> MISPEvent:
+    return generic_ai.validate_event(
+        {"info": "dated", "EventReport": [{"name": "r", "content": DATED_REPORT}]}
+    )
+
+
+def test_extraction_dates_from_the_text_only(fake_llm) -> None:
+    fake_llm(
+        json.dumps(
+            {
+                "published": "2 September 2026",
+                "indicators": [
+                    _candidate("ip-dst", "198.51.100.7")
+                    | {"first_seen": "12 March 2026", "last_seen": "April 3, 2026"},
+                    _candidate("ip-dst", "198.51.100.8") | {"first_seen": "03/04/2026"},
+                    _candidate("url", "https://vendor.example/post")
+                    | {"first_seen": "1 January 2020", "actionable": False},
+                ],
+            }
+        )
+    )
+    event = _dated_event()
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    by_value = {a.value: a for a in event.attributes}
+    beacon = by_value["198.51.100.7"]
+    assert beacon.first_seen.isoformat() == "2026-03-12T00:00:00+00:00"
+    assert beacon.last_seen.isoformat() == "2026-04-03T00:00:00+00:00"
+    assert 'first_seen from "12 March 2026"' in beacon.comment
+    staging = by_value["198.51.100.8"]  # ambiguous 03/04/2026: dropped, nothing guessed
+    assert not hasattr(staging, "first_seen") and not hasattr(staging, "last_seen")
+    blog = by_value["https://vendor.example/post"]  # date not in the text: dropped silently
+    assert not hasattr(blog, "first_seen")
+    assert metadata["dated"] == 1 and metadata["dates_unparsed"] == 1
+    assert metadata["published"] == "2026-09-02T00:00:00+00:00"  # metadata only, never applied
+
+
+def test_extraction_to_ids_is_only_ever_lowered(fake_llm) -> None:
+    fake_llm(
+        json.dumps(
+            {
+                "indicators": [
+                    _candidate("ip-dst", "198.51.100.7") | {"actionable": True},
+                    _candidate("url", "https://vendor.example/post") | {"actionable": False},
+                    _candidate("filename", "psexec.exe") | {"actionable": False},
+                    _candidate("threat-actor", "psexec.exe") | {"actionable": True},
+                ]
+            }
+        )
+    )
+    event = _dated_event()
+    metadata: dict = {}
+    generic_ai.process_event(event, settings={"use_case": "extraction"}, metadata=metadata)
+    flags = {(a.type, a.value): a.to_ids for a in event.attributes}
+    assert flags[("ip-dst", "198.51.100.7")] is True
+    assert flags[("url", "https://vendor.example/post")] is False
+    assert flags[("filename", "psexec.exe")] is False
+    assert flags[("threat-actor", "psexec.exe")] is False  # default false, never raised
+    comments = {a.value: a.comment for a in event.attributes if a.type == "url"}
+    assert comments["https://vendor.example/post"].endswith("; not actionable per report")
+    assert metadata["not_actionable"] == 2

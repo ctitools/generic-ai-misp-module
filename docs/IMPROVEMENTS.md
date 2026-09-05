@@ -159,7 +159,7 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     disappears), keep behaviour byte-for-byte (same error messages, same timeouts), then run the
     offline suite, the `--require-live` run and one benchmark pass as the gate. Update
     ARCHITECTURE.md ("llm.py is the only network code") and CLAUDE.md.
-34. **Content tags only when the report states them (Aaron, 2026-09-05).** Extraction may
+34. **Content tags only when the report states them (Aaron, 2026-09-05); dates done 2026-09-05, tags open.** Extraction may
     suggest `tlp:*`, kill-chain / ATT&CK and confidence-taxonomy tags **only if the marking,
     phase or confidence statement is literally in the EventReport** (same in-source rule as
     for indicators, same provenance in the comment); otherwise the field stays empty. Never
@@ -170,7 +170,7 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     dates stated in the text, a stated publication date at most as `last_seen`, nothing inferred
     from the EventReport's `timestamp` (that is MISP's save time). TODO together with the
     `to_ids` decision (item 35) as one prompt/schema version bump.
-35. **`to_ids` is set blindly.** Every extracted attribute gets PyMISP's per-type default
+35. **`to_ids` was set blindly — done for `to_ids` (2026-09-05, `actionable` from the model, only lowers); ObjectReference still open.** Every extracted attribute gets PyMISP's per-type default
     (`ip-dst` true, `filename` true …), so a vendor's own domain or `mshta.exe` becomes
     actionable. TODO: an `actionable` boolean from the model, applied only to lower the
     default, recorded in the comment; plus ObjectReference links (exploits, connects-to,
@@ -190,3 +190,9 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     galaxy. Needs a labelled check that the resolved cluster is the one the report means
     (item 27's review file can carry it).
 
+37. **In-process backend for tag suggestion (2026-09-05).** UC3 talks to misp-tag-suggest over
+    HTTP (`genai/suggest.py`, one function does the call). If the two ever run on the same
+    host and the dependency rule is relaxed, `suggest_tags()` could call
+    `retrieval.retrieve.SemanticRetrievalSuggester` directly; the use-case, tests and
+    metadata would not change. Not planned: the service loads a 170 MB index plus an encoder
+    once, misp-modules forks per request.

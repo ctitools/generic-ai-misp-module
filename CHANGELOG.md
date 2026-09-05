@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-09-05 (tag suggestion via misp-tag-suggest)
+
+- New use-case `tag_suggestion` (UC3, `genai/suggest.py`): POSTs the event to the [misp-tag-suggest](https://github.com/ctitools/misp-tag-suggest) service (`MISP_TAG_SUGGEST_URL`, optional `MISP_TAG_SUGGEST_API_KEY`, `.env` only), adds the suggested taxonomy tags (`score >= suggest_min_score`, existing tags skipped) and the two `ai-computer-assisted` tags to the event; abstention is not an error. Request keys `suggest_limit` (5) and `suggest_min_score` (0.0). No LLM involved. Decision recorded in USE-CASES.md / ARCHITECTURE.md: HTTP, not `import`, because the service needs torch/faiss and this repo allows only pymisp.
+- `genai/llm.py`: the HTTP call is now `http_json(url, payload, headers=, timeout=)`, shared by the LLM client and the suggest client; error texts of the LLM path unchanged apart from the prefix.
+- Tests: `tests/test_suggest_unit.py` (fake HTTP: filters, abstention, malformed answers, errors, handler dispatch), `tests/test_suggest_live.py` (marker `live_suggest`, gate `suggest` in the live-gates summary, `MispApi.tag_exists`), `tests/test_e2e_misp_write.py` pushes a tag-suggested event back to the dev MISP.
+- Benchmark `benchmarks/run_suggest.py` (+ `tests/test_run_suggest_unit.py`): precision@k / recall@k / hit@1 of the suggestions against the analysts' tags on sampled live events, abstention rate, events/s in `logs/`.
+- misp-tag-suggest itself (formerly misp-suggest) was harmonized in the same pass: Python 3.14, same ruff/pylint/semgrep rules and CI, same `.env` key names, `AGENTS.md`/`CLAUDE.md`/`CHANGELOG.md`; see its changelog.
+
+## 2026-09-05 (dates and to_ids)
+
+- Extraction schema v3 (`cti-info-extraction/qwen3.8-v1` meta.version 3): the model returns `actionable`, `first_seen`, `last_seen` per indicator and a top-level `published`, all as literal spellings. New `genai/dates.py` parses only unambiguous spellings; `extract.py` sets `first_seen`/`last_seen` when the spelling is in the text (a stated publication date is metadata only: on a live report the model picked a referenced blog's date), rejects the free-text types `other`/`text`/`comment` (`free-text-type`), lowers `to_ids` when the model says not actionable (never raises it), records both in the comment, reports `dated`, `dates_unparsed`, `not_actionable`, `published` in the metadata. Runner and extraction report carry the new counts and a "not actionable" review table; the live write-path test asserts `to_ids` and dates arrive in MISP as sent. Tests: `tests/test_dates_unit.py`, two new use-case tests.
 ## 2026-09-05 (event-kind summaries)
 
 - Event-kind ("story-telling") summarization is on par with the report kind: `benchmarks/misp_sample.py` draws 100 real events (5-300 attributes) from the dev MISP; `run_llm --kind event` and `compare_summary --kind event`; benchmark v1 29/100 → v2 99/100, byte-deterministic (`docs/BENCHMARKS_summary-event*.md`, table in BENCHMARKS.md). `summary-event/qwen3.8-v2` (hard 150-word budget, at most five indicators and five related events, copy-exact uuids) is the default; golden re-recorded and reviewed; the live write-path test covers `summary_kind=event`. `render_event` tolerates events without a date.

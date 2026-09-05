@@ -177,6 +177,10 @@ def metrics_row(c: Confusion, kappa: float) -> list:
 
 def header(sample: dict, reports: list[Report], ok: list[Report]) -> str:
     first = ok[0].llm if ok else {}
+    dated = sum(r.llm.get("dated", 0) for r in ok)
+    stored = sum(len(r.pairs) for r in ok)
+    published = sum(1 for r in ok if r.llm.get("published"))
+    lowered = sum(len(r.llm.get("not_actionable", [])) for r in ok)
     model, prompt = first.get("model", {}), first.get("prompt", {})
     tool = reports[0].tool if reports else "iocextract"
     return f"""# Extraction benchmark: LLM vs classic regex extractor
@@ -187,6 +191,10 @@ results {len(reports)}, reports with LLM errors {len(reports) - len(ok)}.
 - Model: `{model.get("name")}` digest `{model.get("digest")}` server `{model.get("server")}`
 - Prompt: `{prompt.get("cluster")}` v{prompt.get("version")} sha256 `{prompt.get("sha256")}`
 - Classic tool: `{tool}`
+
+- Dates: {dated} of {stored} stored indicators carry a first_seen/last_seen stated in the text;
+  {published} reports state a publication date
+- Not actionable per the model (to_ids lowered): {lowered} indicators (listed under Deviations)
 
 **Method.** Indicators are compared by normalised value only (lower-case, trailing `/` and `.`
 stripped); types are ignored. The classic extractor is a deliberate *superset* reference (it also
@@ -261,6 +269,11 @@ def section_deviations(ok: list[Report]) -> str:
         + f"reporter-domain: {flags['reporter-domain']}, other: {flags['other']} "
         f"(of {len(classic_only)} classic-only values)\n\n"
         + table(["id", "type", "value", "flag"], top[:50])
+        + "\n### Not actionable per the model (to_ids lowered; for human review)\n\n"
+        + table(
+            ["id", "type", "value"],
+            [[r.id[:8], t, v] for r in ok for t, v in r.llm.get("not_actionable", [])][:50],
+        )
         + "\n### LLM rejection reasons (summed over reports)\n\n"
         + table(["reason", "count"], sorted(reasons.items(), key=lambda x: -x[1]))
     )

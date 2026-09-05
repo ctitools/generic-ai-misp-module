@@ -83,7 +83,16 @@ def test_writes_results_with_contract_keys(data_dir, tmp_path, fake_llm) -> None
     assert "done=2/2 ok=2 fail=0" in (data_dir / "bench.log").read_text()
     for uid in ("a", "b"):
         result = json.loads((results / f"{uid}.llm.json").read_text())
-        assert set(result) == {"model", "prompt", "indicators", "rejected", "seconds"}
+        assert set(result) == {
+            "model",
+            "prompt",
+            "indicators",
+            "rejected",
+            "seconds",
+            "not_actionable",
+            "dated",
+            "published",
+        }
         assert result["model"] == {"name": "fake-model"}
         assert result["indicators"] == [["domain", "evil.example"], ["ip-dst", "203.0.113.42"]]
         assert [r["reason"] for r in result["rejected"]] == ["not-in-source"]

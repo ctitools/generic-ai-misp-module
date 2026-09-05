@@ -56,7 +56,23 @@ def _precision(event, report, gold, llm_settings):
         f"rejected={[(r['value'], r['reason']) for r in metadata['rejected']][:8]}"
     )
     print("  false positives:", sorted(got - true_positive)[:10])
+    _report_dates(event, metadata, gold)
     return precision, recall
+
+
+def _report_dates(event, metadata, gold) -> None:
+    """Informational: dates the module set vs the hand-labelled ones (no gate yet)."""
+    found = {
+        a.value: a.first_seen.date().isoformat()
+        for a in list(event.attributes) + [a for o in event.objects for a in o.attributes]
+        if getattr(a, "first_seen", None)
+    }
+    expected = gold.get("dates", {})
+    agree = sum(found.get(v) == d for v, d in expected.items())
+    print(
+        f"  dates: set on {metadata['dated']} attributes, {agree}/{len(expected)} labelled "
+        f"first_seen agree, published={metadata['published']} (gold {gold.get('published')})"
+    )
 
 
 @pytest.mark.parametrize(

@@ -6,43 +6,41 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 
 ## Results (2026-09-05, qwen3.8:latest digest 22130167c4c2, Ollama 0.33.2, seed 42)
 
-Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (module as
-deployed, prompt cluster v1, 2000-token answers) and
-[BENCHMARKS_extraction-v2.md](BENCHMARKS_extraction-v2.md) (same prompt, 8000-token answers,
-15-minute request timeout; that interim cluster is gone, the default cluster now has 10000 tokens).
-Both are generated; do not edit them by hand.
+Full tables and charts: [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not
+edit by hand). Prompt cluster `cti-info-extraction/qwen3.8-v1` version 2, `max_tokens` 10000,
+`GENERIC_AI_REQUEST_TIMEOUT=900`.
 
 What the numbers say:
 
-1. **As deployed, 35 of 100 reports failed**: the JSON answer hit the 2000-token budget of
-   `cti-info-extraction/qwen3.8-v1` (the prompt asks for a `quote` per indicator, which is
-   expensive on indicator-rich reports). The module returns an error, never partial results,
-   so those reports contribute nothing. Re-running the 35 with the v2 cluster (8000 tokens,
-   `GENERIC_AI_REQUEST_TIMEOUT=900`) recovered 30; 5 reports overflow even 8000 tokens. v2
-   generations take a median of 95 s and up to 194 s per report, far above the module's 120 s
-   default timeout, so v2 is not a deployable setting as is.
-2. **Against the three hand-labelled gold lists the LLM is precise**: precision 1.00,
+1. **95 of 100 reports succeed; 5 overflow even 10000 answer tokens.** The first run with the
+   original 2000-token budget (a guess, never measured) failed on 35 reports; 8000 recovered
+   30 of them; 10000 recovers the same 30. The remaining 5 are genuinely indicator-dense: a
+   probe of one shows 79 distinct indicators in 18 KB of pretty-printed JSON, about 127 tokens
+   per indicator, because the answer is indented and the `quote` repeats the value. The module
+   returns an error for them, never partial results. Compact JSON and a shorter or absent
+   `quote` would roughly halve the cost (IMPROVEMENTS item 25).
+2. **Speed with the 10000 budget**: median 9 s per report, p90 34 s, max 62 s, none above the
+   module's default 120 s timeout; the full pass took 30 minutes. The earlier 8000-token re-run
+   of the hard reports had taken up to 194 s per report.
+3. **Against the three hand-labelled gold lists the LLM is precise**: precision 1.00,
    recall 0.80, F1 0.89, kappa 0.84 (micro). Its misses are defanged values
    (`131.226.2[.]6`) and a name (`emotet`), both rejected by the module's own filters. The
    classic extractor on the same reports: precision 0.21, recall 0.49, kappa negative, because
    it also returns the reporting vendor's links.
-3. **Against the classic superset agreement is low by construction**: F1 0.29 (v1, 65
-   reports) and 0.41 (v2, 95 reports), kappa negative in both. The classic-only values are
-   URLs and domains (802 of 918 in v2), a large part of them reference links and vendor sites
-   (108 flagged `reporter-domain`; the flag only catches hosts named in the entry metadata, so
-   it undercounts). On hashes the two agree: recall of classic md5/sha1/sha256 is 0.79-0.94
-   (v2); on ip-dst 0.14, url 0.15, domain 0.01 (classic derives a domain from every URL; the
-   LLM reports the URL, and matching is by value).
-4. **What only the LLM finds**: 660 values (v2) in types the regexes cannot see: filename
-   (349), threat-actor (109), malware-type (63), regkey, vulnerability, named pipe, pdb, mutex,
-   btc, onion-address. These are the module's added value and need a human-labelled set to be
-   scored; on the 3 gold lists every such value was literally in the text (precision 1.0).
-5. **Superset artefacts found on the way**: iocextract's IPv6 regex matched times such as
+4. **Against the classic superset (95 reports) agreement is low by construction**: F1 0.43,
+   Jaccard 0.28, kappa -0.55. The classic-only values are URLs and domains (802 of 888), a large
+   part of them reference links and vendor sites (109 flagged `reporter-domain`; the flag only
+   catches hosts named in the entry metadata, so it undercounts). On hashes the two agree:
+   recall of classic md5/sha1/sha256 is 0.84-0.95; on ip-dst 0.12, url 0.15, domain 0.01
+   (classic derives a domain from every URL; the LLM reports the URL, and matching is by value).
+5. **What only the LLM finds**: 644 values in types the regexes cannot see: filename (331),
+   threat-actor (100), malware-type (65), regkey (27), vulnerability, named pipe, pdb, mutex.
+   These are the module's added value and need a human-labelled set to be scored; on the 3 gold
+   lists every such value was literally in the text (precision 1.0).
+6. **Superset artefacts found on the way**: iocextract's IPv6 regex matched times such as
    `23:00:15` (116 false IPs before `genai/classic.py` validated candidates with `ipaddress`),
    and its e-mail regex swallows the preceding word. The comparison refangs values before
    matching so a defanged LLM value equals its refanged classic twin.
-6. **Speed**: median 12 s per report, max 54 s (v1); the v1 pass took 66 minutes including a
-   GPU-server reboot, the v2 re-run of 35 reports 71 minutes.
 
 ## Method
 

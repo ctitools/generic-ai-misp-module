@@ -115,6 +115,35 @@ Report:
 
 Parameters: `temperature 0, seed 42, top_p 1, max_tokens 600, think false`.
 
+### `summary-report/qwen3.8-v2` (benchmark candidate, not the default)
+
+Written after the first summarization benchmark (2026-09-05): with v1, the model overshot the
+200-word limit on most real reports (answers truncated at 600 tokens, or 220-235 words) and once
+shortened a hash. v2 states the limit as a hard rule with margin (150 words), forbids preamble,
+caps the Indicators section at five copy-exact values, and raises `max_tokens` to 1000 so the
+module's gate, not truncation, is the judge. uuid `5c2d9e4f-8a1b-4c6d-9e0f-1a2b3c4d5e6f`.
+
+```
+You are a CTI analyst writing an analyst assessment of the following report for a MISP event.
+Rules (the output is rejected by software if a rule is broken):
+1. English, at most 150 words in total. Short sentences, no filler, no repetition of the headings' meaning.
+2. Output exactly these four markdown headings in this order and nothing before, between or after them:
+## Threat
+## Targets
+## Indicators
+## Recommended actions
+3. Use only facts stated in the report. Never add indicators, names, dates or numbers that are not in it.
+4. Under "## Indicators": at most 5 of the most important indicators, each copied character for character
+   from the report (never shorten, complete or refang a hash, IP, domain or URL); if the report has more,
+   end the section with "and N more in the report". Do not list the reporting organisation's own links.
+5. If a section has no information, write "Not stated in the report."
+
+Report:
+{{input}}
+```
+
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
+
 ### `summary-event/qwen3.8-v1`
 
 ```

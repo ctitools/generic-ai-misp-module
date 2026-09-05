@@ -9,7 +9,7 @@
   "source": "https://github.com/ctitools/generic-ai-misp-module",
   "type": "generic-ai-prompts",
   "uuid": "d555596c-4db5-4af6-a66d-748f74f65ab8",
-  "version": 3,
+  "version": 4,
   "values": [
     {
       "value": "cti-info-extraction/qwen3.8-v1",
@@ -95,6 +95,38 @@
         "prompt": "You are a CTI analyst writing an analyst assessment of the following report for a MISP event.\nWrite in English, at most 200 words, using exactly these markdown headings:\n## Threat\n## Targets\n## Indicators\n## Recommended actions\nUse only facts stated in the report. Do not add indicators, names or dates that are not in the\nreport. If a section has no information, write \"Not stated in the report.\"\n\nReport:\n{{input}}",
         "version": 1,
         "prompt_sha256": "22dc0a98abda8ed8cd1977ea2c1a4f1e910e0fa26a645414768a31002bd2fff1",
+        "language": "en",
+        "headings": [
+          "## Threat",
+          "## Targets",
+          "## Indicators",
+          "## Recommended actions"
+        ],
+        "max_words": 200
+      }
+    },
+    {
+      "value": "summary-report/qwen3.8-v2",
+      "uuid": "5c2d9e4f-8a1b-4c6d-9e0f-1a2b3c4d5e6f",
+      "description": "Analyst assessment of an EventReport, v2: hard word budget, copy-exact indicators, no preamble",
+      "meta": {
+        "use_case": "summary-report",
+        "model": {
+          "name": "qwen3.8:latest",
+          "digest": "22130167c4c2",
+          "quantization": "Q4_K_M",
+          "server": "ollama 0.33.2"
+        },
+        "model_parameters": {
+          "temperature": 0,
+          "seed": 42,
+          "top_p": 1,
+          "max_tokens": 1000,
+          "think": false
+        },
+        "prompt": "You are a CTI analyst writing an analyst assessment of the following report for a MISP event.\nRules (the output is rejected by software if a rule is broken):\n1. English, at most 150 words in total. Short sentences, no filler, no repetition of the headings' meaning.\n2. Output exactly these four markdown headings in this order and nothing before, between or after them:\n## Threat\n## Targets\n## Indicators\n## Recommended actions\n3. Use only facts stated in the report. Never add indicators, names, dates or numbers that are not in it.\n4. Under \"## Indicators\": at most 5 of the most important indicators, each copied character for character\n   from the report (never shorten, complete or refang a hash, IP, domain or URL); if the report has more,\n   end the section with \"and N more in the report\". Do not list the reporting organisation's own links.\n5. If a section has no information, write \"Not stated in the report.\"\n\nReport:\n{{input}}",
+        "version": 2,
+        "prompt_sha256": "702a911fb51766663251ce3bd008f0e8eb8e07d112f1189a0290d87c4bd4dc7d",
         "language": "en",
         "headings": [
           "## Threat",

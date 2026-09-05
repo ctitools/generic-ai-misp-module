@@ -104,6 +104,42 @@ What the numbers say:
 Decision taken 2026-09-05: v2 is the default cluster; `tests/golden/summary-report.md` re-recorded
 and reviewed.
 
+### Results, `event` kind (2026-09-05, 100 real events with 5-300 attributes from the dev MISP, seed 42)
+
+Generated reports: [BENCHMARKS_summary-event-v1.md](BENCHMARKS_summary-event-v1.md) (cluster
+`summary-event/qwen3.8-v1`, the default until this round) and
+[BENCHMARKS_summary-event.md](BENCHMARKS_summary-event.md) (`summary-event/qwen3.8-v2`, the
+default now).
+
+| | v1 | v2 |
+|---|---|---|
+| summaries passing the gate | 29 / 100 | 99 / 100 |
+| answer truncated (max_tokens 600 / 1000) | 71 | 1 |
+| over 200 words | 0 | 0 |
+| words: median / p90 / max | 167 / 205 / 212 | 95 / 147 / 179 |
+| all four headings present | 29 / 29 | 99 / 99 |
+| coverage of the event's own hashes/IPs/URLs (mean) | 0.73 | 0.54 |
+| seconds per event: median / max | 6.0 / 15.3 | 5.3 / 14.2 |
+| determinism: byte-identical in a second pass | not measured | 99 / 99 |
+
+What the numbers say:
+
+1. **The event kind failed for the same reason as the report kind**: v1's soft "at most 200
+   words" is ignored on real events; 71 of 100 answers hit the 600-token budget.
+2. **The first v2 draft still lost 10 events**: rule 5 of v1 ("refer to related events by
+   uuid") made the model list every related-event uuid, about ten tokens each, on events with
+   long RelatedEvent lists; 115 words of prose filled 1000 tokens. Capping "## Related events"
+   at five entries (like the indicators) brought it to 99 of 100. The remaining failure is an
+   event whose rendering itself is long; the answer budget is the next lever.
+3. **Coverage drops from 0.73 to 0.54 by design** (at most five indicators listed); the
+   summary is a story, the attributes stay on the event.
+4. **Determinism holds** on all 99 paired summaries.
+5. The `event` kind is now benchmarked, gated and golden-recorded the same way as `report`
+   (docs/TESTING.md coverage matrix), which closes the parity gap in IMPROVEMENTS item 28.
+
+Decision taken 2026-09-05: v2 is the default `summary-event` cluster; `tests/golden/summary-event.md`
+re-recorded and reviewed.
+
 ## Method
 
 - Sample: 100 random orkl.eu reports (seeded draw, `benchmarks/data/orkl/sample.json`).

@@ -9,7 +9,7 @@
   "source": "https://github.com/ctitools/generic-ai-misp-module",
   "type": "generic-ai-prompts",
   "uuid": "d555596c-4db5-4af6-a66d-748f74f65ab8",
-  "version": 6,
+  "version": 8,
   "values": [
     {
       "value": "cti-info-extraction/qwen3.8-v1",
@@ -138,9 +138,41 @@
       }
     },
     {
+      "value": "summary-event/qwen3.8-v2",
+      "uuid": "9b7e1c3d-2f4a-4b8c-a6d5-0e1f2a3b4c5d",
+      "description": "Story-telling summary of a whole MISP event (default since 2026-09-05): hard word budget, copy-exact indicators and uuids, capped lists, no preamble",
+      "meta": {
+        "use_case": "summary-event",
+        "model": {
+          "name": "qwen3.8:latest",
+          "digest": "22130167c4c2",
+          "quantization": "Q4_K_M",
+          "server": "ollama 0.33.2"
+        },
+        "model_parameters": {
+          "temperature": 0,
+          "seed": 42,
+          "top_p": 1,
+          "max_tokens": 1000,
+          "think": false
+        },
+        "prompt": "You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering\nof the event: its attributes, objects, tags, galaxies and related events.\nRules (the output is rejected by software if a rule is broken):\n1. English, at most 150 words in total. Short sentences, no filler.\n2. Output exactly these four markdown headings in this order and nothing before, between or after them:\n## What happened\n## Key indicators\n## Context and attribution\n## Related events\n3. Use only the information below. Never invent indicators, names, dates or numbers.\n4. Under \"## Key indicators\": at most 5 of the most important indicators, each copied character for\n   character from the rendering (never shorten a hash, IP, domain, URL or uuid); if there are more,\n   end the section with \"and N more in the event\".\n5. Under \"## Related events\": at most 5 related events, each referred to by its uuid exactly as\n   given with its info text; if there are more, end the section with \"and N more related events\".\n   Refer to objects by their uuid exactly as given.\n6. If a section has no information, write \"Not present in the event.\"\n\nEvent:\n{{input}}",
+        "version": 2,
+        "prompt_sha256": "7194f5dff1341991f59bd1caa2926bf82ed8d115868e04cf8da1ec4a5280cda4",
+        "language": "en",
+        "headings": [
+          "## What happened",
+          "## Key indicators",
+          "## Context and attribution",
+          "## Related events"
+        ],
+        "max_words": 200
+      }
+    },
+    {
       "value": "summary-event/qwen3.8-v1",
       "uuid": "3d6c2c76-de71-4335-b19a-ba2550790a9a",
-      "description": "Management summary of a MISP event from its attributes, objects, tags and links",
+      "description": "Story-telling summary of a whole MISP event, v1 (superseded by v2: 29/100 dev-MISP events passed the gate)",
       "meta": {
         "use_case": "summary-event",
         "model": {
@@ -159,38 +191,6 @@
         "prompt": "You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering\nof the event: its attributes, objects, tags, galaxies and related events.\nWrite in English, at most 200 words, using exactly these markdown headings:\n## What happened\n## Key indicators\n## Context and attribution\n## Related events\nMention uuids exactly as given when you refer to objects or related events. Use only the\ninformation below; never invent indicators. If a section has no information, write\n\"Not present in the event.\"\n\nEvent:\n{{input}}",
         "version": 1,
         "prompt_sha256": "b5ed5d27d94e2336aa4a5633f2b6f9e1168d101d9a636b03c843cd0e714098df",
-        "language": "en",
-        "headings": [
-          "## What happened",
-          "## Key indicators",
-          "## Context and attribution",
-          "## Related events"
-        ],
-        "max_words": 200
-      }
-    },
-    {
-      "value": "summary-event/qwen3.8-v2",
-      "uuid": "9b7e1c3d-2f4a-4b8c-a6d5-0e1f2a3b4c5d",
-      "description": "Story-telling summary of a whole MISP event, v2: hard word budget, copy-exact indicators and uuids, no preamble",
-      "meta": {
-        "use_case": "summary-event",
-        "model": {
-          "name": "qwen3.8:latest",
-          "digest": "22130167c4c2",
-          "quantization": "Q4_K_M",
-          "server": "ollama 0.33.2"
-        },
-        "model_parameters": {
-          "temperature": 0,
-          "seed": 42,
-          "top_p": 1,
-          "max_tokens": 1000,
-          "think": false
-        },
-        "prompt": "You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering\nof the event: its attributes, objects, tags, galaxies and related events.\nRules (the output is rejected by software if a rule is broken):\n1. English, at most 150 words in total. Short sentences, no filler.\n2. Output exactly these four markdown headings in this order and nothing before, between or after them:\n## What happened\n## Key indicators\n## Context and attribution\n## Related events\n3. Use only the information below. Never invent indicators, names, dates or numbers.\n4. Under \"## Key indicators\": at most 5 of the most important indicators, each copied character for\n   character from the rendering (never shorten a hash, IP, domain, URL or uuid); if there are more,\n   end the section with \"and N more in the event\".\n5. Refer to objects and related events by their uuid exactly as given.\n6. If a section has no information, write \"Not present in the event.\"\n\nEvent:\n{{input}}",
-        "version": 2,
-        "prompt_sha256": "35dbdca0b8dd5152300531f4d3cce7b10b604096d98497b9a1cb4dc4a03cf833",
         "language": "en",
         "headings": [
           "## What happened",

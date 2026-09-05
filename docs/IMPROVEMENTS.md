@@ -119,7 +119,7 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     threat actors, malware names) are checked to be in the text, not to be indicators.
     TODO: a 20-report human-adjudicated review file, then a precision gate per type.
 28. **Summary quality beyond structure is unmeasured.** A fluent but wrong Threat section
-    passes every check; `summary_kind=event` is benchmarked only on the dummy event.
+    passes every check. (`summary_kind=event` is benchmarked on 100 real events since 2026-09-05.)
     TODO: entity agreement check (names in the summary must appear in the report), a
     10-report human review sheet per prompt version, benchmark `event` kind on the fixture
     events with reports.

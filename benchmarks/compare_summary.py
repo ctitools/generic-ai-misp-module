@@ -232,7 +232,8 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     ext = "summary-event" if args.kind == "event" else "summary"
     rows = load(args.data_dir, args.results_dir, args.second_dir, ext)
-    prompt = prompts.resolve_prompt(f"summary-{args.kind}")
+    used = next((r["result"]["prompt"].get("uuid") for r in rows if "summary" in r["result"]), "")
+    prompt = prompts.resolve_prompt(f"summary-{args.kind}", used)  # the cluster the run used
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(report(rows, prompt, args.kind), encoding="utf-8")
     args.csv.parent.mkdir(parents=True, exist_ok=True)

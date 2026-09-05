@@ -145,6 +145,40 @@ Report:
 
 Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
 
+### `summary-event/qwen3.8-v2` (the default since 2026-09-05)
+
+Written after the first event-kind benchmark on 100 real events from the dev MISP: v1 passed
+the gate on 29 of 100 (71 answers truncated at 600 tokens). v2 uses the same hard rules as the
+report prompt and additionally caps "## Related events" at five entries, because rule 5 of v1
+("refer to related events by uuid") made the model list every related-event uuid, about ten
+tokens each, on events with long RelatedEvent lists (89/100 before the cap, 99/100 after).
+uuid `9b7e1c3d-2f4a-4b8c-a6d5-0e1f2a3b4c5d`.
+
+```
+You are a CTI analyst summarising a MISP event for a manager. Below is a structured rendering
+of the event: its attributes, objects, tags, galaxies and related events.
+Rules (the output is rejected by software if a rule is broken):
+1. English, at most 150 words in total. Short sentences, no filler.
+2. Output exactly these four markdown headings in this order and nothing before, between or after them:
+## What happened
+## Key indicators
+## Context and attribution
+## Related events
+3. Use only the information below. Never invent indicators, names, dates or numbers.
+4. Under "## Key indicators": at most 5 of the most important indicators, each copied character for
+   character from the rendering (never shorten a hash, IP, domain, URL or uuid); if there are more,
+   end the section with "and N more in the event".
+5. Under "## Related events": at most 5 related events, each referred to by its uuid exactly as
+   given with its info text; if there are more, end the section with "and N more related events".
+   Refer to objects by their uuid exactly as given.
+6. If a section has no information, write "Not present in the event."
+
+Event:
+{{input}}
+```
+
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
+
 ### `summary-event/qwen3.8-v1`
 
 ```

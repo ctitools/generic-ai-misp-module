@@ -1,0 +1,175 @@
+# Summarization benchmark: summary_kind=event
+
+Date: 2026-09-05. Reports: 100, summaries: 29, errors: 71.
+
+- Model: `qwen3.8:latest` digest `22130167c4c2` server `ollama 0.33.2`
+- Prompt: `summary-event/qwen3.8-v1` v1 sha256 `b5ed5d27d94e2336aa4a5633f2b6f9e1168d101d9a636b03c843cd0e714098df`; headings ['## What happened', '## Key indicators', '## Context and attribution', '## Related events']; max words 200
+
+**Method.** No reference summaries exist, so this measures the module's own gate (headings, length, no indicator that is not in the input), length, how much of the event's own hashes/IPs/URLs the summary mentions (coverage, informational: a good summary need not list every hash), timing, and determinism between two passes with the same seed (byte-identical, and word-level similarity otherwise).
+
+## Gate
+
+| outcome / gate problem (one error can carry several) | count |
+|---|---|
+| summary produced | 29 |
+| LLM answer was truncated (max_tokens too | 71 |
+
+```mermaid
+pie title Gate outcome
+  "ok" : 29
+  "LLM answer was truncated (max_tokens too" : 71
+```
+
+## Length (words, headings excluded by the gate; limit 200)
+
+| min | median | p90 | max |
+|---|---|---|---|
+| 123 | 167 | 205 | 212 |
+
+```mermaid
+xychart-beta
+  title "Words per summary"
+  x-axis ["0", "25", "50", "75", "100", "125", "150", "175", "200", "225"]
+  y-axis "summaries" 0 --> 13
+  bar [0, 0, 0, 0, 2, 5, 13, 5, 4, 0]
+```
+
+## Headings present
+
+| heading | summaries |
+|---|---|
+| ## What happened | 29 |
+| ## Key indicators | 29 |
+| ## Context and attribution | 29 |
+| ## Related events | 29 |
+
+## Indicator coverage (share of the reference md5/sha1/sha256/ip-dst/url mentioned)
+
+| reports with indicators | mean coverage | median |
+|---|---|---|
+| 23 | 0.725 | 1.000 |
+
+## Timing
+
+| median s | p90 s | max s | total min |
+|---|---|---|---|
+| 6.010 | 8.113 | 15.290 | 10.809 |
+
+## Determinism (second pass, same seed and temperature 0)
+
+| paired | byte-identical | mean word similarity | min similarity |
+|---|---|---|---|
+| 0 | 0 | 0.000 | 0.000 |
+
+## Per report
+
+| id | title | status | words | coverage | seconds | identical | similarity |
+|---|---|---|---|---|---|---|---|
+| 03488f3d | DigitalSide Malware report: MD5: af5e5b2 | error | 0 |  | 6.008 |  |  |
+| 0c4cb36b | Malware collection | ok | 170 | 1.000 | 5.265 |  |  |
+| 0d2fc4a8 | Redis bruteforce Attackers [2024-07-17] | error | 0 |  | 6.354 |  |  |
+| 0ef83690 | DigitalSide Malware report: MD5: fe34555 | error | 0 |  | 6.660 |  |  |
+| 0fe4fcd5 | DigitalSide Malware report: MD5: 15ca693 | error | 0 |  | 5.947 |  |  |
+| 1557a21b | Agent Tesla - javascript dropper - SMTP  | error | 0 |  | 6.378 |  |  |
+| 1699737c | AlienVault | Backdoored PHP Software | ok | 167 | 0.061 | 5.308 |  |  |
+| 21d28baf | Honeytrap | error | 0 |  | 6.461 |  |  |
+| 229a6cc8 | Remcos host indicators [2023-09-12] | error | 0 |  | 5.650 |  |  |
+| 264575d2 | ThreatFox IOCs for 2024-04-12 | error | 0 |  | 13.042 |  |  |
+| 26d4048d | Dionaea | ok | 181 |  | 5.129 |  |  |
+| 2a330185 | AlienVault | New modular downloaders fin | error | 0 |  | 7.333 |  |  |
+| 2cfaae22 | AlienVault | Carbanak attacks against Ch | error | 0 |  | 5.474 |  |  |
+| 2d6a7f33 | AgentTesla downloaded from a .js file (S | error | 0 |  | 6.011 |  |  |
+| 2eef230e | Cowrie | ok | 123 |  | 4.411 |  |  |
+| 30dbf7d0 | Unveiling the Weaponized Web Shell Encys | ok | 205 |  | 5.883 |  |  |
+| 317f3edc | Storm-1175 focuses gaze on vulnerable we | error | 0 |  | 6.498 |  |  |
+| 31a5a558 | Telnet bruteforce Attackers [2024-01-25] | error | 0 |  | 8.258 |  |  |
+| 361b5b3e | Formbook host indicators [2024-07-02] | error | 0 |  | 5.539 |  |  |
+| 3cc0969a | Telnet bruteforce Attackers [2024-03-07] | error | 0 |  | 7.411 |  |  |
+| 44146c5a | RDP bruteforce Attackers [2022-08-10] | ok | 184 |  | 8.517 |  |  |
+| 4bf84caa | DigitalSide Malware report: MD5: ac06141 | error | 0 |  | 6.170 |  |  |
+| 4e1b163a | "Subject: [REDACTED] will be Disabled ,  | error | 0 |  | 5.565 |  |  |
+| 4f937fac | "Subject: RE: SHIPPING DOC - From: chenh | ok | 147 |  | 5.790 |  |  |
+| 4ff7ce39 | Nuevo Backdoor en Outlook Atribuido a AP | error | 0 |  | 5.856 |  |  |
+| 5302ad3a | Detecting Linux Variants of Interlock Ra | error | 0 |  | 6.011 |  |  |
+| 56e1af4c | 0076e384e324fbb55fcb9d42b0ce281c | ok | 163 | 1.000 | 5.316 |  |  |
+| 56e1b16a | 01ada39c547ab3b4c5bc811203caa493 | ok | 167 | 1.000 | 5.165 |  |  |
+| 57615970 | Targeted attack against DNC | error | 0 |  | 5.818 |  |  |
+| 580f6d79 | Locky 2016-10-25 : Affid=3, DGA=88822 -  | error | 0 |  | 7.984 |  |  |
+| 587940d2 | Lokibot host indicators [2024-12-09] | error | 0 |  | 5.760 |  |  |
+| 589a41fb | Cerber delivered via malicious Office do | error | 0 |  | 6.035 |  |  |
+| 58b8193a | Reversing malware in a custom format_ Hi | ok | 168 | 1.000 | 4.857 |  |  |
+| 591b7178 | Formbook host indicators [2024-05-22] | error | 0 |  | 7.292 |  |  |
+| 59aaa45d | Active ransomware attack uses impersonat | ok | 155 | 1.000 | 5.130 |  |  |
+| 5a24041c | OSINT - Android Malware Appears Linked t | error | 0 |  | 6.039 |  |  |
+| 5a26b608 | M2M - "..doc" 2017-11-30 : "FL-123456 11 | error | 0 |  | 7.300 |  |  |
+| 5b6952a8 | DigitalSide Malware report: MD5: d90b513 | ok | 127 | 1.000 | 5.388 |  |  |
+| 5b6ab2dc | "Zestawieni VAT-08/ZUS-08" Campaign | error | 0 |  | 6.053 |  |  |
+| 5c4970b2 | emotet IOC update | error | 0 |  | 6.180 |  |  |
+| 5c51a54e | OSINT: Excel 4.0 Macro Utilized by TA505 | error | 0 |  | 11.227 |  |  |
+| 5c55ff39 | emotet IOC update | error | 0 |  | 5.577 |  |  |
+| 5c65d32b | emotet IOC update | error | 0 |  | 6.004 |  |  |
+| 5c6d7d5f | c2 endpoint delta | error | 0 |  | 5.971 |  |  |
+| 5c6db438 | emotet IOC update | error | 0 |  | 5.811 |  |  |
+| 5c6dfe96 | c2 endpoint delta | error | 0 |  | 6.242 |  |  |
+| 5c974ce1 | emotet IOC update | error | 0 |  | 7.113 |  |  |
+| 5ca43fed | emotet IOC update | ok | 195 | 0.009 | 11.677 |  |  |
+| 5d8f6b9e | emotet IOC update | error | 0 |  | 7.591 |  |  |
+| 5dc46103 | emotet IOC update | ok | 161 | 0.025 | 7.516 |  |  |
+| 5dd58352 | emotet IOC update | ok | 212 | 0.000 | 8.002 |  |  |
+| 5dea53aa | c2 endpoint delta | error | 0 |  | 6.002 |  |  |
+| 5e207470 | emotet IOC update | error | 0 |  | 5.650 |  |  |
+| 5e2890cc | emotet exe 5-tuple | ok | 176 | 1.000 | 5.573 |  |  |
+| 5e3008c1 | Nice Try: 501 (Ransomware) Not Implement | error | 0 |  | 5.735 |  |  |
+| 5e37c8d1 | emotet IOC update | error | 0 |  | 5.981 |  |  |
+| 5e65434b | UPDATE binary C2 additions | error | 0 |  | 6.404 |  |  |
+| 5f0ee937 | UPDATE binary C2 additions | error | 0 |  | 5.742 |  |  |
+| 5f13849e | DigitalSide Malware report: MD5: b1a1bcb | error | 0 |  | 5.601 |  |  |
+| 5f15a68b | emotet IOC update | ok | 170 | 0.107 | 6.924 |  |  |
+| 5f15caee | emotet exe 5-tuple | error | 0 |  | 6.039 |  |  |
+| 7082388a | SSH bruteforce Attackers [2026-08-14] | error | 0 |  | 6.560 |  |  |
+| 719d64ec | ATR_82599 | ok | 163 | 0.667 | 4.821 |  |  |
+| 71ee28a1 | DigitalSide Malware report: MD5: 22faf22 | error | 0 |  | 5.457 |  |  |
+| 7ef5c2f6 | SSH bruteforce Attackers [2025-03-09] | error | 0 |  | 15.290 |  |  |
+| 813bc4df | Tibet Lurk | ok | 212 | 1.000 | 5.210 |  |  |
+| 84248423 | AlienVault | ChinaZ Updates Toolkit by I | ok | 139 | 0.200 | 4.662 |  |  |
+| 85b11f6b | njRAT host indicators [2024-02-21] | error | 0 |  | 5.465 |  |  |
+| 9a50d10e | AgentTesla in ISO mail attachment (SMTP  | error | 0 |  | 6.005 |  |  |
+| a8e25d5c | AlienVault | Parallax RAT sample CoronaV | ok | 159 | 1.000 | 5.286 |  |  |
+| a9e1a395 | "Subject: Zapytanie ofertowe 7100519 - F | ok | 138 | 1.000 | 6.591 |  |  |
+| ae108754 | AgentTesla in .tar email attachment (SMT | error | 0 |  | 5.989 |  |  |
+| ae41bec2 | Урядовою командою реагування на комп'юте | error | 0 |  | 6.936 |  |  |
+| b201e6c4 | Telnet bruteforce Attackers [2024-05-15] | error | 0 |  | 8.397 |  |  |
+| b447f959 | AlienVault | Footprints of Fin7 | error | 0 |  | 8.113 |  |  |
+| b62ed471 | AlienVault | Zero-day exploit (CVE-2018- | error | 0 |  | 5.792 |  |  |
+| be0db1ab | Smoke Loader host indicators [2023-09-26 | error | 0 |  | 5.770 |  |  |
+| c426d9d8 | A recent campaign exploiting the Oman Mi | error | 0 |  | 7.966 |  |  |
+| c4bb38ee | Phishing URL Finding | urlabuse.com | ok | 167 | 1.000 | 3.797 |  |  |
+| ca70216a | CACTUS: Analyzing a Coordinated Ransomwa | error | 0 |  | 6.908 |  |  |
+| cb2e2bb7 | VNC bruteforce Attackers [2025-11-09] | error | 0 |  | 7.242 |  |  |
+| ce05e941 | Daily Incremental ThreatFox Import - 202 | error | 0 |  | 9.512 |  |  |
+| d266f5a6 | Phishing URL Finding | error | 0 |  | 6.280 |  |  |
+| d729922e | BazaFlix: BazaLoader Fakes Movie Streami | ok | 201 | 0.600 | 6.366 |  |  |
+| da2397a3 | Scam URL findings | ok | 159 | 1.000 | 4.298 |  |  |
+| da61d35d | AlienVault | Goblin Panda continues to t | error | 0 |  | 5.757 |  |  |
+| dc0f8ebf | AlienVault | OilRig Targets Technology S | error | 0 |  | 14.805 |  |  |
+| dc58b05e | Redis bruteforce Attackers [2026-01-13] | error | 0 |  | 6.363 |  |  |
+| e05c2b5c | Scam URL findings | ok | 140 | 1.000 | 4.010 |  |  |
+| e126ff7c | Formbook in email (.zip) attachment | error | 0 |  | 7.389 |  |  |
+| e6a2c4ae | VNC bruteforce Attackers [2022-05-22] | error | 0 |  | 7.360 |  |  |
+| eaab8d40 | NPM debug and chalk packages compromised | ok | 177 | 1.000 | 5.026 |  |  |
+| ede6b753 | Command and Control in the Fifth Domain | error | 0 |  | 7.084 |  |  |
+| f178f6aa | DigitalSide Malware report: MD5: 2e091d7 | error | 0 |  | 6.206 |  |  |
+| f1e3923a | Lokibot host indicators [2023-08-22] | error | 0 |  | 5.757 |  |  |
+| f394628d | DigitalSide Malware report: MD5: d118057 | error | 0 |  | 6.554 |  |  |
+| f85b39fa | DDoSPot | ok | 123 |  | 3.669 |  |  |
+| f9d71002 | Campaign Tracked as STAC6405  Organizati | ok | 166 | 1.000 | 3.992 |  |  |
+| fa2d17b5 | Agent Tesla downloader via email attachm | error | 0 |  | 6.349 |  |  |
+| fbac52a7 | AlienVault | Nice Try: 501 (Ransomware)  | error | 0 |  | 5.852 |  |  |
+
+## Reproduce
+
+```bash
+GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --use-case summarization --kind event
+GENERIC_AI_REQUEST_TIMEOUT=900 python -m benchmarks.run_llm --use-case summarization --kind event --results-dir benchmarks/results-pass2
+python -m benchmarks.compare_summary --kind event --second-dir benchmarks/results-pass2
+```

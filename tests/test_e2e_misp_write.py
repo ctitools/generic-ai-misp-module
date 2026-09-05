@@ -24,6 +24,11 @@ ORKL_DIR = PROJECT_ROOT / "tests" / "fixtures" / "orkl"
 REPORTS = sorted(ORKL_DIR.glob("*.txt"))
 AI_TAGS = set(prompts.AI_TAGS)
 YOUR_ORG_ONLY = 0
+SEED_ATTRIBUTES = (
+    ("ip-dst", "203.0.113.42"),
+    ("domain", "login-acme-bank.example"),
+    ("md5", "d41d8cd98f00b204e9800998ecf8427e"),
+)
 
 
 @pytest.fixture(scope="session")
@@ -44,6 +49,8 @@ def created_event(misp_write: PyMISP, request):
     event.analysis = 0
     event.threat_level_id = 4
     event.add_event_report(name=report.stem, content=report.read_text(encoding="utf-8"))
+    for kind, value in SEED_ATTRIBUTES:  # so the event kind has attributes to tell a story from
+        event.add_attribute(kind, value, comment="e2e seed attribute")
     created = misp_write.add_event(event, pythonify=True)
     assert created.distribution == YOUR_ORG_ONLY and not created.published
     try:
@@ -93,4 +100,18 @@ def test_summary_lands_in_misp(misp_write, llm_settings, created_event) -> None:
     assert len(summaries) == 1 and reports[summaries[0]].startswith("## Threat")
     assert reports[REPORTS[0].stem] == REPORTS[0].read_text(encoding="utf-8")  # source untouched
     assert AI_TAGS <= _tags(after)  # event-level content: the event carries the AI tags
+    assert after["distribution"] == str(YOUR_ORG_ONLY) and after["published"] is False
+
+
+@pytest.mark.parametrize("created_event", REPORTS[1:2], indirect=True, ids=[REPORTS[1].stem[:8]])
+def test_event_summary_lands_in_misp(misp_write, llm_settings, created_event) -> None:
+    settings = {"use_case": "summarization", "summary_kind": "event"}
+    after = _run_and_push(misp_write, created_event, settings)
+    reports = {r["name"]: r["content"] for r in after["EventReport"] if not r["deleted"]}
+    summaries = [n for n in reports if n == f"AI summary of event {after['uuid']}"]
+    assert len(summaries) == 1 and reports[summaries[0]].startswith("## What happened")
+    assert reports[REPORTS[1].stem] == REPORTS[1].read_text(encoding="utf-8")  # source untouched
+    assert AI_TAGS <= _tags(after)
+    seeded = {a["value"] for a in after["Attribute"] if a.get("comment") == "e2e seed attribute"}
+    assert seeded == {v for _, v in SEED_ATTRIBUTES}  # nothing added or lost on the event
     assert after["distribution"] == str(YOUR_ORG_ONLY) and after["published"] is False

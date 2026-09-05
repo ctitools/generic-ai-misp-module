@@ -1,20 +1,75 @@
 # AI MISP Module
 
-A custom [misp-modules](https://github.com/MISP/misp-modules) expansion module that takes a
-**full MISP Event** ([MISP core format](https://www.misp-standard.org/rfc/misp-standard-core.html)),
-validates it, extracts the event's `EventReport` markdown and passes both through two hooks that
-will later hold the real AI logic. Today both hooks are dummies.
+A custom [misp-modules](https://github.com/MISP/misp-modules) expansion module that puts a Large
+Language Model to work on a **full MISP Event** ([MISP core
+format](https://www.misp-standard.org/rfc/misp-standard-core.html)) — not on a single attribute.
 
-- module name: `generic_ai`
-- module type: `expansion`
+## What this is
+
+You give the module a whole MISP Event, it validates it with
+[PyMISP](https://github.com/MISP/PyMISP), takes the markdown of the event's `EventReport`s (the
+CTI report an analyst pasted into the event) and hands event plus report to the configured
+use-case. What comes back is again a MISP Event, ready to be pushed into MISP.
+
+| use-case | what you get |
+|---|---|
+| **CTI info extraction** | high-confidence MISP attributes read out of the report — IPs, domains, hashes, CVEs, plus `file` / `vulnerability` objects — each one refanged, deduplicated against the event, and carrying the quote it came from |
+| **Summarization** | a new `EventReport` with an executive summary, either of one report or of the whole event |
+| **none** (default) | pass-through, no LLM call at all |
+
+Three properties matter more than the feature list:
+
+- **MISP Event in → MISP Event out.** No side format, no bespoke JSON contract to integrate.
+- **Everything the LLM produced is tagged**, verbatim, with
+  `ai-computer-assisted:assistance-level="ai-generated"` and
+  `ai-computer-assisted:review-level="unreviewed"`. Nothing the model made can quietly pass as
+  analyst work, and existing event content is never modified or re-tagged.
+- **Bring your own model.** Any OpenAI-compatible chat endpoint — a local Ollama on your own GPU,
+  vLLM, or a commercial API. Prompts and sampling parameters are not hardcoded: they ship as a
+  MISP galaxy you can edit and version ([docs/PROMPTS.md](docs/PROMPTS.md)).
+
+- module name: `generic_ai` · module type: `expansion`
 - input: a full MISP Event (see *Input shapes*)
-- validation: [PyMISP](https://github.com/MISP/PyMISP) (`MISPEvent.load`)
 - output: the processed MISP Event, a second MISP Event built from the report, and the report markdown
 
-## Documentation
+## Why you need it
+
+CTI arrives as prose. A vendor PDF, an ORKL report, a blog post — a human reads it, then retypes
+the indicators into MISP one by one and writes a summary for the people who will not read the
+full report. That work is slow, it is boring, and it is exactly where indicators get dropped or
+mistyped.
+
+This module does the mechanical part and leaves the judgement to you:
+
+- **Less retyping.** The indicators in the report become MISP attributes with the right type and
+  category, defanged spellings (`hxxp://`, `1.2.3[.]4`) resolved back to real values.
+- **Faster triage.** An event-level summary tells an analyst whether this event is worth opening.
+- **Auditable, not magic.** Every generated element is tagged as AI-generated and unreviewed, so
+  you can filter, review or purge it later. Precision is measured, not asserted: there is an
+  extraction precision gate against hand-checked indicator lists and a benchmark suite
+  ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)).
+- **Your data stays where you put it.** Point it at a local model and no report ever leaves your
+  network.
+- **No lock-in.** It is a plain misp-modules expansion module and a small Python package; the only
+  third-party dependency is PyMISP.
+
+## Getting started
+
+New here? Follow **[docs/GETTING_STARTED.md](docs/GETTING_STARTED.md)** — install, configure an
+LLM endpoint, run the module and get your first summary and extraction out of a real event, in a
+few copy-pasteable commands.
+
+## For developers
+
+Everything below is the working documentation of the repository: data flow, layout,
+how to run the module locally, and the test and quality gates.
+
+
+### Documentation
 
 | document | content |
 |---|---|
+| [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) | install, configure, first summary and extraction |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | data flow, schema provenance, planned hooks |
 | [docs/USE-CASES.md](docs/USE-CASES.md) | the two use-cases (CTI info extraction, summarization) and their configuration |
 | [docs/PROMPTS.md](docs/PROMPTS.md) | prompts shipped as a MISP galaxy, v1 prompt texts |
@@ -25,7 +80,7 @@ will later hold the real AI logic. Today both hooks are dummies.
 | [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) | how MISP users will reach the module (research + recommendation, not started) |
 | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) | contributor and agent guidance |
 
-## Data flow
+### Data flow
 
 ```text
 POST /query {"module": "generic_ai", "event": {"Event": {...}}}
@@ -59,7 +114,7 @@ jq -c '{module: "generic_ai", use_case: "summarization", summary_kind: "report",
   | jq '{summary: .results.Event.Event.EventReport[-1].content, tags: [.results.Event.Event.Tag[].name], meta: .metadata}'
 ```
 
-### Input shapes
+#### Input shapes
 
 Both are accepted and equivalent:
 
@@ -68,7 +123,7 @@ Both are accepted and equivalent:
 | direct | `{"module": "generic_ai", "event": {"Event": {...}}}` (bare `{...}` without the wrapper works too) |
 | export-module style | `{"module": "generic_ai", "data": [{"Event": {...}}]}` (what misp-modules sends to export modules) |
 
-### Validation
+#### Validation
 
 PyMISP is the validator: bad dates, distributions outside 0–5, an `EventReport` without a
 `name`, unknown attribute types, a missing `info` and similar problems come back as
@@ -82,7 +137,7 @@ Why not a JSON schema? The RFC's embedded schema (MISP `format/2.5/schema.json`)
 `EventReport` and has `additionalProperties: false` on Event, so it rejects every event that
 carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 
-## Repository layout
+### Repository layout
 
 ```text
 .
@@ -108,7 +163,7 @@ carries a report. See docs/ARCHITECTURE.md, "Schema provenance".
 └── pyproject.toml
 ```
 
-## Setup
+### Setup
 
 Python 3.14 and [uv](https://docs.astral.sh/uv/). A `.venv` is expected at the repo root.
 
@@ -116,13 +171,13 @@ Python 3.14 and [uv](https://docs.astral.sh/uv/). A `.venv` is expected at the r
 uv pip install --python .venv/bin/python -e ".[dev,e2e]"
 ```
 
-## Run
+### Run
 
 ```bash
 .venv/bin/python -m misp_modules -c . -l 127.0.0.1 -p 6666
 ```
 
-## Verify
+### Verify
 
 ```bash
 curl -s http://127.0.0.1:6666/modules | jq '.[] | select(.name=="generic_ai")'
@@ -136,7 +191,7 @@ jq -c '{module: "generic_ai", event: .}' fixtures/output/10a94632-a0a1-4062-a3a5
 
 Expected: the input uuid echoed back and the first 120 characters of the report markdown.
 
-## Tests
+### Tests
 
 ```bash
 .venv/bin/pytest -q                                   # offline layers; live layers skip
@@ -156,7 +211,7 @@ Without `--require-live` an unavailable live system skips its layer, so a green 
 the offline layers; with `--require-live` the same situation **fails** the run. Use it before
 every tag and whenever you claim "all tests pass".
 
-### Live systems (MISP and LLM server)
+#### Live systems (MISP and LLM server)
 
 Both are configured in `.env` at the repo root (gitignored; the last definition of a key wins):
 
@@ -181,7 +236,7 @@ test creates and deletes its own org-only, unpublished events. Four of the eight
 uuids no longer exist on the CIRCL dev instance and skip individually (a data problem, not a
 missing system; they stay skips even with `--require-live`).
 
-### Round-trip quality gate
+#### Round-trip quality gate
 
 Before real AI logic lands in `process_event()`, this proves the processing path does not
 corrupt events. `process_event(event, e2etest=True)` writes the processed event to
@@ -210,7 +265,7 @@ Lint before pushing:
 .venv/bin/ruff check . && .venv/bin/ruff format --check expansion genai tests benchmarks && .venv/bin/pylint expansion genai tests benchmarks
 ```
 
-## Development host
+### Development host
 
 The sandboxed development host from `.env` can run the same loop. Mirror the tree and run pytest there:
 

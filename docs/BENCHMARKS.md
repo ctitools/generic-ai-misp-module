@@ -48,6 +48,12 @@ What the numbers say:
 
 ## Summarization benchmark
 
+Two kinds. `report` summarises the EventReport of the 100 orkl reports. `event` (the
+"story-telling" case) summarises whole events: `python -m benchmarks.misp_sample` draws 100
+real events with 5-300 attributes from the dev MISP (seed 42, read-only, `benchmarks/data/misp/`),
+`run_llm --kind event` renders each event the way the module does and summarises it; the
+coverage reference is then the event's own hashes/IPs/URLs instead of the regex baseline.
+
 `python -m benchmarks.run_llm --use-case summarization` writes one `<id>.summary.json` per
 sampled report (the module as deployed, `summary_kind=report`); a second pass into another
 directory measures determinism; `python -m benchmarks.compare_summary --second-dir …` writes

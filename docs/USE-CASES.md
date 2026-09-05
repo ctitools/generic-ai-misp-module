@@ -22,7 +22,9 @@ from a pinned list:
 | event-level content: a summary EventReport (UC2), tags (future) | the event | same two tags |
 
 Nothing the module adds may leave without these tags. Existing content of the event is never
-modified or re-tagged.
+modified or re-tagged. Content tags (`tlp:*`, kill chain, confidence taxonomy) and dates
+(`first_seen`/`last_seen`) may only ever be suggested when the report states them literally;
+nothing is inferred (IMPROVEMENTS.md item 34, not implemented yet).
 
 ## UC1 — CTI info extraction
 

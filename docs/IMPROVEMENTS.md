@@ -159,4 +159,22 @@ Details and suggested fixes in docs/TESTING.md section 8; listed here so they ar
     disappears), keep behaviour byte-for-byte (same error messages, same timeouts), then run the
     offline suite, the `--require-live` run and one benchmark pass as the gate. Update
     ARCHITECTURE.md ("llm.py is the only network code") and CLAUDE.md.
+34. **Content tags only when the report states them (Aaron, 2026-09-05).** Extraction may
+    suggest `tlp:*`, kill-chain / ATT&CK and confidence-taxonomy tags **only if the marking,
+    phase or confidence statement is literally in the EventReport** (same in-source rule as
+    for indicators, same provenance in the comment); otherwise the field stays empty. Never
+    derive a kill-chain phase from the narrative, never turn the model's own `confidence`
+    score into a `misp:confidence-level` tag. TLP and report-level confidence go on the event
+    (event-level content, so the event gets the AI tags); a phase or technique tied to one
+    indicator goes on that attribute. Same rule for `first_seen` / `last_seen`: per-indicator
+    dates stated in the text, a stated publication date at most as `last_seen`, nothing inferred
+    from the EventReport's `timestamp` (that is MISP's save time). TODO together with the
+    `to_ids` decision (item 35) as one prompt/schema version bump.
+35. **`to_ids` is set blindly.** Every extracted attribute gets PyMISP's per-type default
+    (`ip-dst` true, `filename` true …), so a vendor's own domain or `mshta.exe` becomes
+    actionable. TODO: an `actionable` boolean from the model, applied only to lower the
+    default, recorded in the comment; plus ObjectReference links (exploits, connects-to,
+    drops) between candidates the model already groups, and galaxy clusters instead of
+    free-text `threat-actor` / `malware-type` attributes (event-level, AI-tagged). From the
+    RFC field review of 2026-09-05.
 

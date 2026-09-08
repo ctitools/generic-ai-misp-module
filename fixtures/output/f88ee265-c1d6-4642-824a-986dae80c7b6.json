@@ -1,0 +1,1312 @@
+{
+  "Event": {
+    "analysis": "0",
+    "date": "2026-02-18",
+    "extends_uuid": "",
+    "info": "PFCloud \u00b7 Bulletproof Hosting \u00b7 Datacarry Ransomware",
+    "protected": false,
+    "publish_timestamp": "1784894137",
+    "published": true,
+    "threat_level_id": "4",
+    "timestamp": "1772455068",
+    "uuid": "f88ee265-c1d6-4642-824a-986dae80c7b6",
+    "Orgc": {
+      "name": "CIRCL",
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f"
+    },
+    "Tag": [
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:ransomware=\"datacarry\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Civil Aviation\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Education\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Finance\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Health\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Insurance\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Legal\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Pharmacy\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Sport\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Technology\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:sector=\"Tourism\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Remote Desktop Protocol - T1021.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1562.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#065000",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over Web Service - T1567\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"belgium\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"denmark\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"france\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"greece\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"italy\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"lithuania\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#c05590",
+        "local": false,
+        "name": "misp-galaxy:country=\"south africa\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#23f697",
+        "local": false,
+        "name": "misp-galaxy:country=\"spain\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#c6e2d5",
+        "local": false,
+        "name": "misp-galaxy:country=\"sweden\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"switzerland\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"turkey\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"united kingdom\"",
+        "relationship_type": "targets"
+      },
+      {
+        "colour": "#004646",
+        "local": false,
+        "name": "type:OSINT",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0071c3",
+        "local": false,
+        "name": "osint:lifetime=\"perpetual\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0087e8",
+        "local": false,
+        "name": "osint:certainty=\"50\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:white",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:clear",
+        "relationship_type": ""
+      }
+    ],
+    "Object": [
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Report object to describe a report along with its metadata.",
+        "meta-category": "misc",
+        "name": "report",
+        "template_uuid": "70a68471-df22-4e3f-aa1a-5a3be19f82df",
+        "template_version": "8",
+        "timestamp": "1772441321",
+        "uuid": "44be82bb-a83f-48c6-99c6-efd2a0d4fe84",
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "link",
+            "timestamp": "1772441321",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "6531c2f0-40b6-40c9-9db0-90f9857993e4",
+            "value": "https://www.ccitic.org/assets/reports/CCITIC_CASE-RANS-01_TLP-CLEAR_EN.pdf"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "title",
+            "timestamp": "1772441321",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5e8c8743-5fb7-4eaf-a520-cd8213e530ba",
+            "value": "PFCloud \u00b7 Bulletproof Hosting \u00b7 Datacarry Ransomware"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "type",
+            "timestamp": "1772441321",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "48024b58-4eee-4436-bf29-ee8525f8dd88",
+            "value": "Report"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "case-number",
+            "timestamp": "1772441321",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "90f4b577-d8a3-44f6-9904-7b2de90828f2",
+            "value": "CCITIC : CASE-RANS-01 \u2014 TLP:CLEAR"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Vulnerability object describing a common vulnerability enumeration which can describe published, unpublished, under review or embargo vulnerability for software, equipments or hardware.",
+        "meta-category": "vulnerability",
+        "name": "vulnerability",
+        "template_uuid": "81650945-f186-437b-8945-9f31715d32da",
+        "template_version": "12",
+        "timestamp": "1772444453",
+        "uuid": "5fbe9465-970c-4b36-bbb4-356fbcea7b12",
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "id",
+            "timestamp": "1772444453",
+            "to_ids": false,
+            "type": "vulnerability",
+            "uuid": "f2bf2261-583d-4e85-84b4-6fea91d225cd",
+            "value": "CVE-2023-48788"
+          }
+        ]
+      },
+      {
+        "comment": "C2",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772445349",
+        "uuid": "527cdc45-98a6-4561-b55d-1a12c465a2c5",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772445349",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "276472f6-4b2d-4619-85a0-f9c3149fe23a",
+            "value": "185.216.70.170"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772445349",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "d301c48c-d18a-4e06-81fa-329cd6f23a7a",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772445349",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "7db53eab-8d23-4736-b3c9-3e5ddd16ff1a",
+            "value": "SHELL-CN-1"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772445349",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "88256d07-5208-4e5d-9274-1be7940148bf",
+            "value": "2024-06-19T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "C2",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448082",
+        "uuid": "2397eca4-38fb-45c1-8cc3-cb856712222d",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772447960",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "e615db6a-80bb-4b81-b76c-41757231d71e",
+            "value": "77.90.38.170"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772447960",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "ffec48f6-bb71-4720-b03c-2cf45eae80bb",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772447960",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "eb27d82e-79b7-461d-b291-3207de2cec9b",
+            "value": "SHELL-CN-1"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772447960",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "7a25d564-8250-4d4d-8edc-06394dfbaef5",
+            "value": "2024-08-01T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "C2",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448016",
+        "uuid": "52209cc0-4dec-481d-be4b-467f4f5e8008",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772448016",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "a2b571b2-ff82-48db-84fa-0ee5baaf0535",
+            "value": "154.216.19.224"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772448016",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "64cf374d-fc43-434b-b102-70fef2a47c69",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772448016",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "ccf0df49-12d0-419a-8c98-9283e9ad5c0d",
+            "value": "SHELL-CN-1"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772448016",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "78b0b532-e1ad-4e82-bb91-bb32b55c691c",
+            "value": "2024-11-15T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "C2",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448073",
+        "uuid": "e57d963c-8ebc-4fc9-81cc-aa5ab053a0d7",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772448073",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "dc7010c8-cc62-4a9b-8726-a09d097cd177",
+            "value": "154.216.17.157"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772448073",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "74e0609d-dc38-4be4-8d7b-b59931897333",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772448073",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "ead1beee-9229-424f-a41d-7096d0c44712",
+            "value": "SHELL-CN-1"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772448073",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "6b525b67-33bb-4b73-a882-5e0aad5d70f0",
+            "value": "2025-01-19T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "C2 (WS:8081)",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448196",
+        "uuid": "048a8c05-ed66-4c38-887a-f85a4cfd9990",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772448196",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "4dd9d3bd-8612-42cf-b43f-1d0c94d5d0a8",
+            "value": "176.65.141.201"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772448196",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "cf93bf86-5775-4429-a154-a979166e4f85",
+            "value": "214717"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772448196",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "304b0a0f-2b95-4c33-91d8-a965885b7032",
+            "value": "SHELL-UK-2"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772448196",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "6fb78ec4-6039-4b14-b152-bb65fd3ffac8",
+            "value": "2025-05-18T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "TOR DLS",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448240",
+        "uuid": "091df5ac-1135-4b0b-ba70-d9dc4f2b05cc",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772448240",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "0850c38e-e0de-42d0-9802-3a116f93c138",
+            "value": "176.65.141.232"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772448240",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "0f2c43f3-6690-4f3d-8a06-a3d1b71e0cfe",
+            "value": "214717"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772448240",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "435ba49f-75b0-4c67-b48e-72927facb310",
+            "value": "SHELL-UK-2"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772448240",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "5e0ffe70-9a6f-4aa1-8c75-4443efbbe4b5",
+            "value": "2025-05-18T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "C2",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772448279",
+        "uuid": "cc8e42fc-dcd6-4acd-b5ca-024619a29a10",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772448279",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "d4891065-8b06-4938-806d-7d826eeffd93",
+            "value": "206.123.145.13"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772448279",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "dad726bf-0756-4684-89cf-995bb20c357b",
+            "value": "207184"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772448279",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "19bd847f-6d49-4edb-83d8-cc5ff0ad1c15",
+            "value": "SHELL-UK-3"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "first-seen",
+            "timestamp": "1772448279",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "b9ea7cea-3eca-49dc-a7b3-b92f4b47db07",
+            "value": "2025-06-13T00:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772448426",
+        "uuid": "c0b9d6d6-468e-401a-b5fc-66112183f10d",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772448383",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "31214b55-5ace-4512-83f1-645675a0ba23",
+            "value": "sos.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772448383",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "f2676b25-a50b-44e6-aa6b-8be84f8c36c9",
+            "value": "fa3654b740b3d7b6ab2e097b262f1e4ec70f48a8f76d385fb08c9a66ed0c161d"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772448417",
+        "uuid": "27d2afe3-1edb-4360-8018-e0e6cd2271a6",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772448417",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "e1312cb0-dfe7-46ce-b107-759c65fbd29e",
+            "value": "sos.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772448417",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "d2f17116-02d9-4a1e-bf5f-223640f44243",
+            "value": "78f234a399b75241f8e961b4a0ff78439fa024d265a70af1a16e167c6cd0f50e"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772448469",
+        "uuid": "bdfa8e9a-112c-4cbd-b6a1-2b9dc0df35dc",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772448469",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "d29aa881-3968-4941-b2b5-e8d152ae0c8a",
+            "value": "audiodg.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772448469",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "7dba3cf0-3f22-4e57-8005-169b172ddc62",
+            "value": "6b93afe89d923d9694c660d4271f850a5534b7308b1902f4547d841ecea11d42"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772448501",
+        "uuid": "943cc7c7-2b89-4939-a02d-2d1a0f4c09d5",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772448501",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "897a7172-2643-4c19-ba6b-3a73723f5311",
+            "value": "audiofg.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772448501",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "5575f3bc-785e-47d1-8eae-a288787e6dd6",
+            "value": "b1cf41363401fe5671e24fd55ee89b0c177140c482a8dab1b9891db509df52f6"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772449348",
+        "uuid": "8c18a4af-899d-4858-8b7c-defadab8d710",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772449348",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "fb1bfa07-7636-4520-8348-8eb7311479aa",
+            "value": "audiodg.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772449348",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "2a9d7138-874c-4492-a487-67a9b59eb36d",
+            "value": "9b4e60fc6089912f84c96e77f8d905a6c1e9e76d15fdce96958a45ad0e8e6108"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772449370",
+        "uuid": "0ce342e6-9c1e-4416-8383-7603830bf0e3",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772449370",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "fb45537f-d08a-44be-8042-d97f02fdc601",
+            "value": "KB332.ps1"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772449370",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "11132afa-561b-4e85-a1ee-144968beb360",
+            "value": "a1b1a4aa5e90404a55d1fdf16f53b3689f3f2d62dfeec4d8c324d445a1e29db1"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772452687",
+        "uuid": "ddf5bd8a-c007-4d3e-8d7b-4637ff9f7e62",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772452687",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "9ffe1d76-fdc3-4d52-9cbc-d55ae1a58986",
+            "value": "154.216.19.224"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772452687",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "c02a516c-acd9-4af3-a3d2-fc2df7f8b79d",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772452687",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "2070cff9-9ac4-4d72-a277-1dce392f4150",
+            "value": "SHELL-CN-1"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772452715",
+        "uuid": "f3cde105-3820-4abf-998a-fea62c218677",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772452715",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "029f3809-98e9-4444-a746-f6b47b13ab23",
+            "value": "154.216.17.157"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772452715",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "3cd37db4-aed9-454c-99f4-8fe572fee63c",
+            "value": "135357"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772452715",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "56ecd68c-cf96-4626-9da2-cb7d821ff9be",
+            "value": "SHELL-CN-1"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772453029",
+        "uuid": "426ed644-d6bd-4768-a947-b5a78902848c",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772453029",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "6270321b-c5e5-48fc-b437-d1f799466f20",
+            "value": "176.65.141.201",
+            "Tag": [
+              {
+                "colour": "#0088cc",
+                "local": false,
+                "name": "misp-galaxy:country=\"germany\"",
+                "relationship_type": ""
+              }
+            ]
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772452748",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "55970159-ba9f-4b4b-9b87-eff99cd65658",
+            "value": "214717"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772452748",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "a58d67f4-7694-40e6-b104-22961748ca64",
+            "value": "SHELL-UK-2 / SHELL-UK-1"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772452785",
+        "uuid": "7bcdc517-8a97-4d01-8007-39643caff45d",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772452785",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "5957fd67-7fb1-405c-865a-188cda46c6e5",
+            "value": "176.65.141.232"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772452785",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "b66cd98c-34ea-4404-bbd2-c1918a9f92b4",
+            "value": "214717"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772452785",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "fa1cf385-326d-4d8f-b7d3-a1ccb5c27c8e",
+            "value": "SHELL-UK-2"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "IP Address information. Useful if you are pulling your ip information from ip-api.com",
+        "meta-category": "network",
+        "name": "ip-api-address",
+        "template_uuid": "4336f124-6264-4f72-943e-cc3797e4122b",
+        "template_version": "2",
+        "timestamp": "1772452957",
+        "uuid": "5bddc229-5e92-4d7f-ae1c-d8441ff61e3c",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip-src",
+            "timestamp": "1772452957",
+            "to_ids": true,
+            "type": "ip-src",
+            "uuid": "50e740b1-c54b-4f61-81a6-e05315af75b3",
+            "value": "206.123.145.13"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "asn",
+            "timestamp": "1772452957",
+            "to_ids": false,
+            "type": "AS",
+            "uuid": "f226152d-c66a-4f32-b612-63df66b11450",
+            "value": "207184"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "organization",
+            "timestamp": "1772452957",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b3ed2d8a-3734-4dea-a02e-a6e9b58fc01f",
+            "value": "SHELL-UK-3"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "An object describing a YARA rule (or a YARA rule name) along with its version.",
+        "meta-category": "misc",
+        "name": "yara",
+        "template_uuid": "b5acf82e-ecca-4868-82fe-9dbdf4d808c3",
+        "template_version": "7",
+        "timestamp": "1772453105",
+        "uuid": "cb45d34e-fa52-4de0-88cc-1679684ba2b0",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara-rule-name",
+            "timestamp": "1772453105",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "063c7b31-a7fa-4105-ac78-299324beb96a",
+            "value": "Datacarry_Chisel_Tunneling"
+          },
+          {
+            "category": "Payload installation",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara",
+            "timestamp": "1772453105",
+            "to_ids": true,
+            "type": "yara",
+            "uuid": "477b9f80-10a4-4843-a317-5f9807614354",
+            "value": "rule Datacarry_Chisel_Tunneling {meta:author = \"CCITIC ASBL\" date = \"2025-11-21\"\r\ndescription = \"Chisel tunneling Datacarry detection\"\r\ntlp = \"TLP:CLEAR\" confidence = \"A1\" strings: $s1 = \"server34787\" ascii wide $s2 =\r\n\"GenuineIntel\" ascii wide $s3 = \"chisel\" ascii wide nocase condition: uint16(0) ==\r\n0x5A4D and filesize < 50MB and 2 of them }"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "An object describing a Sigma rule (or a Sigma rule name).",
+        "meta-category": "misc",
+        "name": "sigma",
+        "template_uuid": "aa21a3cd-ab2c-442a-9999-a5e6626591ec",
+        "template_version": "2",
+        "timestamp": "1772453133",
+        "uuid": "7ab05e8f-10f7-49cd-9b67-ab3f3f84a9a1",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sigma-rule-name",
+            "timestamp": "1772453133",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1c7f0de1-2eef-43f7-aff0-ecffd46968dd",
+            "value": "Datacarry"
+          },
+          {
+            "category": "Payload installation",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sigma",
+            "timestamp": "1772453133",
+            "to_ids": true,
+            "type": "sigma",
+            "uuid": "67bf5b72-07ee-4cc5-87e9-a081dedbfb17",
+            "value": "title: Datacarry - RDP Backdoor KB332.ps1 id: ccitic-case-rans-01-rdp status: experimental\r\ndescription: Unauthorized RDP activation author: CCITIC ASBL date: 2025-11-21 tags: -\r\nattack.t1021.001 - attack.t1059.001 logsource: category: process_creation product: windows\r\ndetection: selection: CommandLine|contains: - 'Set-ExecutionPolicy Unrestricted'\r\n- 'fDenyTSConnections' - 'Allow RDP' condition: selection level: critical"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "source": "https://github.com/MISP/misp-taxonomies/blob/main/ai-computer-assisted/machinetag.json",
+  "version": 1,
+  "pinned": "2026-09-04",
+  "tags": [
+    "ai-computer-assisted:assistance-level=\"ai-assisted-minor\"",
+    "ai-computer-assisted:assistance-level=\"ai-assisted-substantial\"",
+    "ai-computer-assisted:assistance-level=\"ai-generated\"",
+    "ai-computer-assisted:assistance-level=\"ai-generated-human-directed\"",
+    "ai-computer-assisted:assistance-level=\"none\"",
+    "ai-computer-assisted:review-level=\"ai-reviewed\"",
+    "ai-computer-assisted:review-level=\"human-reviewed\"",
+    "ai-computer-assisted:review-level=\"human-reviewed-updated\"",
+    "ai-computer-assisted:review-level=\"multi-party-reviewed\"",
+    "ai-computer-assisted:review-level=\"unreviewed\""
+  ]
+}

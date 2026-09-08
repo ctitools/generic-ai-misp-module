@@ -1,0 +1,102 @@
+{
+  "note": "Microsoft ToolShell / SharePoint report",
+  "indicators": [
+    [
+      "ip-dst",
+      "104.238.159.149"
+    ],
+    [
+      "ip-dst",
+      "131.226.2.6"
+    ],
+    [
+      "ip-dst",
+      "134.199.202.205"
+    ],
+    [
+      "ip-dst",
+      "188.130.206.168"
+    ],
+    [
+      "ip-src",
+      "104.238.159.149"
+    ],
+    [
+      "ip-src",
+      "131.226.2.6"
+    ],
+    [
+      "ip-src",
+      "134.199.202.205"
+    ],
+    [
+      "ip-src",
+      "188.130.206.168"
+    ],
+    [
+      "md5",
+      "11f048838dabd650892acff3dd777035"
+    ],
+    [
+      "sha256",
+      "92bb4ddb98eeaf11fc15bb32e71d0a63256a0ed826a03ba293ce3a8bf057a514"
+    ],
+    [
+      "vulnerability",
+      "CVE-2025-49704"
+    ],
+    [
+      "vulnerability",
+      "CVE-2025-49706"
+    ],
+    [
+      "vulnerability",
+      "CVE-2025-53770"
+    ],
+    [
+      "vulnerability",
+      "CVE-2025-53771"
+    ],
+    [
+      "filename",
+      "spinstall0.aspx"
+    ],
+    [
+      "filename",
+      "debug_dev.js"
+    ],
+    [
+      "filename",
+      "spinstall.aspx"
+    ],
+    [
+      "filename",
+      "spinstall1.aspx"
+    ],
+    [
+      "filename",
+      "spinstall2.aspx"
+    ],
+    [
+      "threat-actor",
+      "Linen Typhoon"
+    ],
+    [
+      "threat-actor",
+      "Storm-2603"
+    ],
+    [
+      "threat-actor",
+      "Violet Typhoon"
+    ],
+    [
+      "url",
+      "c34718cbb4c6.ngrok-free.app/file.ps1"
+    ]
+  ],
+  "dates": {
+    "CVE-2025-49706": "2025-07-07",
+    "CVE-2025-49704": "2025-07-07"
+  },
+  "dates_note": "first_seen: 'As early as July 7, 2025, ... attempting to exploit CVE-2025-49706 and CVE-2025-49704' (labelled 2026-09-05)"
+}

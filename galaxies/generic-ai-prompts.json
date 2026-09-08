@@ -1,0 +1,9 @@
+{
+  "name": "Generic AI prompts",
+  "namespace": "generic-ai",
+  "type": "generic-ai-prompts",
+  "description": "Prompts, models and sampling parameters used by the Generic AI MISP module",
+  "uuid": "3c9bf465-07aa-4836-a1e3-14992cae7f69",
+  "version": 1,
+  "icon": "robot"
+}

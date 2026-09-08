@@ -1,127 +1,101 @@
-# AI MISP Module
+# Generic AI MISP module
 
-This repository now contains a runnable custom `misp-modules` scaffold for a Generic AI MISP enrichment module.
+A custom [misp-modules](https://github.com/MISP/misp-modules) expansion module that puts a Large
+Language Model to work on a **full MISP Event** ([MISP core
+format](https://www.misp-standard.org/rfc/misp-standard-core.html)) — not on a single attribute.
 
-The first loop is intentionally thin:
+You give it a whole MISP Event, it validates it with [PyMISP](https://github.com/MISP/PyMISP),
+takes the markdown of the event's `EventReport`s (the CTI report an analyst pasted in) and runs
+the configured use-case on it. What comes back is again a MISP Event, ready to be pushed into
+MISP.
 
-- module name: `generic_ai`
-- module type: `expansion`
-- supported input: raw `text` requests or MISP `attribute` requests with `text` / `comment`
-- output format: MISP `EventReport` in `misp_standard` format
-- current behavior: live backend summarization when configured, with deterministic fallback when unavailable
+| use-case | what you get |
+|---|---|
+| **CTI info extraction** | high-confidence MISP attributes read out of the report — IPs, domains, hashes, CVEs, plus `file` / `vulnerability` objects — each one refanged, deduplicated against the event, and carrying the quote it came from |
+| **Summarization** | a new `EventReport` with an executive summary, either of one report or of the whole event |
+| **Tag suggestion** | taxonomy and galaxy tags voted from the most similar events already in your MISP (no LLM) |
+| **none** (default) | pass-through, no model call at all |
 
-The verified live backend path uses Ollama through its OpenAI-compatible endpoint at `http://10.72.0.4:11434/v1`.
-The fallback keeps the module executable while preserving the Generic AI request shape described in the architecture notes.
+Three properties matter more than the feature list:
 
-The development-host bootstrap intentionally installs the base upstream `misp-modules` package, not the full `all` extra. That means the server logs warnings for optional upstream modules that are not installed, but the custom `generic_ai` scaffold still loads and runs correctly.
+- **MISP Event in → MISP Event out.** No side format, no bespoke JSON contract to integrate.
+- **Everything the model produced is tagged**, verbatim, with
+  `ai-computer-assisted:assistance-level="ai-generated"` and
+  `ai-computer-assisted:review-level="unreviewed"`. Nothing machine-made can quietly pass as
+  analyst work, and existing event content is never modified or re-tagged.
+- **Bring your own model.** Any OpenAI-compatible chat endpoint — a local Ollama on your own
+  GPU, vLLM, or a commercial API. Prompts and sampling parameters are not hardcoded: they ship
+  as a MISP galaxy you can edit and version.
 
-For a general architecture see [ARCHITECTURE.md](ARCHITECTURE.md).
-For use-case descriptions see [USE-CASES.md](USE-CASES.md).
+## Documentation
 
-**Repository Layout**
+Three guides, one per reader. Start with the one that matches what you want to do.
 
-```text
-.
-├── expansion/
-│   └── generic_ai.py
-├── tests/
-│   ├── fixtures/orkl-sample.txt
-│   ├── test_generic_ai_e2e.py
-│   └── test_generic_ai_unit.py
-├── artifacts/
-├── logs/
-├── CHANGELOG.md
-└── pyproject.toml
-```
+| guide | for you if you want to | contents |
+|---|---|---|
+| **[docs/USER_GUIDE.md](docs/USER_GUIDE.md)** | understand what it does to an event before deciding to use it | the three jobs with real examples, the rules it always follows, measured quality, where your data goes, what it does *not* do |
+| **[docs/OPERATOR_GUIDE.md](docs/OPERATOR_GUIDE.md)** | install it, run it and keep it alive | install, `.env`, running the server, verification calls, settings, the tag-suggestion service, metrics, logs, failure modes, security, upgrades |
+| **[docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md)** | change the code | code map, invariants, how to add a use-case or a prompt, the test layers and gates, how to run and write benchmarks, how to contribute, and where the project stands |
 
-**Development Host Bootstrap**
+Reference documents behind them — the use-case contracts
+([docs/USE-CASES.md](docs/USE-CASES.md)), the architecture
+([docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)), the prompts
+([docs/PROMPTS.md](docs/PROMPTS.md)), the test plan ([docs/TESTING.md](docs/TESTING.md)), the
+measurements ([docs/BENCHMARKS.md](docs/BENCHMARKS.md)), the requirements
+([docs/requirements.md](docs/requirements.md)) and the backlog
+([docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md)) — are indexed in the developer guide.
 
-Run these commands from the local workstation in this repository so the local tree is mirrored into the sandboxed development host directory.
+## Why you need it
 
-```bash
-set -a && source .env
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" "mkdir -p \"${DEVELOPER_HOST_DIRECTORY}\""
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'curl -LsSf https://astral.sh/uv/install.sh | sh'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && uv python install 3.12 && uv venv --python 3.12 .venv'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && [ -d misp-modules ] || git clone https://github.com/MISP/misp-modules.git'
-ssh "${DEVELOPER_USER}@${DEVELOPER_HOST}" 'export PATH="$HOME/.local/bin:$PATH" && cd "'"${DEVELOPER_HOST_DIRECTORY}"'" && uv pip install --python .venv/bin/python -e ./misp-modules'
-rsync -az --delete \
-  --exclude '.git' \
-  --exclude '.env' \
-  --exclude '.venv' \
-  --exclude '__pycache__' \
-  --exclude '.pytest_cache' \
-  --exclude '.ruff_cache' \
-  --exclude '.semgrep' \
-  ./ "${DEVELOPER_USER}@${DEVELOPER_HOST}:${DEVELOPER_HOST_DIRECTORY}/generic-ai-misp-module/"
-```
+CTI arrives as prose. A vendor PDF, an ORKL report, a blog post — a human reads it, then retypes
+the indicators into MISP one by one and writes a summary for the people who will not read the
+full report. That work is slow, it is boring, and it is exactly where indicators get dropped or
+mistyped.
 
-**Run Command**
+This module does the mechanical part and leaves the judgement to you:
 
-On the development host:
+- **Less retyping.** The indicators in the report become MISP attributes with the right type and
+  category, defanged spellings (`hxxp://`, `1.2.3[.]4`) resolved back to real values.
+- **Faster triage.** An event-level summary tells an analyst whether this event is worth opening.
+- **Auditable, not magic.** Every generated element is tagged as AI-generated and unreviewed, so
+  you can filter, review or purge it later. Precision is measured, not asserted: there is an
+  extraction precision gate against hand-checked indicator lists and a benchmark suite.
+- **Your data stays where you put it.** Point it at a local model and no report ever leaves your
+  network.
+- **No lock-in.** It is a plain misp-modules expansion module and a small Python package; the
+  only third-party runtime dependency is PyMISP.
 
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-cd "$DEVELOPER_HOST_DIRECTORY"
-.venv/bin/python -m misp_modules -c ./generic-ai-misp-module -l 127.0.0.1 -p 6666
-```
+## Try it in a minute
 
-For MISP_HOST integration the verified service listener was started on `0.0.0.0:6666` so MISP could reach it from outside the development host.
-
-**Verification Step**
-
-From the development host:
+Python 3.14, [uv](https://docs.astral.sh/uv/), and an OpenAI-compatible endpoint in `.env`
+(details: [docs/OPERATOR_GUIDE.md](docs/OPERATOR_GUIDE.md)).
 
 ```bash
-curl -s http://127.0.0.1:6666/modules | python3 -m json.tool
-jq -Rs --arg uuid "0d2f54fb-3910-445c-aeb6-5fd28a7532d9" '{
-  module: "generic_ai",
-  attribute: {
-    type: "text",
-    uuid: $uuid,
-    value: ("# ORKL CTI Report\n\n- Source fixture: tests/fixtures/orkl-sample.txt\n\n" + .)
-  },
-  use_case_category: "summarization",
-  config: {
-    backend: "openai",
-    api_base: "http://10.72.0.4:11434/v1",
-    default_model_id: "gemma4:latest",
-    verify_ssl: false,
-    summary_chars: 700
-  }
-}' generic-ai-misp-module/tests/fixtures/orkl-sample.txt |
-  curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- |
-  jq .
+uv pip install --python .venv/bin/python -e ".[dev,e2e]"
+.venv/bin/python -m misp_modules -c . -l 127.0.0.1 -p 6666
 ```
 
-**Artifact Path**
+In a second terminal — a summary of the shipped test event, with the AI tags it carries:
 
-Saved verification artifacts include:
+```bash
+jq -c '{module: "generic_ai", use_case: "summarization", summary_kind: "report", event: .}' fixtures/summary/dummy-event.json \
+  | curl -s http://127.0.0.1:6666/query -H 'Content-Type: application/json' --data @- \
+  | jq '{summary: .results.Event.Event.EventReport[-1].content, tags: [.results.Event.Event.Tag[].name], meta: .metadata}'
+```
 
-- `artifacts/live_openai_compat_response.json`
-- `artifacts/misp_e2e_result.json`
-- `artifacts/misp_e2e_event_reports.json`
-- `artifacts/misp_e2e_fetched_event.json`
-- `logs/live_openai_compat_metrics.json`
-- `logs/misp_e2e_metrics.json`
+## Status
 
-**Data Flow**
+Working and measured: the three use-cases, the round-trip guarantee, the test layers (offline,
+local server, live LLM, live MISP, live write path) and the benchmark suite are in place —
+current numbers in [docs/BENCHMARKS.md](docs/BENCHMARKS.md), the full picture of what is done,
+partial and planned in
+[docs/DEVELOPER_GUIDE.md §10](docs/DEVELOPER_GUIDE.md#10-where-the-project-stands).
 
-1. MISP or a caller posts a `text` attribute or raw text to `/query`.
-2. `expansion/generic_ai.py` extracts the input text and sends it to the configured backend.
-3. The verified live path uses `backend=openai` with `api_base=http://10.72.0.4:11434/v1`, which targets Ollama's OpenAI-compatible API.
-4. If the backend fails or is not configured, the module falls back to a deterministic summary.
-5. The module returns `results.EventReport` plus `results.Tag` with `ai-computer-assisted` tags for `ai-generated` and `unreviewed`.
-6. On `MISP_HOST`, the verified enrichment route is `enrich_attribute` on a `text` attribute, which stores the generated `EventReport` on the event and tags the event accordingly.
+Not there yet: MISP's web interface has no path that sends a whole event to an expansion module,
+so the module is called by script or API today. The researched plan for proper UI integration is
+[docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md).
 
-**Verified MISP_HOST Flow**
-
-The successful end-to-end run used:
-
-- report source: `tests/fixtures/orkl-sample.txt`
-- event input: one `text` attribute containing a markdown-wrapped ORKL report
-- enrichment route: `misp.enrich_attribute(<attribute_uuid>, "generic_ai")`
-- result: a generated `EventReport` stored on the same event
-- event tags: `ai-computer-assisted:assistance-level="ai-generated"`, `ai-computer-assisted:review-level="unreviewed"`
-
-The successful run metadata is captured in `artifacts/misp_e2e_result.json`.
+- module name `generic_ai` · module type `expansion` · input: a full MISP Event · output: the
+  processed MISP Event, a second MISP Event built from the report, and the report markdown
+- licensed under the [GNU AGPL v3](LICENSE); built at [CIRCL](https://www.circl.lu/) with
+  [ctitools](https://github.com/ctitools)

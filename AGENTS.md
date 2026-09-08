@@ -48,8 +48,8 @@ Use this stack unless the user asks to change it.
 
 ### Runtime And Tooling
 
-1. Python `3.13`
-2. `uv` for dependency management and command execution
+1. Python `3.14` (or higher)
+2. `uv` for dependency management and command execution (the `.venv` at the repo root already exists; do not recreate it)
 3. `pytest` for tests
 
 ### Stdlib First
@@ -65,7 +65,10 @@ Prefer the standard library for:
 
 ### Approved Third-Party Dependencies
 
-none. Ask if you really need one.
+- `pymisp` (latest release from https://github.com/MISP/PyMISP) — the MISP object model and validator
+- `json` (stdlib)
+
+Nothing else. Ask if you really need one.
 
 ### Software Supply Chain checks
 1. every dependency might pull in other dependencies. This is a DAG.
@@ -124,13 +127,13 @@ If you add or change a pipeline, leave behind:
 
 1. You will find the DEVELOPER_HOST and _USER in your .env 
 2. You have ssh access there. Only operate in DEVELOPER_HOST_DIRECTORY. Never somewhere else! You are sandboxed.
-3. Generally, follow the README, ARCHITECTURE.md notes to set things up
+3. Generally, follow the README and docs/ARCHITECTURE.md notes to set things up
 
 On the DEVELOPMENT_HOST, do:
 
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh
-uv venv --python=3.12 .venv
+uv venv --python=3.14 .venv
 source .venv/bin/activate
 git clone https://github.com/MISP/misp-modules.git && cd misp-modules
 uv pip install .[all]

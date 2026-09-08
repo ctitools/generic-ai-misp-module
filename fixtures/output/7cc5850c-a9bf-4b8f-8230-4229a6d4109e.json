@@ -1,0 +1,1281 @@
+{
+  "Event": {
+    "analysis": "0",
+    "date": "2026-01-14",
+    "extends_uuid": "",
+    "info": "COMmand & Evade: Turla's Kazuar v3 Loader",
+    "protected": false,
+    "publish_timestamp": "1784894144",
+    "published": true,
+    "threat_level_id": "4",
+    "timestamp": "1772807938",
+    "uuid": "7cc5850c-a9bf-4b8f-8230-4229a6d4109e",
+    "Orgc": {
+      "name": "CIRCL",
+      "uuid": "55f6ea5e-2c60-40e5-964f-47a8950d210f"
+    },
+    "Tag": [
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:360net-threat-actor=\"Turla - APT-C-29\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#e2c55c",
+        "local": false,
+        "name": "misp-galaxy:threat-actor=\"Turla\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:malpedia=\"Kazuar\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-malware=\"Kazuar - S0265\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:software=\"Kazuar\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:tool=\"Kazuar\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#004646",
+        "local": false,
+        "name": "type:OSINT",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0071c3",
+        "local": false,
+        "name": "osint:lifetime=\"perpetual\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0087e8",
+        "local": false,
+        "name": "osint:certainty=\"50\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:white",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:clear",
+        "relationship_type": ""
+      }
+    ],
+    "Object": [
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Report object to describe a report along with its metadata.",
+        "meta-category": "misc",
+        "name": "report",
+        "template_uuid": "70a68471-df22-4e3f-aa1a-5a3be19f82df",
+        "template_version": "8",
+        "timestamp": "1772455164",
+        "uuid": "83b9afc2-0cc8-41fc-be65-c1d1c47ee5ee",
+        "Attribute": [
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "link",
+            "timestamp": "1772455164",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "da143d09-7795-4508-9be0-a974480638f1",
+            "value": "https://r136a1.dev/2026/01/14/command-and-evade-turlas-kazuar-v3-loader/"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "summary",
+            "timestamp": "1772455164",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5652e7aa-b0da-421e-9bc6-67c0cbe0db16",
+            "value": "This blog post analyzes the latest version of Turla\u2019s Kazuar v3 loader, which was previously examined at the beginning of 2024. The upgraded loader heavily utilizes the Component Object Model (COM) and employs patchless Event Tracing for Windows (ETW) and Antimalware Scan Interface (AMSI) bypass techniques, as well as a control flow redirection trick, alongside various other methods to evade security solutions and increase analysis time. It is likely that this malware was used in the same campaign which ESET reported in their Gamaredon and Turla collaboration article, as the loaded Kazuar v3 payloads also use the agent label AGN-RR-01."
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "title",
+            "timestamp": "1772455164",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "d5fc8d7b-b57c-4478-bb9b-c698243e8100",
+            "value": "?? COMmand & Evade: Turla's Kazuar v3 Loader"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "type",
+            "timestamp": "1772455164",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "f224b3f3-1c51-4cbc-ad81-9a6859720eae",
+            "value": "Blog"
+          }
+        ]
+      },
+      {
+        "comment": "Legitimate signed printer driver installer from Hewlett-Packard",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772615559",
+        "uuid": "13a18e30-d616-4665-8a22-ce2aacef6c6e",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "8aa742a4-08bd-4220-ad7b-2155ce885d57",
+            "referenced_uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+            "relationship_type": "included-in",
+            "timestamp": "1772615449",
+            "uuid": "51248138-25bf-4780-89fc-5ba7afaa0774"
+          },
+          {
+            "comment": "",
+            "object_uuid": "8aa742a4-08bd-4220-ad7b-2155ce885d57",
+            "referenced_uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+            "relationship_type": "downloaded-from",
+            "timestamp": "1772615499",
+            "uuid": "a9a8701a-3173-479c-868c-a20def7ff377"
+          },
+          {
+            "comment": "",
+            "object_uuid": "8aa742a4-08bd-4220-ad7b-2155ce885d57",
+            "referenced_uuid": "7b35b286-9f74-4646-af3d-047ab3685d57",
+            "relationship_type": "executes",
+            "timestamp": "1772615559",
+            "uuid": "e35fb349-8041-4557-987b-d474f9af94b6"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772609978",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "94f9dd76-a0a1-4da5-bbd2-fb29b8e1cb9b",
+            "value": "hpbprndi.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772609978",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "50c6f48c-b05e-423e-bc90-98a5d093d7d8",
+            "value": "34b7df7919dbbe031b5d802accb566ce6e91df4155b1858c3c81e4c003f1168c"
+          }
+        ]
+      },
+      {
+        "comment": "Native loader",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772803998",
+        "uuid": "7b35b286-9f74-4646-af3d-047ab3685d57",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "3105f0df-9fe6-4c87-8994-c393737a7a0c",
+            "referenced_uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+            "relationship_type": "included-in",
+            "timestamp": "1772615469",
+            "uuid": "b0a92410-0b03-4f61-89d2-6de5868df4ea"
+          },
+          {
+            "comment": "",
+            "object_uuid": "3105f0df-9fe6-4c87-8994-c393737a7a0c",
+            "referenced_uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+            "relationship_type": "downloaded-from",
+            "timestamp": "1772615512",
+            "uuid": "19178ed9-1da7-4624-8dd2-791ef4883ff2"
+          },
+          {
+            "comment": "",
+            "object_uuid": "3105f0df-9fe6-4c87-8994-c393737a7a0c",
+            "referenced_uuid": "13a18e30-d616-4665-8a22-ce2aacef6c6e",
+            "relationship_type": "executed-by",
+            "timestamp": "1772615574",
+            "uuid": "cd63c649-b718-417a-8529-99df8c5739e3"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "On disk",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772803998",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "ad939103-5e58-4117-86cc-35e082756978",
+            "value": "hpbprndiLOC.dll"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772803998",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "b450193b-844e-4338-88ad-e213b8f64099",
+            "value": "69908f05b436bd97baae56296bf9b9e734486516f9bb9938c2b8752e152315d4"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "Internal",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772803998",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "d4b650f1-3b55-443a-996c-e3581d08b8e5",
+            "value": "Hsauxvhwcpicf.dll"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772803998",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1bb4043d-a262-4926-9218-e01cbb5fa365",
+            "value": "%LOCALAPPDATA%\\Programs\\HP\\Printer\\Drive\\hpbprndiLOC.dll"
+          }
+        ]
+      },
+      {
+        "comment": "Encrypted KERNEL Kazuar v3",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772804127",
+        "uuid": "68000a9d-de29-458c-9eaa-f8a95a67fd7d",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "c391c860-b0d8-4dd3-91f3-88d2919550c8",
+            "referenced_uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+            "relationship_type": "included-in",
+            "timestamp": "1772615460",
+            "uuid": "e15fcae1-62da-4436-be24-97ed935a2cf5"
+          },
+          {
+            "comment": "",
+            "object_uuid": "c391c860-b0d8-4dd3-91f3-88d2919550c8",
+            "referenced_uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+            "relationship_type": "downloaded-from",
+            "timestamp": "1772615522",
+            "uuid": "0502035c-5c46-4fce-aea8-9998659f499a"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772804127",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "48ffe11f-0683-460c-997f-9cad1e895c92",
+            "value": "jayb.dadk"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772804127",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "b9c6cbce-f8d6-4242-90f4-7fff53be2ad6",
+            "value": "befa1695fcee9142738ad34cb0bfb453906a7ed52a73e2d665cf378775433aa8"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772804127",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "bf96b1a2-1f76-4464-9051-7bd9520b93e8",
+            "value": "%LOCALAPPDATA%\\Programs\\HP\\Printer\\Drive\\jayb.dadk"
+          }
+        ]
+      },
+      {
+        "comment": "Encrypted WORKER Kazuar v3",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772804200",
+        "uuid": "c956d6d8-07d5-4c06-a4e9-33cb1d7b75c5",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "aa283de9-e1f8-4cb2-bf2a-70b71de60d68",
+            "referenced_uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+            "relationship_type": "included-in",
+            "timestamp": "1772615435",
+            "uuid": "0a88b966-53c9-4881-b77f-4f702b63104d"
+          },
+          {
+            "comment": "",
+            "object_uuid": "aa283de9-e1f8-4cb2-bf2a-70b71de60d68",
+            "referenced_uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+            "relationship_type": "downloaded-from",
+            "timestamp": "1772615491",
+            "uuid": "3455f78b-31c7-46bc-aa55-770d32e0ed04"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772804200",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "cd7ded63-cdef-4058-a40e-368f91177f7f",
+            "value": "kgjlj.sil"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772804200",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "48ff807f-7c0d-4b13-8ac6-29dfe47532f3",
+            "value": "458ca514e058fccc55ee3142687146101e723450ebd66575c990ca55f323c769"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772804200",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "d4189a82-2d5c-4999-9e2d-279647898bb8",
+            "value": "%LOCALAPPDATA%\\Programs\\HP\\Printer\\Drive\\kgjlj.sil"
+          }
+        ]
+      },
+      {
+        "comment": "Encrypted BRIDGE Kazuar v3",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772804687",
+        "uuid": "1605c89d-541e-4584-a9f0-4c58e256f4d8",
+        "ObjectReference": [
+          {
+            "comment": "",
+            "object_uuid": "1d3738d3-c41f-4978-9e6e-a6a8c8fcbef0",
+            "referenced_uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+            "relationship_type": "downloaded-from",
+            "timestamp": "1772615389",
+            "uuid": "3bb9c4b5-6490-402a-9fa6-bc0f58b8d8aa"
+          },
+          {
+            "comment": "",
+            "object_uuid": "1d3738d3-c41f-4978-9e6e-a6a8c8fcbef0",
+            "referenced_uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+            "relationship_type": "included-in",
+            "timestamp": "1772615412",
+            "uuid": "64e82f46-49d5-4f6a-9ec9-c738a0080eff"
+          }
+        ],
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772804687",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "5c30da40-9fb9-4b61-9f06-53973e855a7d",
+            "value": "pkrfsu.ldy"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772804687",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "704418c9-3bec-4af1-aee1-8eea93bdd28f",
+            "value": "b755e4369f1ac733da8f3e236c746eda94751082a3031e591b6643a596a86acb"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772804687",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "c7c59e25-0b68-4f11-9dd1-1ac5efefb0a1",
+            "value": "%LOCALAPPDATA%\\Programs\\HP\\Printer\\Drive\\pkrfsu.ldy"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772614511",
+        "uuid": "4ca59242-eb35-4071-8309-3c8af9d393e8",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "path",
+            "timestamp": "1772614511",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "c905a5dd-dd69-4f96-a4e8-80f58e5fb9c6",
+            "value": "%LOCALAPPDATA%\\Programs\\HP\\Printer\\Driver"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "A domain/hostname and IP address seen as a tuple in a specific time frame.",
+        "meta-category": "network",
+        "name": "domain-ip",
+        "template_uuid": "43b3b146-77eb-4931-b4cc-b66c60f28734",
+        "template_version": "11",
+        "timestamp": "1772615292",
+        "uuid": "54eb5223-172f-46f8-9a3c-4d5f34384e31",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ip",
+            "timestamp": "1772615292",
+            "to_ids": true,
+            "type": "ip-dst",
+            "uuid": "e642f58f-b9b7-4653-b2af-fe73d79eeb95",
+            "value": "185.126.255.132"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1772788568",
+        "uuid": "5ac5348e-7f11-45a6-a6c8-50bf10be62c2",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1772788568",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "5654266e-d3ea-424f-99c2-f7d86bc3e84e",
+            "value": "https://185.126.255.132/requestor.php"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772796071",
+        "uuid": "0ba72a25-8f22-4397-a841-356994544ef1",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772796071",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "80aa386c-ce3c-45a8-abdf-7276597cc2a7",
+            "value": "8RWRLT.vbs"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772796071",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "576a1f9c-fb0e-493d-a2eb-68fdd55feff7",
+            "value": "3db10e71dab8710fb69b5c65c48382f43be3e4c79456d7a7abd5a7059873f581"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772804748",
+        "uuid": "3d9c4cba-c34d-4a92-8099-a0e15ece8ade",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "On disk",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772804748",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "d714b970-fbcc-4bd8-86c2-3feb0dc8bdf9",
+            "value": "jtjdypzmb.yqg"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "Internal",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772804748",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "994d8563-61ed-405c-aaf7-683c1bd42e51",
+            "value": "IbadessasGrvionana.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772804748",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "1a2622bb-64c9-4f6b-8a30-dec04658dae1",
+            "value": "866824f2474ad603576b12b83831b2acc12d378f0ef4d0b20df10639b04c44da"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772804749",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "8d2db341-fe9a-4397-8e19-9841b41cd2a0",
+            "value": "%ALLUSERSPROFILE%\\WindowsSupport\\Packages\\Drivers\\jtjdypzmb.yqg"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772800754",
+        "uuid": "49baa8bd-9ace-458a-b953-d5dc1aaa0f79",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "On disk",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772800754",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "4e6d2770-66d1-429d-92f2-03836f0fb268",
+            "value": "- (KERNEL Kazuar v3)"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "Internal",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772800754",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "8605fc9d-cd22-42f5-b64d-77b1056a576f",
+            "value": "TyntGextctidv.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772800754",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "439a82d6-5693-4236-a77f-0d40f66bcb36",
+            "value": "c1f278f88275e07cc03bd390fe1cbeedd55933110c6fd16de4187f4c4aaf42b9"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772801432",
+        "uuid": "40f39b40-ab24-4e2d-87a3-c074bd850995",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "on disk",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772801432",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "cc02b100-c4cb-4d94-9bc1-51b3ba15045d",
+            "value": "- (WORKER Kazuar v3)"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "internal",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772801432",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "22c34754-d630-4100-a5ad-c78f88e31d34",
+            "value": "SthtbMexprVacu.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772801432",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "204f710f-fe99-4141-9551-40731b3808db",
+            "value": "436cfce71290c2fc2f2c362541db68ced6847c66a73b55487e5e5c73b0636c85"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772801531",
+        "uuid": "f7b566ac-32bb-4c47-96e5-04b949fa7261",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "on disk",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772801531",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "e8eef05f-e467-4498-9be6-a58602cab76b",
+            "value": "- (BRIDGE Kazuar v3)"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "internal",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "filename",
+            "timestamp": "1772801531",
+            "to_ids": true,
+            "type": "filename",
+            "uuid": "2d94644e-4bcf-4b47-9c60-dffa3ab7b3a7",
+            "value": "CokeCefshsVeit.exe"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1772801531",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "146a1b71-9a67-47be-9368-010de4965085",
+            "value": "6eb31006ca318a21eb619d008226f08e287f753aec9042269203290462eaa00d"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "A domain/hostname and IP address seen as a tuple in a specific time frame.",
+        "meta-category": "network",
+        "name": "domain-ip",
+        "template_uuid": "43b3b146-77eb-4931-b4cc-b66c60f28734",
+        "template_version": "11",
+        "timestamp": "1772802489",
+        "uuid": "fc6b7450-7cfe-48dc-bf60-bb85bb28eabe",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "DNS address",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1772802489",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "28af398f-08e3-483f-8dd7-e602d2c8d2ea",
+            "value": "esetcloud.com"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1772802707",
+        "uuid": "93246c46-039b-4727-ab3d-68abb7abd91b",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "C2 URL",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1772802707",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "c5f302b0-7569-43d2-bc41-167f7d1997c5",
+            "value": "https://arianeconseil.online/wp-includes/sitemaps/html/"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1772802720",
+        "uuid": "d47826c8-9d11-4b86-ac35-a1a6bc34a509",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "C2 URL",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1772802720",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "84128ac4-47f0-4b33-84b8-87f72e8d13b8",
+            "value": "https://download.originalapk.com/wp-content/plugins/loginizer/styles/"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1772802728",
+        "uuid": "b41a0881-b72c-4ce5-b87c-266dd16dcb18",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "C2 URL",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1772802728",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "317ebd1f-e0c0-4e89-b44b-015b9e9246df",
+            "value": "https://portal.northernfruit.com/wp-content/plugins/file-away/core/"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772802847",
+        "uuid": "586e573d-8273-4594-815a-d4a118604359",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "path",
+            "timestamp": "1772802847",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "96ca3b8a-558d-4be1-aba9-f0c22cf473ca",
+            "value": "%ALLUSERSPROFILE%\\WindowsSupport\\Packages\\Drivers"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772802967",
+        "uuid": "e3a8ebf9-8c14-4991-a130-ac60f98c98f4",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "path",
+            "timestamp": "1772802967",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "24ee14d8-f432-4e6a-9704-61c747551464",
+            "value": "%ALLUSERSPROFILE%\\WindowsGraphicalDevice"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1772803533",
+        "uuid": "006294b6-26b4-41de-a88d-5192cd810cab",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "fullpath",
+            "timestamp": "1772803533",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "87d2846d-cb44-469b-88b0-96801c130e4b",
+            "value": "%LOCALAPPDATA%\\Temp\\dksuluc.hpn"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805261",
+        "uuid": "b483bb25-591c-46ea-abf7-be0cc17851c8",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805261",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "63459473-2610-475b-a595-3435e8903e5f",
+            "value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\CLSID\\{5806CA31-7A57-4125-AC69-4D597BD5FE38}"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805270",
+        "uuid": "eb660643-a188-4270-8660-4ef2c05c3ed7",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805270",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "b7447872-fe59-4c60-829c-ad9449a6c815",
+            "value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\CLSID\\{045CE7DB-2160-4067-BB86-0D54E20FA95D}"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805280",
+        "uuid": "9fa5f149-27e3-4f69-85b7-9e9834266156",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805280",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "8d1b91b4-068b-430e-9d6f-34307ca21211",
+            "value": "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\CLSID\\{045CE7DB-2160-4067-BB86-0D54E20FA95D}"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805315",
+        "uuid": "fb21162c-da70-4f53-bd27-6a34777ac897",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805315",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "81906593-95df-46fd-9b17-6eeb0fcbc176",
+            "value": "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\CLSID\\{5806CA31-7A57-4125-AC69-4D597BD5FE38}"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805329",
+        "uuid": "8e37a4df-1807-4b25-8f80-13d59f9abcb0",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805329",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "3be51788-c0d5-44d4-8458-83fee7b99a8a",
+            "value": "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\CLSID\\{D6BCEDD7-8E53-4769-9826-24954C975AAC}"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "Registry key object describing a Windows registry key with value and last-modified timestamp",
+        "meta-category": "file",
+        "name": "registry-key",
+        "template_uuid": "8b3228ad-6d82-4fe6-b2ae-05426308f1d5",
+        "template_version": "5",
+        "timestamp": "1772805345",
+        "uuid": "4299e4a2-353e-4dbc-99de-270259eb9b83",
+        "Attribute": [
+          {
+            "category": "Persistence mechanism",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "key",
+            "timestamp": "1772805345",
+            "to_ids": true,
+            "type": "regkey",
+            "uuid": "338f4fcc-0b2b-4201-a4f5-9477282bc934",
+            "value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\CLSID\\{D6BCEDD7-8E53-4769-9826-24954C975AAC}"
+          }
+        ]
+      },
+      {
+        "comment": "Native Loader",
+        "deleted": false,
+        "description": "An object describing a YARA rule (or a YARA rule name) along with its version.",
+        "meta-category": "misc",
+        "name": "yara",
+        "template_uuid": "b5acf82e-ecca-4868-82fe-9dbdf4d808c3",
+        "template_version": "7",
+        "timestamp": "1772805823",
+        "uuid": "52c43dcf-fbef-47c2-9cfb-2eee28182411",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara-rule-name",
+            "timestamp": "1772805823",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "b6b89a15-2034-4c2c-adc3-9aa20a2c592c",
+            "value": "turla_kazuar_v3_native_loader"
+          },
+          {
+            "category": "Payload installation",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara",
+            "timestamp": "1772805823",
+            "to_ids": true,
+            "type": "yara",
+            "uuid": "48005359-7d5b-40c1-b5fd-257c66bfaba5",
+            "value": "import \"pe\"\r\n\r\nrule turla_kazuar_v3_native_loader\r\n{\r\n    meta:\r\n        author = \"Dominik Reichel\"\r\n        description = \"Detects Turla's Kazuar v3 native loader\"\r\n        date = \"2026-01-12\"\r\n        reference = \"https://r136a1.dev/2026/01/14/command-and-evade-turlas-kazuar-v3-loader/\"\r\n\r\n    strings:\r\n        $a0 = \"%d:%08X\"\r\n        $a1 = \"Software\\\\Classes\\\\\" wide\r\n        \r\n        $b0 = {7B 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 2D 00 ?? 00 ?? 00 ?? 00 ?? 00 2D 00 ?? 00 ?? 00 ?? 00 ?? 00 2D 00 ?? 00 ?? 00 ?? 00 ?? 00 2D 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 ?? 00 00 00}\r\n\r\n    condition:\r\n        uint16(0) == 0x5A4D and\r\n        uint32(uint32(0x3C)) == 0x00004550 and\r\n        all of ($a*) and\r\n        b0 >= 3 and \r\n        pe.imports(\"dbghelp.dll\", \"SymInitialize\") and\r\n        pe.imports(\"dbghelp.dll\", \"SymCleanup\") and\r\n        pe.imports(\"oleaut32.dll\", \"SafeArrayAccessData\") and\r\n        pe.imports(\"oleaut32.dll\", \"SafeArrayUnaccessData\") and\r\n        pe.imports(\"ole32.dll\", \"StringFromCLSID\") and\r\n        pe.imports(\"ole32.dll\", \"CLSIDFromProgID\") and\r\n        pe.imports(\"ole32.dll\", \"CLSIDFromString\") and\r\n        pe.imports(\"ole32.dll\", \"CoUninitialize\")\r\n}"
+          }
+        ]
+      },
+      {
+        "comment": "COM-Visible Assembly",
+        "deleted": false,
+        "description": "An object describing a YARA rule (or a YARA rule name) along with its version.",
+        "meta-category": "misc",
+        "name": "yara",
+        "template_uuid": "b5acf82e-ecca-4868-82fe-9dbdf4d808c3",
+        "template_version": "7",
+        "timestamp": "1772805892",
+        "uuid": "0064208a-8c30-41a7-836e-756a74921fba",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara-rule-name",
+            "timestamp": "1772805892",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "acf1c1d8-1e6e-4a2a-8918-b4c218b94d22",
+            "value": "turla_kazuar_v3_com_visible_app"
+          },
+          {
+            "category": "Payload installation",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara",
+            "timestamp": "1772805892",
+            "to_ids": true,
+            "type": "yara",
+            "uuid": "88d01712-5db6-49c3-8ef2-54cf0a2f8f21",
+            "value": "import \"pe\"\r\n\r\nrule turla_kazuar_v3_com_visible_app\r\n{\r\n    meta:\r\n        author = \"Dominik Reichel\"\r\n        description = \"Detects Turla's Kazuar v3 COM-visible application\"\r\n        date = \"2026-01-12\"\r\n        reference = \"https://r136a1.dev/2026/01/14/command-and-evade-turlas-kazuar-v3-loader/\"\r\n\r\n    strings:\r\n        $a0 = \"GetDelegateForFunctionPointer\"\r\n        $a1 = \"StackFrame\"\r\n        $a2 = \"GuidAttribute\"\r\n        $a3 = \"ComVisibleAttribute\"\r\n        $a4 = \"ClassInterfaceAttribute\"\r\n        $a5 = \"UnmanagedFunctionPointerAttribute\"\r\n        $a6 = \"CompilerGeneratedAttribute\"\r\n        $a7 = \"System.Reflection\"\r\n        $a8 = \"CallingConvention\"\r\n        $a9 = \"TargetInvocationException\"\r\n        $a10 = \"get_InnerException\"\r\n\r\n        $b0 = \"ResourceManager\"\r\n\r\n    condition:\r\n        uint16(0) == 0x5A4D and\r\n        uint32(uint32(0x3C)) == 0x00004550 and\r\n        pe.imports(\"mscoree.dll\", \"_CorDllMain\") and\r\n        all of ($a*) and\r\n        filesize < 100KB and not\r\n        $b0\r\n}"
+          }
+        ]
+      },
+      {
+        "comment": "Kazuar v3 (KERNEL, WORKER, BRIDGE)",
+        "deleted": false,
+        "description": "An object describing a YARA rule (or a YARA rule name) along with its version.",
+        "meta-category": "misc",
+        "name": "yara",
+        "template_uuid": "b5acf82e-ecca-4868-82fe-9dbdf4d808c3",
+        "template_version": "7",
+        "timestamp": "1772805980",
+        "uuid": "d4f8e2c9-a513-4a61-a784-13c0984750cc",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara-rule-name",
+            "timestamp": "1772805980",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "1a09a0f4-4511-4fba-9b95-1783aad41755",
+            "value": "turla_kazuar_v3"
+          },
+          {
+            "category": "Payload installation",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "yara",
+            "timestamp": "1772805981",
+            "to_ids": true,
+            "type": "yara",
+            "uuid": "b4a96c57-ac06-4cd3-b689-ea69da457021",
+            "value": "import \"pe\"\r\n\r\nrule turla_kazuar_v3\r\n{\r\n    meta:\r\n        author = \"Dominik Reichel\"\r\n        description = \"Detects Turla's KERNEL, WORKER and BRIDGE Kazuar v3\"\r\n        date = \"2026-01-12\"\r\n        reference = \"https://r136a1.dev/2026/01/14/command-and-evade-turlas-kazuar-loader/\"\r\n\r\n    strings:\r\n        $a0 = \"FxResources.System.Buffers\"\r\n        $a1 = \"FxResources.System.Numerics.Vectors\"\r\n        $a2 = \"Google.Protobuf.Reflection\"\r\n        $a3 = \"Google.Protobuf.WellKnownTypes\"\r\n        $a4 = \"Microsoft.CodeAnalysis\"\r\n        $a5 = \"System.Diagnostics.CodeAnalysis\"\r\n        $a6 = \"System.Runtime.InteropServices\"\r\n\r\n        $b0 = \"RequestElection\"\r\n        $b1 = \"LeaderShutdown\"\r\n        $b2 = \"ClientAnnouncement\"\r\n        $b3 = \"LeaderAnnouncement\"\r\n        $b4 = \"Silence\"\r\n\r\n        $c0 = \"ExchangeWebServices\"\r\n        $c1 = \"WebSocket\"\r\n        $c2 = \"HTTP\"\r\n\r\n        $d0 = \"AUTOS\"\r\n        $d1 = \"GET_CONFIG\"\r\n        $d2 = \"PEEP\"\r\n        $d3 = \"CHECK\"\r\n        $d4 = \"KEYLOG\"\r\n        $d5 = \"SYN\"\r\n        $d6 = \"TASK_RESULT\"\r\n        $d7 = \"CHECK_RESULT\"\r\n        $d8 = \"CONFIG\"\r\n        $d9 = \"SEND\"\r\n        $d10 = \"TASK_KILL\"\r\n        $d11 = \"SEND_RESULT\"\r\n        $d12 = \"TASK\"\r\n\r\n    condition:\r\n        uint16(0) == 0x5A4D and\r\n        uint32(uint32(0x3C)) == 0x00004550 and\r\n        pe.imports(\"mscoree.dll\", \"_CorExeMain\") and\r\n        (\r\n            (\r\n                4 of ($a*) and\r\n                2 of ($b*)\r\n            ) or\r\n            (\r\n                5 of ($a*) and\r\n                all of ($c*)\r\n            ) or\r\n            (\r\n                5 of ($a*) and\r\n                9 of ($d*)\r\n            ) or\r\n            (\r\n                2 of ($b*) and\r\n                2 of ($c*)\r\n            ) or\r\n            (\r\n                2 of ($b*) and\r\n                6 of ($d*)\r\n            ) or\r\n            (\r\n                all of ($b*)\r\n            ) or\r\n            (\r\n                10 of ($d*)\r\n            )\r\n        )\r\n}"
+          }
+        ]
+      },
+      {
+        "comment": "IDAPython strings decryption script",
+        "deleted": false,
+        "description": "Object describing a computer program written to be run in a special run-time environment. The script or shell script can be used for malicious activities but also as support tools for threat analysts.",
+        "meta-category": "misc",
+        "name": "script",
+        "template_uuid": "6bce7d01-dbec-4054-b3c2-3655a19382e2",
+        "template_version": "7",
+        "timestamp": "1772806128",
+        "uuid": "3067bccd-94f8-4012-8483-076e3dccdb77",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "script",
+            "timestamp": "1772806128",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "2c68513e-41e1-4b7a-b377-c3f0899a5e96",
+            "value": "\"\"\"\r\nIDA Python script to decrypt strings in Turla's Kazuar v3 loader\r\nSample SHA-256: 69908f05b436bd97baae56296bf9b9e734486516f9bb9938c2b8752e152315d4\r\n\r\nTested with IDA Pro 9.1\r\n\"\"\"\r\n\r\nimport idautils\r\nimport idaapi\r\nimport idc\r\n\r\nfrom dataclasses import dataclass\r\nfrom typing import Optional\r\nfrom enum import Enum, auto\r\n\r\n\r\nclass Algorithm(Enum):\r\n    ONE = auto()\r\n    TWO = auto()\r\n\r\n\r\nDECRYPTION_FUNCTIONS = [\r\n    (Algorithm.ONE, 0x1D4CBCA30),\r\n    (Algorithm.ONE, 0x1D4CBC190),\r\n    (Algorithm.TWO, 0x1D4CBC3E0)\r\n]\r\n\r\n\r\n@dataclass\r\nclass DecryptionData:\r\n    encrypted_string_address: Optional[str] = None\r\n    encrypted_string_length: Optional[str] = None\r\n    key_1: Optional[str] = None  # Algorithm 1\r\n    key_2: Optional[str] = None  # Algorithm 1\r\n    key_3: Optional[str] = None  # Algorithm 1\r\n\r\n    def is_complete(self, algo: Algorithm) -> bool:\r\n        result = False\r\n\r\n        if algo == Algorithm.ONE:\r\n            result = None not in (\r\n                self.encrypted_string_address,\r\n                self.encrypted_string_length,\r\n                self.key_1,\r\n                self.key_2,\r\n                self.key_3\r\n            )\r\n        elif algo == Algorithm.TWO:\r\n            result = (self.encrypted_string_address is not None and\r\n                      self.encrypted_string_length is not None)\r\n\r\n        return result\r\n\r\n\r\ndef is_number(str_num: str) -> bool:\r\n    result = True\r\n\r\n    try:\r\n        float(str_num)\r\n    except ValueError:\r\n        result = False\r\n\r\n    return result\r\n\r\n\r\ndef set_decompilation_comment(comment: str, address: int) -> None:\r\n    # Copy&pasted and adjusted from:\r\n    # https://github.com/GDATAAdvancedAnalytics/IDA-Python/blob/master/Trickbot/stringDecryption.py#L104\r\n    cfunc = idaapi.decompile(address)\r\n\r\n    eamap = cfunc.get_eamap()\r\n    decomp_obj_address = eamap[address][0].ea\r\n\r\n    tl = idaapi.treeloc_t()\r\n    tl.ea = decomp_obj_address\r\n\r\n    comment_set = False\r\n    for itp in range(idaapi.ITP_SEMI, idaapi.ITP_COLON):\r\n        tl.itp = itp\r\n        cfunc.set_user_cmt(tl, comment)\r\n        cfunc.save_user_cmts()\r\n        _ = cfunc.__str__()\r\n        if not cfunc.has_orphan_cmts():\r\n            comment_set = True\r\n            cfunc.save_user_cmts()\r\n            break\r\n        cfunc.del_orphan_cmts()\r\n\r\n    if not comment_set:\r\n        print(f'[-] Please set {comment} to line {hex(int(address))} manually')\r\n\r\n\r\ndef decrypt(data: DecryptionData, algo: Algorithm) -> str:\r\n    result = ''\r\n    encrypted_string = idc.get_bytes(int(data.encrypted_string_address, 16),\r\n                                     int(data.encrypted_string_length, 16))\r\n\r\n    if algo == Algorithm.ONE:\r\n        k1, k2, k3 = (bytes.fromhex(getattr(data, f'key_{i}'))[0] for i in range(1, 4))\r\n\r\n        for x in range(len(encrypted_string)):\r\n            k3 = k2 + (k1 * k3 & 0xFF) & 0xFF\r\n            xored = k3 ^ encrypted_string[x]\r\n            result += chr(xored)\r\n    elif algo == Algorithm.TWO:\r\n        k1 = 0x8B5AA471\r\n        k2 = 0x19660D\r\n        k3 = 0x3C6EF35F\r\n\r\n        for x in range(len(encrypted_string)):\r\n            if (x & 3) == 0:\r\n                k1 = (k3 + (k2 * k1)) & 0xFFFFFFFF\r\n\r\n            xor_key = (k1 >> ((x & 3) << 3)) & 0xFF\r\n            xored = xor_key ^ encrypted_string[x]\r\n            result += chr(xored)\r\n\r\n    return result\r\n\r\n\r\ndef normalize_operand(value: str) -> str:\r\n    result = value.removesuffix('h').lstrip('0') or '0'\r\n\r\n    return result[-2:].zfill(2)\r\n\r\n\r\ndef assign_if_empty(attr_name: str, value: str) -> bool:\r\n    if not getattr(df_obj, attr_name):\r\n        setattr(df_obj, attr_name, normalize_operand(value))\r\n\r\n        return True\r\n\r\n    return False\r\n\r\n\r\nfor algorithm, decryption_function in DECRYPTION_FUNCTIONS:\r\n    xrefs = idautils.CodeRefsTo(decryption_function, 1)\r\n\r\n    for ref in xrefs:\r\n        current_instruction = ida_ua.insn_t()\r\n        ea = prev_head(ref)\r\n        df_obj = DecryptionData()\r\n\r\n        while True:\r\n            ida_ua.decode_insn(current_instruction, ea)\r\n    \r\n            mnemonic = current_instruction.get_canon_mnem()\r\n            operand_1 = idc.print_operand(ea, 0)\r\n            operand_2 = idc.print_operand(ea, 1)\r\n\r\n            if mnemonic == 'lea' and operand_1 == 'rcx' and operand_2.startswith('unk_'):\r\n                if not df_obj.encrypted_string_address:\r\n                    df_obj.encrypted_string_address = operand_2.removeprefix('unk_')\r\n            elif algorithm == Algorithm.ONE and mnemonic == 'mov':\r\n                if operand_1 == 'r8d' and not df_obj.encrypted_string_length:\r\n                    df_obj.encrypted_string_length = normalize_operand(operand_2)\r\n                elif operand_1 == 'r9d' and not df_obj.key_1:\r\n                    df_obj.key_1 = normalize_operand(operand_2)\r\n                elif operand_1.startswith(('dword ptr [rsp+', '[rsp+')) and (\r\n                        operand_2.endswith('h') or is_number(operand_2)):\r\n                    if not assign_if_empty('key_2', operand_2):\r\n                        assign_if_empty('key_3', operand_2)\r\n            elif algorithm == Algorithm.TWO and mnemonic == 'mov':\r\n                if operand_1 == 'edx' and not df_obj.encrypted_string_length:\r\n                    df_obj.encrypted_string_length = normalize_operand(operand_2)\r\n\r\n            if df_obj.is_complete(algorithm):\r\n                break\r\n\r\n            ea = prev_head(ea)\r\n\r\n        decrypted_string = decrypt(df_obj, algorithm)\r\n\r\n        set_decompilation_comment(decrypted_string, ref)\r\n        print(f'{hex(ref)}: {decrypted_string}')"
+          }
+        ]
+      }
+    ]
+  }
+}

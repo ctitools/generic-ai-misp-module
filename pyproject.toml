@@ -1,10 +1,21 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "generic-ai-misp-module"
-version = "0.1.0"
-description = "Custom MISP expansion module scaffold for Generic AI summarization"
+version = "0.3.0"
+description = "Custom MISP expansion module: full MISP Event in, processed MISP Event out"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
-dependencies = []
+requires-python = ">=3.14"
+dependencies = ["pymisp>=2.5.34.2", "iocextract>=1.16.1"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "pylint"]
+e2e = ["misp-modules"]
+
+[tool.setuptools]
+packages = ["expansion"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -12,13 +23,13 @@ addopts = "-ra"
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B"]
 
 [tool.pylint.main]
-py-version = "3.12"
+py-version = "3.14"
 
 [tool.pylint.messages_control]
 disable = [

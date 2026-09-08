@@ -14,3 +14,21 @@ artifacts/*
 !artifacts/.gitkeep
 
 presentations/generic-ai-misp-module.pptx
+tests/e2etests/*
+!tests/e2etests/.gitkeep
+tests/golden/*.tmp
+
+.claude/
+benchmarks/data/
+benchmarks/results/*.json
+benchmarks/results/gold/
+benchmarks/results-v2/*.json
+benchmarks/results-pass2/
+benchmarks/results-v2-pass2/
+benchmarks/results-event-v2/
+benchmarks/results-event-v2-pass2/
+benchmarks/results-suggest/
+benchmarks/results-v4/
+benchmarks/results-v4-pass2/
+benchmarks/results-event-v4/
+benchmarks/results-event-v4-pass2/

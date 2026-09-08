@@ -1,0 +1,639 @@
+{
+  "Event": {
+    "analysis": "2",
+    "date": "2025-03-26",
+    "extends_uuid": "",
+    "info": "Warning Against Phishing Emails Distributing GuLoader Malware by Impersonating a Famous International Shipping Company",
+    "protected": false,
+    "publish_timestamp": "1784894153",
+    "published": true,
+    "threat_level_id": "3",
+    "timestamp": "1784851946",
+    "uuid": "ec93ed24-3227-406e-bae0-38f7b90800e4",
+    "Orgc": {
+      "name": "Organisation Centre for Cyber security Belgium",
+      "uuid": "5cf66e53-b5f8-43e7-be9a-49880a3b4631"
+    },
+    "Tag": [
+      {
+        "colour": "#075200",
+        "local": false,
+        "name": "admiralty-scale:source-reliability=\"b\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0fc000",
+        "local": false,
+        "name": "admiralty-scale:information-credibility=\"2\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "tlp:clear",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#bc2de0",
+        "local": false,
+        "name": "GuLoader",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#ffffff",
+        "local": false,
+        "name": "OSINT",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#856c13",
+        "local": false,
+        "name": "Phishing",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#2133c6",
+        "local": false,
+        "name": "Powershell",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#E6DE83",
+        "local": false,
+        "name": "xworm rat",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:country=\"china\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#1f2325",
+        "local": false,
+        "name": "misp-galaxy:malpedia=\"CloudEyE\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-malware=\"GuLoader - S0561\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:software=\"GuLoader\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Spearphishing Attachment - T1566.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#064d00",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Visual Basic - T1059.005\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#064500",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#064f00",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Hollowing - T1055.012\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Execution - T1569.002\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#0088cc",
+        "local": false,
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "relationship_type": ""
+      },
+      {
+        "colour": "#243A78",
+        "local": false,
+        "name": "Windows",
+        "relationship_type": ""
+      }
+    ],
+    "Object": [
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "An annotation object allowing analysts to add annotations, comments, executive summary to a MISP event, objects or attributes.",
+        "meta-category": "misc",
+        "name": "annotation",
+        "template_uuid": "5d8dc046-15a1-4ca3-a09f-ed4ede7c4487",
+        "template_version": "3",
+        "timestamp": "1743115113",
+        "uuid": "ada8307d-97a0-4135-9af9-adbb99247c7b",
+        "Attribute": [
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "creation-date",
+            "timestamp": "1743001235",
+            "to_ids": false,
+            "type": "datetime",
+            "uuid": "dd13eaae-52b4-409f-8fd7-b3b9e4e36213",
+            "value": "2025-03-24T00:00:00+00:00"
+          },
+          {
+            "category": "External analysis",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "ref",
+            "timestamp": "1743115113",
+            "to_ids": false,
+            "type": "link",
+            "uuid": "7122a30a-898d-426f-b41c-2ac2fd2059f5",
+            "value": "https://asec.ahnlab.com/en/87002"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "text",
+            "timestamp": "1743001235",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "da746ea8-eb45-43a0-acd2-5dcd348cc2bc",
+            "value": "Warning Against Phishing Emails Distributing GuLoader Malware by Impersonating a Famous International Shipping Company"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1784818635",
+        "uuid": "37b01a19-528a-4a6a-8b64-ed14c00c4b3c",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1743001219",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "efaaccd8-8c6a-4fcb-a319-4038f5cf15dc",
+            "value": "https://planachiever.au/admin-admin/Belejrers.fla"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "scheme",
+            "timestamp": "1743001219",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "5f63e0ad-9f86-4891-827a-f4e2331a5ad7",
+            "value": "https"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1743001219",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "4dbc95db-485e-4a90-9a61-a756b31b88b2",
+            "value": "planachiever.au"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "resource_path",
+            "timestamp": "1784818635",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "a18167d1-cdb5-42de-8877-33f1b0edeb6a",
+            "value": "admin-admin/Belejrers.fla"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "url object describes an url along with its normalized field (like extracted using faup parsing library) and its metadata.",
+        "meta-category": "network",
+        "name": "url",
+        "template_uuid": "60efb77b-40b5-4c46-871b-ed1ed999fce5",
+        "template_version": "10",
+        "timestamp": "1743115113",
+        "uuid": "0f930444-f830-4a98-8e48-21790e54a2c7",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "url",
+            "timestamp": "1743001220",
+            "to_ids": true,
+            "type": "url",
+            "uuid": "629b0dd5-b75e-4693-914f-b2f28e51a2e8",
+            "value": "https://planachiever.au/admin-admin/bPeMVYr142.bin"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "scheme",
+            "timestamp": "1743001220",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "a575e274-ba75-437b-8f9f-862b9d2afce4",
+            "value": "https"
+          },
+          {
+            "category": "Network activity",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1743001220",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "7f787e05-03af-435a-b9cd-e062ff47f72c",
+            "value": "planachiever.au"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "resource_path",
+            "timestamp": "1743115113",
+            "to_ids": false,
+            "type": "text",
+            "uuid": "54ac4673-b2ea-4871-9f6b-e79330a9cebb",
+            "value": "admin-admin/bPeMVYr142.bin"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "A domain/hostname and IP address seen as a tuple in a specific time frame.",
+        "meta-category": "network",
+        "name": "domain-ip",
+        "template_uuid": "43b3b146-77eb-4931-b4cc-b66c60f28734",
+        "template_version": "11",
+        "timestamp": "1784829731",
+        "uuid": "8a53e6ed-41b7-4231-8536-e319b840f2d3",
+        "Attribute": [
+          {
+            "category": "Network activity",
+            "comment": "WARNING - Potential False positive:\n- Top 1,000,000 most-used sites from Tranco\n- Top 10K most-used sites from Tranco\n- List of known dynamic DNS domains",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "domain",
+            "timestamp": "1784829731",
+            "to_ids": true,
+            "type": "domain",
+            "uuid": "9570758b-548e-45ef-aa89-06124c12f138",
+            "value": "tripplebanks.duckdns.org"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1743001220",
+        "uuid": "e789cd75-c1bc-4114-85d0-903fe89553dc",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "md5",
+            "timestamp": "1743001220",
+            "to_ids": true,
+            "type": "md5",
+            "uuid": "61a02760-1977-43a2-8d43-593f3427470b",
+            "value": "0477406f83847d43a3b668cc1e75185f"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1743001221",
+        "uuid": "35f2896c-80c8-4111-ab66-47d7f7edc796",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "md5",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "md5",
+            "uuid": "9fcd9e43-99fe-4184-8f40-8b570403e691",
+            "value": "1ce8509eabe2a293376d9b70044922fd"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha1",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "sha1",
+            "uuid": "1281b0c7-a4ee-4ee3-8bb5-d715f9b51807",
+            "value": "c174cad363871c6e10126efc6dd5d013ab1ade93"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "34d9ca9d-04a3-46f2-9d22-6d4bafff00ab",
+            "value": "551ef3569aab63c041b6404ed3c62102858c66d7ae646d6589b6cadc9cfb2a42"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ssdeep",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "ssdeep",
+            "uuid": "4c504112-c427-4082-83c3-e4b62f8d525d",
+            "value": "768:1BcpjcB8ts5gEoLMTy5zLkyeToY/xNMyiNC4:gqBLpQMCzwyQooKyi7"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "tlsh",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "tlsh",
+            "uuid": "7a455cbe-3bc9-4419-bbe6-8c8e3ec256f1",
+            "value": "t180f2f1df27ef63deca011c99f082a58163b49c1d8a7a49e7c2c67f32a131d1a44dd42e"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "size-in-bytes",
+            "timestamp": "1743001221",
+            "to_ids": false,
+            "type": "size-in-bytes",
+            "uuid": "fc14db84-33cf-4f54-ad35-52c3f51306fe",
+            "value": "36928"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1784829738",
+        "uuid": "eaac2ad1-0428-4dc6-8dbb-8ac57cec4822",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "md5",
+            "timestamp": "1784829734",
+            "to_ids": true,
+            "type": "md5",
+            "uuid": "b061466a-4d7a-4612-bb21-8c6e1fab70fc",
+            "value": "9c14df330dea5dfaab7a4303a3296779"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha1",
+            "timestamp": "1784829736",
+            "to_ids": true,
+            "type": "sha1",
+            "uuid": "f912e4c6-cfc7-440c-910a-b1ebc1c594bf",
+            "value": "690abe98f8e88e3e5180028527c4342cb8214a2c"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1784829738",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "2de156fe-ded9-4b9c-8be5-0c80a9e7dc50",
+            "value": "b9477485f31a190c45e36d57b7df198dc5f5f181c5671a172e3591e97e2d71ef"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ssdeep",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "ssdeep",
+            "uuid": "73f42345-969d-4977-a056-eef303174cb6",
+            "value": "768:6RtzhkLdJSN8Jvp+9n+BZR09ylr7HK4YsRPGUdrNNVomPI6LjpcX3rG9nI:6HzhkHJRG+Xm987u4PGmrnVLrcnr6I"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "tlsh",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "tlsh",
+            "uuid": "a9ac8ce0-d5e2-4b90-bbcb-6dfaa00adf74",
+            "value": "t1a263f66c9a48051f4cf6a25afc544c52ca68810e1f227fa3aefb935d1005d68b7fe1cb"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "size-in-bytes",
+            "timestamp": "1743001221",
+            "to_ids": false,
+            "type": "size-in-bytes",
+            "uuid": "9542d4da-7fc4-4488-8ad7-25facbb5ebeb",
+            "value": "66720"
+          }
+        ]
+      },
+      {
+        "comment": "",
+        "deleted": false,
+        "description": "File object describing a file with meta-information",
+        "meta-category": "file",
+        "name": "file",
+        "template_uuid": "688c46fb-5edb-40a3-8273-1af7923e2215",
+        "template_version": "25",
+        "timestamp": "1743001221",
+        "uuid": "45a1ee91-0cf8-4b01-9c67-0ee1cc065225",
+        "Attribute": [
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "md5",
+            "timestamp": "1743001221",
+            "to_ids": true,
+            "type": "md5",
+            "uuid": "5c422049-1131-4710-9001-b80cb023f5ab",
+            "value": "a501b4c09476b8f5ab505c6578bf9f9e"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha1",
+            "timestamp": "1743001222",
+            "to_ids": true,
+            "type": "sha1",
+            "uuid": "90ccc089-7e56-4287-a982-5d1122fed74f",
+            "value": "eb4995893db93c29f14f3218c90a684786cb2aac"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "sha256",
+            "timestamp": "1743001222",
+            "to_ids": true,
+            "type": "sha256",
+            "uuid": "f738e5b2-f884-4e60-a89a-89ae60b5aa31",
+            "value": "bd1575e88d459487b9b1b1169cce123f211b79ee945dd7dcd7eacdee21d2e8e9"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "ssdeep",
+            "timestamp": "1743001222",
+            "to_ids": true,
+            "type": "ssdeep",
+            "uuid": "94de52d9-3871-4399-bcc2-5a10cd67b331",
+            "value": "12288:raWjn3vVobHpzNQsOB6lpxwdNECoeZDdE:WQUHNrlpxwLhbg"
+          },
+          {
+            "category": "Payload delivery",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": false,
+            "object_relation": "tlsh",
+            "timestamp": "1743001222",
+            "to_ids": true,
+            "type": "tlsh",
+            "uuid": "206d357e-5ac6-448f-962e-d8ce6d272140",
+            "value": "t181a4efbd7910afb54c7600238e20eb5a4ef176fb9069338bf6d714b538607299db5c0a"
+          },
+          {
+            "category": "Other",
+            "comment": "",
+            "deleted": false,
+            "disable_correlation": true,
+            "object_relation": "size-in-bytes",
+            "timestamp": "1743001222",
+            "to_ids": false,
+            "type": "size-in-bytes",
+            "uuid": "730c43b4-a2a6-42ad-bb58-7d9e04a094aa",
+            "value": "461436"
+          }
+        ]
+      }
+    ],
+    "EventReport": [
+      {
+        "content": "AhnLab SEcurity intelligence Center (ASEC) recently identified the distribution of GuLoader malware via a phishing email by impersonating a famous international shipping company. The phishing email was obtained through the email honeypot operated by ASEC. The mail body instructs users to check their post-paid customs tax and demands them to open the attachment.",
+        "deleted": false,
+        "name": "Warning Against Phishing Emails Distributing GuLoader Malware by Impersonating a Famous International Shipping Company",
+        "timestamp": "1743000900",
+        "uuid": "dff88412-9e1e-4c89-b5d0-cf1bb43a7171"
+      }
+    ]
+  }
+}

@@ -48,6 +48,16 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
       `from_dict` does for published events via `publish()`. The module passes
       `force_timestamps=True`. Measured round-trip losses tolerated by the gate are listed in
       `tests/misp_compare.py`.
+    - **New, 2026-09-07, open:** loading a `malware-sample` attribute (`filename|md5`) makes
+      PyMISP derive a `malware_filename` field that `to_json()` then writes out, so the
+      round-trip gate reports `Object[n]/Attribute[m]/malware_filename: added by processing`
+      on every event with such an object (seen on live event
+      `01ff7e7f-bf4f-4b74-93ed-962cf9fa5c42`, reproduce with
+      `E2E_SEED=95592929 MISP_VERIFY_SSL=false .venv/bin/pytest -q -s tests/test_e2e_roundtrip.py`).
+      It is a derived duplicate of the value's first half — nothing is changed or lost — so it
+      belongs in the same family as the four allowlisted normalisations. Decision needed:
+      allowlist the path with that reason (and note it in TESTING.md), or raise it upstream
+      first. Until then the gate fails whenever the draw contains a malware-sample object.
 
 ## 3. Design and maintainability
 
@@ -56,7 +66,9 @@ Analysis of `main` at `29ce262` (2026-09-04), before the `with_full_event` rewri
     JSON schema does not, and its `additionalProperties: false` contradicts the prose.
 13. **Undocumented settings — done (removed).** `api_key` and `use_case_prompt` were read but
     absent from `moduleconfig`, so MISP's UI could never expose them.
-14. **Two version numbers — done.** `moduleinfo["version"]` (0.2) and `pyproject` (0.1.0) now both say 0.3.
+14. **Two version numbers — done, then drifted again.** `moduleinfo["version"]` (0.2) and
+    `pyproject` (0.1.0) were aligned on 0.3; as of 2026-09-07 the module says 0.4 and
+    `pyproject` 0.3.0. Bump both in the same commit.
 15. **ARCHITECTURE.md contract unimplemented — open.** `tlp_level`, `model_parameters`
     (seed/temperature), `reference_uploaded_file`, the pydantic schema and the
     `status_code/metadata/answer/extra_tags` envelope exist only in the diagram. Decide per item

@@ -1,7 +1,8 @@
 """Semantic comparison of two MISP event dicts (original vs. processed).
 
 A PyMISP load -> to_json round trip is not byte-identical, so the round-trip quality gate
-compares meaning, not bytes. Tolerated on purpose (each rule is deliberate, see README):
+compares meaning, not bytes. Tolerated on purpose (each rule is deliberate, see
+docs/DEVELOPER_GUIDE.md section 6):
 
 1. keys whose value is None, "", whitespace-only, [] or {} are ignored on both sides
    (PyMISP serialises a whitespace-only EventReport content as "");

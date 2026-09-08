@@ -1,6 +1,6 @@
 """Generic AI MISP module: takes a full MISP Event, validates it, runs a use-case on it.
 
-Data flow (see README.md / docs/ARCHITECTURE.md):
+Data flow (see docs/DEVELOPER_GUIDE.md / docs/ARCHITECTURE.md):
 
     request -> _extract_event -> validate_event -> event (MISPEvent)
         -> get_event_report(event) -> event_report (markdown string)

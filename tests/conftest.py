@@ -36,7 +36,7 @@ def load_env() -> dict[str, str]:
     return llm.env()
 
 
-LIVE_HELP = "see README.md, section 'Live systems (MISP and LLM server)'"
+LIVE_HELP = "see docs/OPERATOR_GUIDE.md, sections 1.3 and 3 (live systems in .env)"
 
 
 def pytest_addoption(parser):

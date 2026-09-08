@@ -72,10 +72,13 @@ the response metadata:
 2. `type` exists in `describeTypes.json` and is not a free-text type (`other`, `text`,
    `comment` carry no indicator semantics and are rejected as `free-text-type`); an invalid or
    missing `category` is replaced by the type's default category.
-3. PyMISP `MISPAttribute(type, value)` accepts it (PyMISP's own per-type validation).
-4. A per-type format check for the common types (IPv4/IPv6, domain/hostname, md5/sha1/sha256,
-   url, email, CVE id, `ip-src|port`/`ip-dst|port`/`hostname|port`). Types without a check rely on 1–3.
-5. Not already on the event (same type + value, including inside objects).
+3. A per-type format check for the common types (IPv4/IPv6, domain/hostname, md5/sha1/sha256,
+   url, email, CVE id, `ip-src|port`/`ip-dst|port`/`hostname|port`). Types without a check rely on 1–2.
+4. Not already on the event (same type + value, including inside objects).
+
+PyMISP is not one of the filters but the last word: it validates each accepted candidate when
+the attribute is created, and a value it refuses (e.g. an unparsable date) fails the whole
+request instead of being reported as a rejection.
 
 `confidence` is only a gate (`>= min_confidence`, default 0.9); it is not stored.
 If the model output is not valid JSON, the request fails with an error — never partial results.

@@ -6,8 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Read `AGENTS.md` first: it is the binding contributor guide (short closed loops, "less code is
 more", tests first, CHANGELOG entry after every change, docs updated in the same pass, only
-`pymisp` as third-party dependency). This file only adds what AGENTS.md does not say. All other documentation lives in `docs/`;
-the use-case contracts are in `docs/USE-CASES.md`, the test plan in `docs/TESTING.md`.
+`pymisp` as third-party dependency). This file only adds what AGENTS.md does not say. All other documentation lives in `docs/`,
+organised as three guides — `docs/USER_GUIDE.md` (what it does), `docs/OPERATOR_GUIDE.md`
+(install, run, operate) and `docs/DEVELOPER_GUIDE.md` (code, tests, benchmarks, contributing,
+project status) — in front of the reference documents; the use-case contracts are in
+`docs/USE-CASES.md`, the test plan in `docs/TESTING.md`.
 
 ## Commands
 

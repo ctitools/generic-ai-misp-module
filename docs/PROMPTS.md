@@ -32,7 +32,7 @@ makes summaries reproducible ([TESTING.md](TESTING.md)).
 | `description` | one line: what the prompt does |
 | `meta.use_case` | `cti-info-extraction` \| `summary-report` \| `summary-event` |
 | `meta.model` | model this prompt is validated against: `{"name": "qwen3.8:latest", "digest": "22130167c4c2", "quantization": "Q4_K_M", "server": "ollama 0.33.2"}` |
-| `meta.model_parameters` | `{"temperature": 0, "seed": 42, "top_p": 1, "max_tokens": 600, "think": false}` |
+| `meta.model_parameters` | `{"temperature": 0, "seed": 42, "top_p": 1, "max_tokens": 8000, "think": false}` |
 | `meta.prompt` | the full prompt text (system + user parts joined, `{{input}}` placeholder) |
 | `meta.version` | prompt version, bump on every text change |
 | `meta.output_schema` | UC1 only: the JSON schema the model must follow |
@@ -87,7 +87,7 @@ Report:
 ```
 
 `{{misp_types}}` is filled from `describeTypes.json` at call time (so the list is never stale).
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 10000, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 16000, think false`.
 
 "Never normalise a value" is addressed to the model: the module wants the literal spelling back
 (defanged if the report defangs) and refangs it itself, so the in-source check stays exact.
@@ -115,14 +115,14 @@ Report:
 {{input}}
 ```
 
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 600, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 16000, think false`.
 
 ### `summary-report/qwen3.8-v2` (the default since 2026-09-05)
 
 Written after the first summarization benchmark (2026-09-05): with v1, the model overshot the
 200-word limit on most real reports (answers truncated at 600 tokens, or 220-235 words) and once
 shortened a hash. v2 states the limit as a hard rule with margin (150 words), forbids preamble,
-caps the Indicators section at five copy-exact values, and raises `max_tokens` to 1000 so the
+caps the Indicators section at five copy-exact values, and raises `max_tokens` (now 16000 for every cluster) so the
 module's gate, not truncation, is the judge. On the 100-report orkl benchmark v2 passed the gate
 on 96 reports, v1 on 28 (docs/BENCHMARKS.md); v1 stays selectable by value or uuid. uuid `5c2d9e4f-8a1b-4c6d-9e0f-1a2b3c4d5e6f`.
 
@@ -145,7 +145,7 @@ Report:
 {{input}}
 ```
 
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 16000, think false`.
 
 ### `summary-event/qwen3.8-v2` (the default since 2026-09-05)
 
@@ -179,7 +179,7 @@ Event:
 {{input}}
 ```
 
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 1000, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 16000, think false`.
 
 ### `summary-event/qwen3.8-v1` (superseded 2026-09-05)
 
@@ -199,7 +199,7 @@ Event:
 {{input}}
 ```
 
-Parameters: `temperature 0, seed 42, top_p 1, max_tokens 600, think false`.
+Parameters: `temperature 0, seed 42, top_p 1, max_tokens 16000, think false`.
 
 ## Backlog
 

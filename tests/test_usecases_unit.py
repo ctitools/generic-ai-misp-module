@@ -405,7 +405,7 @@ def test_check_summary_refangs_before_comparing() -> None:
 
 def test_summary_v2_cluster_is_the_default_and_v1_stays_selectable() -> None:
     v2 = prompts.resolve_prompt("summary-report", "summary-report/qwen3.8-v2")
-    assert v2.version == 2 and v2.params["max_tokens"] == 1000 and v2.max_words == 200
+    assert v2.version == 2 and v2.params["max_tokens"] == 16000 and v2.max_words == 200
     assert (
         "150 words" in v2.text and v2.headings == prompts.resolve_prompt("summary-report").headings
     )
@@ -422,7 +422,7 @@ def test_check_summary_accepts_values_broken_across_lines_in_the_source() -> Non
 
 def test_summary_event_v2_cluster_is_selectable() -> None:
     v2 = prompts.resolve_prompt("summary-event", "summary-event/qwen3.8-v2")
-    assert v2.version == 2 and v2.params["max_tokens"] == 1000 and "150 words" in v2.text
+    assert v2.version == 2 and v2.params["max_tokens"] == 16000 and "150 words" in v2.text
     assert v2.headings == prompts.resolve_prompt("summary-event").headings
 
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-22 (larger answer budgets)
+
+- `max_tokens` raised to 16000 in every cluster of `clusters/generic-ai-prompts.json` (was 10000 for extraction, 1000/600 for the summaries) and the built-in fallback in `genai/llm.py` (used only when a cluster omits the key) from 600 to 8000. The prompt text and `prompt_sha256` are unchanged; the vLLM instance on nanu reports a 128k model length, so prompt plus answer still fit. Tests and `docs/PROMPTS.md` / `docs/BENCHMARKS.md` updated.
+
 ## 2026-09-07 (documentation harmonised into three guides)
 
 - Documentation is now organised by reader, following the [Write the Docs documentation principles](https://www.writethedocs.org/guide/writing/docs-principles/) (skimmable, exemplary, unique — no overlap between sources, current, addressable): `docs/USER_GUIDE.md` (what the module does to an event: the three jobs with real recorded examples, the rules it always follows, the measured quality read honestly, where the data goes, what it does not do), `docs/OPERATOR_GUIDE.md` (install → configure → run → verify → operate: settings and precedence, the tag-suggestion service, the per-request `metadata` as the metrics surface, which process logs what, health checks, capacity and the three stacked timeouts, a failure-mode table from error string to fix, security posture, model/prompt/index changes) and `docs/DEVELOPER_GUIDE.md` (code map, the nine invariants, how to add a use-case/prompt/filter, the test layers and gates, how to run and write a benchmark, the contribution loop, and a done/partial/planned status table).

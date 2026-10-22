@@ -14,7 +14,7 @@ from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TIMEOUT = 120
-DEFAULT_PARAMS = {"temperature": 0, "seed": 42, "top_p": 1, "max_tokens": 600, "think": False}
+DEFAULT_PARAMS = {"temperature": 0, "seed": 42, "top_p": 1, "max_tokens": 8000, "think": False}
 
 
 class LLMError(RuntimeError):

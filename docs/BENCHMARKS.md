@@ -7,7 +7,7 @@ in [BENCHMARKS_extraction.md](BENCHMARKS_extraction.md) (generated, do not edit 
 ## Current results (v4 run, 2026-09-05)
 
 Model `qwen3.8:latest` digest `22130167c4c2`, Ollama 0.33.2, seed 42 / temperature 0. Extraction
-prompt `cti-info-extraction/qwen3.8-v1` at schema version 3, `max_tokens` 10000,
+prompt `cti-info-extraction/qwen3.8-v1` at schema version 3, `max_tokens` 10000 (16000 since 2026-10-22),
 `GENERIC_AI_REQUEST_TIMEOUT=900`. Summary clusters `summary-report/qwen3.8-v2` and
 `summary-event/qwen3.8-v2`. Tag suggestion: misp-tag-suggest on nanu, BGE-base
 `a5beb1e3e68b`, index of 2026-09-05 (60,301 train events). One command, `sh benchmarks/run_v4.sh`,
